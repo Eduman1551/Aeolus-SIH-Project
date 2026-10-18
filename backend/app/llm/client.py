@@ -118,7 +118,9 @@ class LLM:
             text = self._chat([
                 {"role": "system", "content": "Rewrite the plan-change facts below as two short, plain sentences for an "
                                               "air-operations planner. Use only the facts given. Do not add any number, "
-                                              "time, id or claim that is not in the facts. No preamble."},
+                                              "time, id or claim that is not in the facts. Missions that 'remain "
+                                              "unassigned overall' were not dropped by this change; never call them "
+                                              "dropped. No preamble."},
                 {"role": "user", "content": facts},
             ], json_mode=False, max_tokens=160).strip()
         except Exception:  # noqa: BLE001

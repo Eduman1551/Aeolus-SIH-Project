@@ -200,12 +200,15 @@ def build_diff(ws: WorldState, old: Plan | None, new: Plan, trigger: str, now: f
 
 def summarise(changes: list[Change], stability: dict, trigger: str, unassigned: int) -> str:
     if not changes:
-        return f"No assignment changes needed after: {trigger}."
+        return f"No assignment changes needed after: {trigger}. {unassigned} mission(s) remain unassigned overall."
     kinds = defaultdict(int)
     for c in changes:
         kinds[c.kind] += 1
     label = {"aircraft_swap": "aircraft swaps", "crew_swap": "crew swaps", "retimed": "re-timed",
              "removed": "sorties dropped", "added": "sorties added"}
     bits = ", ".join(f"{v} {label[k]}" for k, v in sorted(kinds.items()))
+    dropped = sorted({c.mission_id for c in changes if c.kind == "removed"})
+    newly = f" Newly dropped missions: {', '.join(dropped)}." if dropped else " No mission was dropped by this change."
     return (f"After {trigger}: {bits}. {stability['total'] - stability['changed']} of {stability['total']} "
-            f"existing sorties unchanged ({stability['stability_pct']}% stable). {unassigned} mission(s) unassigned.")
+            f"existing sorties unchanged ({stability['stability_pct']}% stable).{newly} "
+            f"{unassigned} mission(s) remain unassigned overall.")
