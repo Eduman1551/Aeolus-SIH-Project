@@ -9,6 +9,8 @@ from pydantic import BaseModel, Field
 
 from app.events.types import EventError, EventIn, describe, normalise
 from app.planning.orchestrator import Planner, PlannerError
+from app.predict.model import model_info
+from app.predict.weather import mission_weather_notes
 
 router = APIRouter()
 
@@ -68,8 +70,10 @@ def state(req: Request) -> dict[str, Any]:
     p = planner(req)
     with p.lock:
         snap = p.ws.snapshot()
-        svc, _ = p.risk_inputs(p.ws)
+        svc, wx = p.risk_inputs(p.ws)
         snap["serviceability"] = svc
+        snap["weather_impact"] = mission_weather_notes(p.ws, wx)
+        snap["model"] = model_info()
         snap["feed"] = list(p.ws.feed_log)[:60]
         return snap
 

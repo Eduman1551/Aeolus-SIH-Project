@@ -11,14 +11,27 @@ from app.fusion.world import WorldState
 from app.planning.orchestrator import Planner
 from app.precompute.cache import ContingencyCache, build_cache
 from app.precompute.fragility import compute_fragility
+from app.predict.model import predict_serviceability
+from app.predict.weather import weather_impact
 
 log = logging.getLogger("aeolus.service")
 
 
 class AeolusPlanner(Planner):
     def reset(self) -> None:
+        self._risk_memo: tuple[int, int, tuple] | None = None
         super().reset()
         self.cache = ContingencyCache()
+
+    # ---------- predictive inputs ----------
+
+    def risk_inputs(self, ws: WorldState) -> tuple[dict[str, float], dict]:
+        key = (id(ws), ws.version)
+        if self._risk_memo and self._risk_memo[:2] == key:
+            return self._risk_memo[2]
+        value = (predict_serviceability(ws), weather_impact(ws))
+        self._risk_memo = (*key, value)
+        return value
 
     # ---------- fragility ----------
 
