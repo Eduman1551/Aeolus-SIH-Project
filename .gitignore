@@ -35,3 +35,5 @@ backend/app/predict/*.meta.json
 
 # local tool settings
 .claude/
+# written by next dev
+frontend/AGENTS.md
