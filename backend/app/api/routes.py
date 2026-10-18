@@ -172,6 +172,7 @@ def reset(req: Request) -> dict[str, Any]:
     p = planner(req)
     p.reset()
     req.app.state.hub.notify("world")
+    req.app.state.hub.notify("plan")
     return p.status_view()
 
 

@@ -370,8 +370,8 @@ class Planner:
     def advance_clock(self, real_seconds: float) -> bool:
         """Move the scenario clock. Returns True when the minute display changed."""
         with self.lock:
-            if self.paused or self.status == "ended":
-                return False
+            if self.paused or self.status == "ended" or self.active is None:
+                return False  # the clock models plan execution, so it starts at the first publish
             before = int(self.ws.now)
             self.ws.now = min(self.ws.rules.horizon_end, self.ws.now + self.settings.sim_speed * real_seconds / 60.0)
             if self.ws.now >= self.ws.rules.horizon_end and self.active is not None and self.status != "ended":
