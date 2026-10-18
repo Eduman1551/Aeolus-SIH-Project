@@ -35,21 +35,30 @@ def coverage(ws: WorldState, plan: Plan | None, prios=(1, 2)) -> tuple[int, int]
     return sum(1 for m in missions if m.id in covered), len(missions)
 
 
+def _free_minutes(t0: int, t1: int, windows) -> int:
+    busy = sorted((max(t0, w.start), min(t1, w.end)) for w in windows if w.start < t1 and t0 < w.end)
+    total, cur = 0, t0
+    for b0, b1 in busy:
+        if b0 > cur:
+            total += b0 - cur
+        cur = max(cur, b1)
+    return total + max(0, t1 - cur)
+
+
 def utilisation(ws: WorldState, plan: Plan | None) -> tuple[float, float]:
-    """% of serviceable aircraft and available crews that fly at least one sortie."""
-    end = ws.rules.horizon_end
-    serviceable = [a for a in ws.aircraft.values()
-                   if a.status == "serviceable" and not any(w.start <= ws.rules.horizon_start and w.end >= end
-                                                            for w in a.unavailable)]
-    crews = [c for c in ws.crews.values()
-             if c.status == "available" and not any(w.start <= c.duty_start and w.end >= c.duty_end
-                                                    for w in c.unavailable)]
-    if plan is None or not serviceable or not crews:
+    """Tasked hours as a % of available hours: aircraft flying time over serviceable time in the
+    horizon, and crew duty used (incl. brief/debrief) over each crew's duty allowance."""
+    h0, h1 = ws.rules.horizon_start, ws.rules.horizon_end
+    a_avail = {a.id: _free_minutes(h0, h1, a.unavailable) for a in ws.aircraft.values() if a.status == "serviceable"}
+    c_avail = {c.id: min(c.max_duty_min, _free_minutes(max(h0, c.duty_start), min(h1, c.duty_end), c.unavailable))
+               for c in ws.crews.values() if c.status == "available"}
+    a_total, c_total = sum(a_avail.values()), sum(c_avail.values())
+    if plan is None or not a_total or not c_total:
         return 0.0, 0.0
-    used_a = {s.aircraft_id for s in plan.sorties}
-    used_c = {s.crew_id for s in plan.sorties}
-    return (100.0 * sum(a.id in used_a for a in serviceable) / len(serviceable),
-            100.0 * sum(c.id in used_c for c in crews) / len(crews))
+    r = ws.rules
+    a_used = sum(s.landing - s.takeoff for s in plan.sorties if s.aircraft_id in a_avail)
+    c_used = sum(s.landing - s.takeoff + r.brief_min + r.debrief_min for s in plan.sorties if s.crew_id in c_avail)
+    return 100.0 * a_used / a_total, 100.0 * c_used / c_total
 
 
 @dataclass
@@ -137,7 +146,7 @@ class KpiTracker:
             ba, bc = utilisation(ws, baseline)
             butil = (ba + bc) / 2
         k.append(Kpi(id="utilisation", label="Resource use", value=round(util, 1), unit="%",
-                     display=f"{util:.0f}%" if plan else "--", detail=f"aircraft {ua:.0f}% · crews {uc:.0f}%",
+                     display=f"{util:.0f}%" if plan else "--", detail=f"tasked hours: aircraft {ua:.0f}% · crew duty {uc:.0f}%",
                      baseline=f"greedy {butil:.0f}%" if baseline else None,
                      delta=f"{util - butil:+.0f} pts vs greedy" if baseline and plan else None,
                      good=(util >= butil) if baseline and plan else None, target="above greedy baseline"))
