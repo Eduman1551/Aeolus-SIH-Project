@@ -8,6 +8,7 @@ import { connectLive } from "@/lib/ws";
 import Gantt from "./Gantt";
 import KpiStrip from "./KpiStrip";
 import MissionTable from "./MissionTable";
+import RightPanel from "./RightPanel";
 import Toasts from "./Toasts";
 import TopBar from "./TopBar";
 import { Button } from "./ui";
@@ -60,7 +61,9 @@ export default function Dashboard() {
                 <MissionTable />
               </section>
             </div>
-            <aside className="w-[400px] shrink-0 rounded-md border border-line bg-panel 2xl:w-[460px]" />
+            <aside aria-label="Planner tools" className="w-[400px] shrink-0 overflow-hidden rounded-md border border-line bg-panel 2xl:w-[460px]">
+              <RightPanel />
+            </aside>
           </main>
         </>
       )}
