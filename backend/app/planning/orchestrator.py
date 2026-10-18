@@ -120,7 +120,7 @@ class Planner:
         return max(self.ws.rules.horizon_start, self.ws.now + self.ws.rules.freeze_min)
 
     def _proposal(self, res: SolveResult, previous: Plan | None, trigger: dict, path: str, t0: float,
-                  feas=None) -> Proposal:
+                  feas=None, diff_ref: Plan | None = None) -> Proposal:
         ws = self.ws
         plan = res.plan
         feas = feas if feas is not None else res.feasibility
@@ -129,10 +129,11 @@ class Planner:
         validation = validate_plan(ws, plan, ws.now)
         plan.status = "pending_approval" if validation.ok else "invalid"
         svc, _ = self.risk_inputs(ws)
-        stab = stability_metrics(previous, plan)
+        ref = previous if previous is not None else diff_ref  # no active plan yet: compare with the rejected one
+        stab = stability_metrics(ref, plan)
         label = trigger.get("label", "change")
-        if previous is not None:
-            changes = build_diff(ws, previous, plan, label, ws.now, feas, svc)
+        if ref is not None:
+            changes = build_diff(ws, ref, plan, label, ws.now, feas, svc)
             summary = summarise(changes, stab, label, len(plan.unassigned))
         else:
             changes = []
@@ -278,8 +279,9 @@ class Planner:
             else:
                 opts.earliest = self.earliest()
                 res = solve(self.ws, opts)
-            trigger = {"kind": "reject", "label": label, "note": note, "conditions": applied, "parser": parser}
-            new = self._proposal(res, previous, trigger, "reject loop", t0)
+            trigger = {"kind": "reject", "label": label, "note": note, "conditions": applied, "parser": parser,
+                       "compared_with": prop.id}
+            new = self._proposal(res, previous, trigger, "reject loop", t0, diff_ref=prop.plan)
             self.notify("plan")
             if applied:
                 self.notify("world")
@@ -387,16 +389,24 @@ class Planner:
     # ---------- views ----------
 
     def compute_kpis(self):
-        plan = self.active or (self.proposal.plan if self.proposal else None)
+        """KPIs describe the plan the planner is looking at: the proposal if one is waiting, else the active plan."""
         if self.active is not None:
             self.active_validation = validate_plan(self.ws, self.active, self.ws.now)
-            violations = len(self.active_validation.violations)
-        elif self.proposal is not None:
+        note = "from the independent validator"
+        if self.proposal is not None:
+            plan = self.proposal.plan
             violations = len(self.proposal.validation.violations)
+            note = "plan under review"
+            if self.active_validation is not None and not self.active_validation.ok:
+                note += f" · active plan has {len(self.active_validation.violations)} conflicts with the latest picture"
+        elif self.active is not None:
+            plan = self.active
+            violations = len(self.active_validation.violations)
+            note = "active plan, re-checked against the latest picture"
         else:
-            violations = None
+            plan, violations = None, None
         bv = len(self.baseline_validation.violations) if self.baseline_validation else None
-        return self.kpi.compute(self.ws, plan, self.baseline, violations, bv)
+        return self.kpi.compute(self.ws, plan, self.baseline, violations, bv, violations_note=note)
 
     def status_view(self) -> dict[str, Any]:
         with self.lock:

@@ -85,18 +85,18 @@ class KpiTracker:
         self.changes_explained += sum(1 for c in changes if (c.reason or "").strip())
 
     def compute(self, ws: WorldState, plan: Plan | None, baseline: Plan | None, violations: int | None,
-                baseline_violations: int | None) -> list[Kpi]:
+                baseline_violations: int | None, violations_note: str = "from the independent validator") -> list[Kpi]:
         k: list[Kpi] = []
 
         # 1 planning time
         if self.initial_solve_ms is not None:
             manual_ms = self.manual_baseline_min * 60_000
-            red = 100.0 * (1 - self.initial_solve_ms / manual_ms)
+            ratio = manual_ms / max(self.initial_solve_ms, 1.0)
             k.append(Kpi(id="planning_time", label="Planning time", value=round(self.initial_solve_ms, 1), unit="ms",
                          display=_secs(self.initial_solve_ms),
-                         detail=f"{red:.2f}% faster than a {self.manual_baseline_min} min manual plan (assumed)",
+                         detail=f"about {ratio:,.0f}x faster than a {self.manual_baseline_min} min manual plan (assumed)",
                          baseline=f"greedy {_secs(self.greedy_ms or 0)} · manual {self.manual_baseline_min} min (assumed)",
-                         delta=f"-{red:.1f}% vs manual", good=True, target="seconds, not hours"))
+                         delta=f"{ratio:,.0f}x faster than manual (assumed)", good=True, target="seconds, not hours"))
         else:
             k.append(Kpi(id="planning_time", label="Planning time", value=None, unit="ms", display="--",
                          detail="Generate a plan to measure", target="seconds, not hours"))
@@ -135,7 +135,7 @@ class KpiTracker:
         # 4 violations
         k.append(Kpi(id="violations", label="Constraint violations", value=violations, unit="",
                      display=str(violations) if violations is not None else "--",
-                     detail="from the independent validator", good=(violations == 0) if violations is not None else None,
+                     detail=violations_note, good=(violations == 0) if violations is not None else None,
                      baseline=f"greedy {baseline_violations}" if baseline_violations is not None else None,
                      target="0"))
 
