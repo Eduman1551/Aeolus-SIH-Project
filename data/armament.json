@@ -1,0 +1,102 @@
+{
+  "source": "armament and logistics system",
+  "seed": 2026,
+  "synthetic": true,
+  "weapon_types": [
+    {
+      "id": "GB-250",
+      "name": "GB-250 glide bomb",
+      "category": "air-to-ground",
+      "compatible_types": [
+        "SKR",
+        "ARC"
+      ]
+    },
+    {
+      "id": "LG-500",
+      "name": "LG-500 laser-guided bomb",
+      "category": "air-to-ground",
+      "compatible_types": [
+        "ARC",
+        "SKR"
+      ]
+    },
+    {
+      "id": "ARM-9",
+      "name": "ARM-9 anti-radiation missile",
+      "category": "suppression",
+      "compatible_types": [
+        "SKR"
+      ]
+    },
+    {
+      "id": "AAM-L",
+      "name": "AAM-L long-range air-to-air missile",
+      "category": "air-to-air",
+      "compatible_types": [
+        "ARC"
+      ]
+    },
+    {
+      "id": "AAM-S",
+      "name": "AAM-S short-range air-to-air missile",
+      "category": "air-to-air",
+      "compatible_types": [
+        "ARC",
+        "SKR"
+      ]
+    }
+  ],
+  "stock": [
+    {
+      "base_id": "B1",
+      "weapon_id": "GB-250",
+      "qty": 12
+    },
+    {
+      "base_id": "B1",
+      "weapon_id": "LG-500",
+      "qty": 4
+    },
+    {
+      "base_id": "B1",
+      "weapon_id": "ARM-9",
+      "qty": 4
+    },
+    {
+      "base_id": "B1",
+      "weapon_id": "AAM-L",
+      "qty": 8
+    },
+    {
+      "base_id": "B1",
+      "weapon_id": "AAM-S",
+      "qty": 8
+    },
+    {
+      "base_id": "B2",
+      "weapon_id": "GB-250",
+      "qty": 8
+    },
+    {
+      "base_id": "B2",
+      "weapon_id": "LG-500",
+      "qty": 4
+    },
+    {
+      "base_id": "B2",
+      "weapon_id": "ARM-9",
+      "qty": 4
+    },
+    {
+      "base_id": "B2",
+      "weapon_id": "AAM-L",
+      "qty": 6
+    },
+    {
+      "base_id": "B2",
+      "weapon_id": "AAM-S",
+      "qty": 6
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+{
+  "source": "tasking order",
+  "seed": 2026,
+  "synthetic": true,
+  "mission_types": [
+    {
+      "id": "STRIKE",
+      "name": "Strike",
+      "eligible_types": [
+        "SKR",
+        "ARC"
+      ],
+      "loadouts": {
+        "SKR": {
+          "GB-250": 4
+        },
+        "ARC": {
+          "LG-500": 2
+        }
+      },
+      "target_min_ceiling_ft": 2000,
+      "target_min_vis_km": 5.0
+    },
+    {
+      "id": "SEAD",
+      "name": "Suppression of air defences",
+      "eligible_types": [
+        "SKR"
+      ],
+      "loadouts": {
+        "SKR": {
+          "ARM-9": 2
+        }
+      },
+      "target_min_ceiling_ft": 1000,
+      "target_min_vis_km": 3.0
+    },
+    {
+      "id": "CAP",
+      "name": "Combat air patrol",
+      "eligible_types": [
+        "ARC"
+      ],
+      "loadouts": {
+        "ARC": {
+          "AAM-L": 2,
+          "AAM-S": 2
+        }
+      },
+      "target_min_ceiling_ft": 0,
+      "target_min_vis_km": 0.0
+    },
+    {
+      "id": "ISR",
+      "name": "Reconnaissance",
+      "eligible_types": [
+        "NOC"
+      ],
+      "loadouts": {
+        "NOC": {}
+      },
+      "target_min_ceiling_ft": 2500,
+      "target_min_vis_km": 5.0
+    },
+    {
+      "id": "AIRLIFT",
+      "name": "Airlift / resupply",
+      "eligible_types": [
+        "TRV"
+      ],
+      "loadouts": {
+        "TRV": {}
+      },
+      "target_min_ceiling_ft": 1000,
+      "target_min_vis_km": 3.0
+    }
+  ],
+  "missions": [
+    {
+      "id": "M01",
+      "name": "Dawn CAP Redhill",
+      "type_id": "CAP",
+      "priority": 1,
+      "zone_id": "Z1",
+      "window_start": 450,
+      "window_end": 450,
+      "duration_min": 180,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M02",
+      "name": "Strike Ironvale depot",
+      "type_id": "STRIKE",
+      "priority": 1,
+      "zone_id": "Z3",
+      "window_start": 540,
+      "window_end": 570,
+      "duration_min": 150,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M03",
+      "name": "Recce Saltmarsh coast",
+      "type_id": "ISR",
+      "priority": 2,
+      "zone_id": "Z2",
+      "window_start": 480,
+      "window_end": 540,
+      "duration_min": 240,
+      "aircraft_required": 1,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M04",
+      "name": "SEAD Ironvale radar",
+      "type_id": "SEAD",
+      "priority": 2,
+      "zone_id": "Z3",
+      "window_start": 480,
+      "window_end": 510,
+      "duration_min": 120,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M05",
+      "name": "Resupply Greywater post",
+      "type_id": "AIRLIFT",
+      "priority": 1,
+      "zone_id": "Z6",
+      "window_start": 600,
+      "window_end": 660,
+      "duration_min": 180,
+      "aircraft_required": 1,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M06",
+      "name": "Recce Far Reach",
+      "type_id": "ISR",
+      "priority": 3,
+      "zone_id": "Z5",
+      "window_start": 660,
+      "window_end": 720,
+      "duration_min": 240,
+      "aircraft_required": 1,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M07",
+      "name": "Strike Westfold bridge",
+      "type_id": "STRIKE",
+      "priority": 2,
+      "zone_id": "Z4",
+      "window_start": 600,
+      "window_end": 720,
+      "duration_min": 150,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M08",
+      "name": "CAP Saltmarsh",
+      "type_id": "CAP",
+      "priority": 3,
+      "zone_id": "Z2",
+      "window_start": 780,
+      "window_end": 780,
+      "duration_min": 180,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M09",
+      "name": "CAP Ironvale",
+      "type_id": "CAP",
+      "priority": 1,
+      "zone_id": "Z3",
+      "window_start": 900,
+      "window_end": 900,
+      "duration_min": 180,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M10",
+      "name": "Strike Far Reach convoy",
+      "type_id": "STRIKE",
+      "priority": 2,
+      "zone_id": "Z5",
+      "window_start": 930,
+      "window_end": 990,
+      "duration_min": 150,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M11",
+      "name": "Recce Redhill",
+      "type_id": "ISR",
+      "priority": 4,
+      "zone_id": "Z1",
+      "window_start": 840,
+      "window_end": 900,
+      "duration_min": 180,
+      "aircraft_required": 1,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M12",
+      "name": "Resupply Westfold",
+      "type_id": "AIRLIFT",
+      "priority": 3,
+      "zone_id": "Z4",
+      "window_start": 960,
+      "window_end": 1080,
+      "duration_min": 180,
+      "aircraft_required": 1,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M13",
+      "name": "SEAD Far Reach",
+      "type_id": "SEAD",
+      "priority": 2,
+      "zone_id": "Z5",
+      "window_start": 900,
+      "window_end": 930,
+      "duration_min": 120,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M14",
+      "name": "Strike Greywater cache",
+      "type_id": "STRIKE",
+      "priority": 4,
+      "zone_id": "Z6",
+      "window_start": 1110,
+      "window_end": 1170,
+      "duration_min": 120,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    },
+    {
+      "id": "M15",
+      "name": "Dusk CAP Redhill",
+      "type_id": "CAP",
+      "priority": 3,
+      "zone_id": "Z1",
+      "window_start": 1200,
+      "window_end": 1200,
+      "duration_min": 180,
+      "aircraft_required": 2,
+      "status": "open",
+      "origin": "tasking order"
+    }
+  ]
+}

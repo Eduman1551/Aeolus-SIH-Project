@@ -1,0 +1,1927 @@
+{
+  "source": "met office",
+  "seed": 2026,
+  "synthetic": true,
+  "weather": [
+    {
+      "location_id": "B1",
+      "start": 0,
+      "end": 60,
+      "ceiling_ft": 6700,
+      "vis_km": 9.3,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 60,
+      "end": 120,
+      "ceiling_ft": 8600,
+      "vis_km": 8.3,
+      "wind_kt": 5,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 120,
+      "end": 180,
+      "ceiling_ft": 8800,
+      "vis_km": 7.9,
+      "wind_kt": 18,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 180,
+      "end": 240,
+      "ceiling_ft": 8600,
+      "vis_km": 7.3,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 240,
+      "end": 300,
+      "ceiling_ft": 5100,
+      "vis_km": 8.4,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 300,
+      "end": 360,
+      "ceiling_ft": 6200,
+      "vis_km": 9.5,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 360,
+      "end": 420,
+      "ceiling_ft": 3900,
+      "vis_km": 8.9,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 420,
+      "end": 480,
+      "ceiling_ft": 5800,
+      "vis_km": 7.3,
+      "wind_kt": 17,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 480,
+      "end": 540,
+      "ceiling_ft": 4400,
+      "vis_km": 8.3,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 540,
+      "end": 600,
+      "ceiling_ft": 4000,
+      "vis_km": 7.0,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 600,
+      "end": 660,
+      "ceiling_ft": 6900,
+      "vis_km": 9.8,
+      "wind_kt": 6,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 660,
+      "end": 720,
+      "ceiling_ft": 7400,
+      "vis_km": 9.4,
+      "wind_kt": 11,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 720,
+      "end": 780,
+      "ceiling_ft": 4200,
+      "vis_km": 8.9,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 780,
+      "end": 840,
+      "ceiling_ft": 5200,
+      "vis_km": 9.0,
+      "wind_kt": 15,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 840,
+      "end": 900,
+      "ceiling_ft": 4400,
+      "vis_km": 7.0,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 900,
+      "end": 960,
+      "ceiling_ft": 7100,
+      "vis_km": 9.3,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 960,
+      "end": 1020,
+      "ceiling_ft": 7900,
+      "vis_km": 9.2,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 1020,
+      "end": 1080,
+      "ceiling_ft": 6900,
+      "vis_km": 7.7,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 1080,
+      "end": 1140,
+      "ceiling_ft": 4300,
+      "vis_km": 9.9,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 1140,
+      "end": 1200,
+      "ceiling_ft": 5300,
+      "vis_km": 7.3,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 1200,
+      "end": 1260,
+      "ceiling_ft": 4300,
+      "vis_km": 9.4,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 1260,
+      "end": 1320,
+      "ceiling_ft": 5400,
+      "vis_km": 8.5,
+      "wind_kt": 16,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 1320,
+      "end": 1380,
+      "ceiling_ft": 8600,
+      "vis_km": 7.4,
+      "wind_kt": 10,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B1",
+      "start": 1380,
+      "end": 1440,
+      "ceiling_ft": 5900,
+      "vis_km": 7.0,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 0,
+      "end": 60,
+      "ceiling_ft": 5900,
+      "vis_km": 9.7,
+      "wind_kt": 5,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 60,
+      "end": 120,
+      "ceiling_ft": 8800,
+      "vis_km": 8.0,
+      "wind_kt": 15,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 120,
+      "end": 180,
+      "ceiling_ft": 8400,
+      "vis_km": 9.8,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 180,
+      "end": 240,
+      "ceiling_ft": 6700,
+      "vis_km": 8.4,
+      "wind_kt": 13,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 240,
+      "end": 300,
+      "ceiling_ft": 6300,
+      "vis_km": 8.0,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 300,
+      "end": 360,
+      "ceiling_ft": 6600,
+      "vis_km": 9.8,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 360,
+      "end": 420,
+      "ceiling_ft": 7400,
+      "vis_km": 9.4,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 420,
+      "end": 480,
+      "ceiling_ft": 7200,
+      "vis_km": 8.6,
+      "wind_kt": 17,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 480,
+      "end": 540,
+      "ceiling_ft": 7400,
+      "vis_km": 8.0,
+      "wind_kt": 11,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 540,
+      "end": 600,
+      "ceiling_ft": 7800,
+      "vis_km": 9.1,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 600,
+      "end": 660,
+      "ceiling_ft": 6000,
+      "vis_km": 7.1,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 660,
+      "end": 720,
+      "ceiling_ft": 3700,
+      "vis_km": 8.9,
+      "wind_kt": 5,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 720,
+      "end": 780,
+      "ceiling_ft": 6300,
+      "vis_km": 9.6,
+      "wind_kt": 10,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 780,
+      "end": 840,
+      "ceiling_ft": 6500,
+      "vis_km": 9.1,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 840,
+      "end": 900,
+      "ceiling_ft": 4300,
+      "vis_km": 8.9,
+      "wind_kt": 10,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 900,
+      "end": 960,
+      "ceiling_ft": 8500,
+      "vis_km": 9.6,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 960,
+      "end": 1020,
+      "ceiling_ft": 4500,
+      "vis_km": 9.0,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 1020,
+      "end": 1080,
+      "ceiling_ft": 5900,
+      "vis_km": 7.8,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 1080,
+      "end": 1140,
+      "ceiling_ft": 6100,
+      "vis_km": 9.6,
+      "wind_kt": 16,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 1140,
+      "end": 1200,
+      "ceiling_ft": 5400,
+      "vis_km": 7.6,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "B2",
+      "start": 1200,
+      "end": 1260,
+      "ceiling_ft": 700,
+      "vis_km": 2.5,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "evening fog bank"
+    },
+    {
+      "location_id": "B2",
+      "start": 1260,
+      "end": 1320,
+      "ceiling_ft": 700,
+      "vis_km": 2.5,
+      "wind_kt": 18,
+      "kind": "forecast",
+      "note": "evening fog bank"
+    },
+    {
+      "location_id": "B2",
+      "start": 1320,
+      "end": 1380,
+      "ceiling_ft": 700,
+      "vis_km": 2.5,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "evening fog bank"
+    },
+    {
+      "location_id": "B2",
+      "start": 1380,
+      "end": 1440,
+      "ceiling_ft": 8400,
+      "vis_km": 9.4,
+      "wind_kt": 13,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 0,
+      "end": 60,
+      "ceiling_ft": 6400,
+      "vis_km": 7.5,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 60,
+      "end": 120,
+      "ceiling_ft": 6500,
+      "vis_km": 8.3,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 120,
+      "end": 180,
+      "ceiling_ft": 8500,
+      "vis_km": 8.6,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 180,
+      "end": 240,
+      "ceiling_ft": 8700,
+      "vis_km": 7.3,
+      "wind_kt": 10,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 240,
+      "end": 300,
+      "ceiling_ft": 4900,
+      "vis_km": 7.0,
+      "wind_kt": 6,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 300,
+      "end": 360,
+      "ceiling_ft": 6400,
+      "vis_km": 8.9,
+      "wind_kt": 17,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 360,
+      "end": 420,
+      "ceiling_ft": 6900,
+      "vis_km": 9.3,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 420,
+      "end": 480,
+      "ceiling_ft": 3600,
+      "vis_km": 8.1,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 480,
+      "end": 540,
+      "ceiling_ft": 5700,
+      "vis_km": 8.7,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 540,
+      "end": 600,
+      "ceiling_ft": 8500,
+      "vis_km": 8.6,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 600,
+      "end": 660,
+      "ceiling_ft": 7400,
+      "vis_km": 9.1,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 660,
+      "end": 720,
+      "ceiling_ft": 8300,
+      "vis_km": 8.7,
+      "wind_kt": 10,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 720,
+      "end": 780,
+      "ceiling_ft": 7100,
+      "vis_km": 7.9,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 780,
+      "end": 840,
+      "ceiling_ft": 7700,
+      "vis_km": 8.7,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 840,
+      "end": 900,
+      "ceiling_ft": 8500,
+      "vis_km": 7.8,
+      "wind_kt": 17,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 900,
+      "end": 960,
+      "ceiling_ft": 4500,
+      "vis_km": 7.3,
+      "wind_kt": 5,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 960,
+      "end": 1020,
+      "ceiling_ft": 8300,
+      "vis_km": 8.1,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 1020,
+      "end": 1080,
+      "ceiling_ft": 7600,
+      "vis_km": 8.9,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 1080,
+      "end": 1140,
+      "ceiling_ft": 5500,
+      "vis_km": 7.8,
+      "wind_kt": 6,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 1140,
+      "end": 1200,
+      "ceiling_ft": 5300,
+      "vis_km": 9.8,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 1200,
+      "end": 1260,
+      "ceiling_ft": 5100,
+      "vis_km": 7.8,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 1260,
+      "end": 1320,
+      "ceiling_ft": 6100,
+      "vis_km": 9.6,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 1320,
+      "end": 1380,
+      "ceiling_ft": 6100,
+      "vis_km": 9.9,
+      "wind_kt": 5,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z1",
+      "start": 1380,
+      "end": 1440,
+      "ceiling_ft": 4100,
+      "vis_km": 7.7,
+      "wind_kt": 13,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 0,
+      "end": 60,
+      "ceiling_ft": 4200,
+      "vis_km": 7.3,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 60,
+      "end": 120,
+      "ceiling_ft": 7100,
+      "vis_km": 10.0,
+      "wind_kt": 15,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 120,
+      "end": 180,
+      "ceiling_ft": 5500,
+      "vis_km": 9.3,
+      "wind_kt": 5,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 180,
+      "end": 240,
+      "ceiling_ft": 6000,
+      "vis_km": 7.9,
+      "wind_kt": 10,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 240,
+      "end": 300,
+      "ceiling_ft": 7300,
+      "vis_km": 8.4,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 300,
+      "end": 360,
+      "ceiling_ft": 7800,
+      "vis_km": 8.1,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 360,
+      "end": 420,
+      "ceiling_ft": 7800,
+      "vis_km": 9.9,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 420,
+      "end": 480,
+      "ceiling_ft": 5900,
+      "vis_km": 7.9,
+      "wind_kt": 15,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 480,
+      "end": 540,
+      "ceiling_ft": 3800,
+      "vis_km": 9.2,
+      "wind_kt": 17,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 540,
+      "end": 600,
+      "ceiling_ft": 3600,
+      "vis_km": 7.8,
+      "wind_kt": 14,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 600,
+      "end": 660,
+      "ceiling_ft": 5300,
+      "vis_km": 9.2,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 660,
+      "end": 720,
+      "ceiling_ft": 5400,
+      "vis_km": 9.3,
+      "wind_kt": 14,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 720,
+      "end": 780,
+      "ceiling_ft": 7200,
+      "vis_km": 9.7,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 780,
+      "end": 840,
+      "ceiling_ft": 1800,
+      "vis_km": 6.0,
+      "wind_kt": 14,
+      "kind": "forecast",
+      "note": "low cloud over the coast"
+    },
+    {
+      "location_id": "Z2",
+      "start": 840,
+      "end": 900,
+      "ceiling_ft": 1800,
+      "vis_km": 6.0,
+      "wind_kt": 10,
+      "kind": "forecast",
+      "note": "low cloud over the coast"
+    },
+    {
+      "location_id": "Z2",
+      "start": 900,
+      "end": 960,
+      "ceiling_ft": 7000,
+      "vis_km": 7.2,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 960,
+      "end": 1020,
+      "ceiling_ft": 4500,
+      "vis_km": 8.9,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 1020,
+      "end": 1080,
+      "ceiling_ft": 3700,
+      "vis_km": 7.4,
+      "wind_kt": 15,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 1080,
+      "end": 1140,
+      "ceiling_ft": 7300,
+      "vis_km": 8.9,
+      "wind_kt": 13,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 1140,
+      "end": 1200,
+      "ceiling_ft": 3600,
+      "vis_km": 8.3,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 1200,
+      "end": 1260,
+      "ceiling_ft": 5700,
+      "vis_km": 8.2,
+      "wind_kt": 16,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 1260,
+      "end": 1320,
+      "ceiling_ft": 5000,
+      "vis_km": 9.3,
+      "wind_kt": 11,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 1320,
+      "end": 1380,
+      "ceiling_ft": 8400,
+      "vis_km": 7.4,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z2",
+      "start": 1380,
+      "end": 1440,
+      "ceiling_ft": 3600,
+      "vis_km": 9.0,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 0,
+      "end": 60,
+      "ceiling_ft": 7800,
+      "vis_km": 8.7,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 60,
+      "end": 120,
+      "ceiling_ft": 8500,
+      "vis_km": 7.4,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 120,
+      "end": 180,
+      "ceiling_ft": 3600,
+      "vis_km": 7.8,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 180,
+      "end": 240,
+      "ceiling_ft": 6100,
+      "vis_km": 7.8,
+      "wind_kt": 14,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 240,
+      "end": 300,
+      "ceiling_ft": 4300,
+      "vis_km": 9.8,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 300,
+      "end": 360,
+      "ceiling_ft": 4000,
+      "vis_km": 9.5,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 360,
+      "end": 420,
+      "ceiling_ft": 3700,
+      "vis_km": 9.0,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 420,
+      "end": 480,
+      "ceiling_ft": 8700,
+      "vis_km": 7.8,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 480,
+      "end": 540,
+      "ceiling_ft": 8300,
+      "vis_km": 9.2,
+      "wind_kt": 5,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 540,
+      "end": 600,
+      "ceiling_ft": 7700,
+      "vis_km": 9.5,
+      "wind_kt": 11,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 600,
+      "end": 660,
+      "ceiling_ft": 6500,
+      "vis_km": 7.2,
+      "wind_kt": 11,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 660,
+      "end": 720,
+      "ceiling_ft": 7800,
+      "vis_km": 8.5,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 720,
+      "end": 780,
+      "ceiling_ft": 8200,
+      "vis_km": 9.7,
+      "wind_kt": 16,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 780,
+      "end": 840,
+      "ceiling_ft": 8000,
+      "vis_km": 9.9,
+      "wind_kt": 11,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 840,
+      "end": 900,
+      "ceiling_ft": 7000,
+      "vis_km": 9.5,
+      "wind_kt": 14,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 900,
+      "end": 960,
+      "ceiling_ft": 4700,
+      "vis_km": 8.1,
+      "wind_kt": 18,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 960,
+      "end": 1020,
+      "ceiling_ft": 7500,
+      "vis_km": 8.4,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 1020,
+      "end": 1080,
+      "ceiling_ft": 8500,
+      "vis_km": 9.0,
+      "wind_kt": 13,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 1080,
+      "end": 1140,
+      "ceiling_ft": 4700,
+      "vis_km": 7.5,
+      "wind_kt": 17,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 1140,
+      "end": 1200,
+      "ceiling_ft": 4400,
+      "vis_km": 8.5,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 1200,
+      "end": 1260,
+      "ceiling_ft": 5700,
+      "vis_km": 9.4,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 1260,
+      "end": 1320,
+      "ceiling_ft": 7900,
+      "vis_km": 8.2,
+      "wind_kt": 5,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 1320,
+      "end": 1380,
+      "ceiling_ft": 7500,
+      "vis_km": 7.5,
+      "wind_kt": 13,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z3",
+      "start": 1380,
+      "end": 1440,
+      "ceiling_ft": 5800,
+      "vis_km": 8.6,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 0,
+      "end": 60,
+      "ceiling_ft": 4300,
+      "vis_km": 9.1,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 60,
+      "end": 120,
+      "ceiling_ft": 3600,
+      "vis_km": 8.6,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 120,
+      "end": 180,
+      "ceiling_ft": 5400,
+      "vis_km": 8.7,
+      "wind_kt": 16,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 180,
+      "end": 240,
+      "ceiling_ft": 5900,
+      "vis_km": 8.6,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 240,
+      "end": 300,
+      "ceiling_ft": 8600,
+      "vis_km": 8.9,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 300,
+      "end": 360,
+      "ceiling_ft": 6700,
+      "vis_km": 7.3,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 360,
+      "end": 420,
+      "ceiling_ft": 8100,
+      "vis_km": 8.2,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 420,
+      "end": 480,
+      "ceiling_ft": 5100,
+      "vis_km": 7.9,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 480,
+      "end": 540,
+      "ceiling_ft": 7700,
+      "vis_km": 9.4,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 540,
+      "end": 600,
+      "ceiling_ft": 5300,
+      "vis_km": 7.9,
+      "wind_kt": 13,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 600,
+      "end": 660,
+      "ceiling_ft": 5700,
+      "vis_km": 7.4,
+      "wind_kt": 16,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 660,
+      "end": 720,
+      "ceiling_ft": 4700,
+      "vis_km": 9.9,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 720,
+      "end": 780,
+      "ceiling_ft": 8900,
+      "vis_km": 8.8,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 780,
+      "end": 840,
+      "ceiling_ft": 6200,
+      "vis_km": 8.1,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 840,
+      "end": 900,
+      "ceiling_ft": 4500,
+      "vis_km": 9.2,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 900,
+      "end": 960,
+      "ceiling_ft": 4600,
+      "vis_km": 7.9,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 960,
+      "end": 1020,
+      "ceiling_ft": 4500,
+      "vis_km": 7.1,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 1020,
+      "end": 1080,
+      "ceiling_ft": 6700,
+      "vis_km": 9.0,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 1080,
+      "end": 1140,
+      "ceiling_ft": 8800,
+      "vis_km": 8.1,
+      "wind_kt": 15,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 1140,
+      "end": 1200,
+      "ceiling_ft": 5400,
+      "vis_km": 7.6,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 1200,
+      "end": 1260,
+      "ceiling_ft": 7300,
+      "vis_km": 8.8,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 1260,
+      "end": 1320,
+      "ceiling_ft": 4100,
+      "vis_km": 10.0,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 1320,
+      "end": 1380,
+      "ceiling_ft": 4100,
+      "vis_km": 9.6,
+      "wind_kt": 6,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z4",
+      "start": 1380,
+      "end": 1440,
+      "ceiling_ft": 5900,
+      "vis_km": 7.8,
+      "wind_kt": 13,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 0,
+      "end": 60,
+      "ceiling_ft": 7600,
+      "vis_km": 7.4,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 60,
+      "end": 120,
+      "ceiling_ft": 6600,
+      "vis_km": 7.4,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 120,
+      "end": 180,
+      "ceiling_ft": 5000,
+      "vis_km": 9.5,
+      "wind_kt": 18,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 180,
+      "end": 240,
+      "ceiling_ft": 7200,
+      "vis_km": 8.0,
+      "wind_kt": 6,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 240,
+      "end": 300,
+      "ceiling_ft": 8400,
+      "vis_km": 9.9,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 300,
+      "end": 360,
+      "ceiling_ft": 8400,
+      "vis_km": 7.9,
+      "wind_kt": 11,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 360,
+      "end": 420,
+      "ceiling_ft": 2200,
+      "vis_km": 4.0,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "morning haze"
+    },
+    {
+      "location_id": "Z5",
+      "start": 420,
+      "end": 480,
+      "ceiling_ft": 2200,
+      "vis_km": 4.0,
+      "wind_kt": 14,
+      "kind": "forecast",
+      "note": "morning haze"
+    },
+    {
+      "location_id": "Z5",
+      "start": 480,
+      "end": 540,
+      "ceiling_ft": 6200,
+      "vis_km": 8.5,
+      "wind_kt": 14,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 540,
+      "end": 600,
+      "ceiling_ft": 5500,
+      "vis_km": 9.7,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 600,
+      "end": 660,
+      "ceiling_ft": 6000,
+      "vis_km": 7.9,
+      "wind_kt": 10,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 660,
+      "end": 720,
+      "ceiling_ft": 8600,
+      "vis_km": 8.4,
+      "wind_kt": 15,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 720,
+      "end": 780,
+      "ceiling_ft": 8300,
+      "vis_km": 9.4,
+      "wind_kt": 17,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 780,
+      "end": 840,
+      "ceiling_ft": 8800,
+      "vis_km": 9.4,
+      "wind_kt": 16,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 840,
+      "end": 900,
+      "ceiling_ft": 4800,
+      "vis_km": 7.5,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 900,
+      "end": 960,
+      "ceiling_ft": 7700,
+      "vis_km": 9.2,
+      "wind_kt": 17,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 960,
+      "end": 1020,
+      "ceiling_ft": 5200,
+      "vis_km": 8.0,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 1020,
+      "end": 1080,
+      "ceiling_ft": 5500,
+      "vis_km": 7.8,
+      "wind_kt": 18,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 1080,
+      "end": 1140,
+      "ceiling_ft": 5100,
+      "vis_km": 7.4,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 1140,
+      "end": 1200,
+      "ceiling_ft": 4900,
+      "vis_km": 8.0,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 1200,
+      "end": 1260,
+      "ceiling_ft": 7000,
+      "vis_km": 9.3,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 1260,
+      "end": 1320,
+      "ceiling_ft": 5300,
+      "vis_km": 8.7,
+      "wind_kt": 16,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 1320,
+      "end": 1380,
+      "ceiling_ft": 6000,
+      "vis_km": 7.1,
+      "wind_kt": 14,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z5",
+      "start": 1380,
+      "end": 1440,
+      "ceiling_ft": 7800,
+      "vis_km": 8.2,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 0,
+      "end": 60,
+      "ceiling_ft": 7800,
+      "vis_km": 9.3,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 60,
+      "end": 120,
+      "ceiling_ft": 7800,
+      "vis_km": 9.5,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 120,
+      "end": 180,
+      "ceiling_ft": 6800,
+      "vis_km": 7.6,
+      "wind_kt": 15,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 180,
+      "end": 240,
+      "ceiling_ft": 7600,
+      "vis_km": 8.0,
+      "wind_kt": 16,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 240,
+      "end": 300,
+      "ceiling_ft": 8100,
+      "vis_km": 7.5,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 300,
+      "end": 360,
+      "ceiling_ft": 7000,
+      "vis_km": 9.1,
+      "wind_kt": 8,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 360,
+      "end": 420,
+      "ceiling_ft": 5600,
+      "vis_km": 8.7,
+      "wind_kt": 17,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 420,
+      "end": 480,
+      "ceiling_ft": 8800,
+      "vis_km": 9.3,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 480,
+      "end": 540,
+      "ceiling_ft": 8900,
+      "vis_km": 9.7,
+      "wind_kt": 14,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 540,
+      "end": 600,
+      "ceiling_ft": 3500,
+      "vis_km": 7.1,
+      "wind_kt": 11,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 600,
+      "end": 660,
+      "ceiling_ft": 7500,
+      "vis_km": 7.4,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 660,
+      "end": 720,
+      "ceiling_ft": 5500,
+      "vis_km": 7.1,
+      "wind_kt": 10,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 720,
+      "end": 780,
+      "ceiling_ft": 8500,
+      "vis_km": 8.4,
+      "wind_kt": 12,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 780,
+      "end": 840,
+      "ceiling_ft": 7400,
+      "vis_km": 8.9,
+      "wind_kt": 6,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 840,
+      "end": 900,
+      "ceiling_ft": 7000,
+      "vis_km": 9.1,
+      "wind_kt": 21,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 900,
+      "end": 960,
+      "ceiling_ft": 8400,
+      "vis_km": 7.0,
+      "wind_kt": 7,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 960,
+      "end": 1020,
+      "ceiling_ft": 4400,
+      "vis_km": 8.0,
+      "wind_kt": 11,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 1020,
+      "end": 1080,
+      "ceiling_ft": 6400,
+      "vis_km": 7.6,
+      "wind_kt": 9,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 1080,
+      "end": 1140,
+      "ceiling_ft": 8000,
+      "vis_km": 7.9,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 1140,
+      "end": 1200,
+      "ceiling_ft": 6100,
+      "vis_km": 9.1,
+      "wind_kt": 22,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 1200,
+      "end": 1260,
+      "ceiling_ft": 7000,
+      "vis_km": 7.4,
+      "wind_kt": 4,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 1260,
+      "end": 1320,
+      "ceiling_ft": 5200,
+      "vis_km": 9.8,
+      "wind_kt": 5,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 1320,
+      "end": 1380,
+      "ceiling_ft": 4600,
+      "vis_km": 8.7,
+      "wind_kt": 20,
+      "kind": "forecast",
+      "note": "fair"
+    },
+    {
+      "location_id": "Z6",
+      "start": 1380,
+      "end": 1440,
+      "ceiling_ft": 4900,
+      "vis_km": 10.0,
+      "wind_kt": 19,
+      "kind": "forecast",
+      "note": "fair"
+    }
+  ]
+}

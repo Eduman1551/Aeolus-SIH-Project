@@ -1,0 +1,13 @@
+{
+  "source": "planning rules",
+  "seed": 2026,
+  "synthetic": true,
+  "rules": {
+    "brief_min": 60,
+    "debrief_min": 30,
+    "horizon_start": 360,
+    "horizon_end": 1440,
+    "scenario_start": 360,
+    "freeze_min": 30
+  }
+}

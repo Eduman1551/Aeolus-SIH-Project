@@ -1,0 +1,39 @@
+{
+  "source": "intelligence cell",
+  "seed": 2026,
+  "synthetic": true,
+  "threats": [
+    {
+      "id": "T1",
+      "zone_id": "Z2",
+      "level": 1,
+      "start": 0,
+      "end": 1440,
+      "note": "light air defence"
+    },
+    {
+      "id": "T2",
+      "zone_id": "Z3",
+      "level": 2,
+      "start": 0,
+      "end": 1440,
+      "note": "medium SAM site"
+    },
+    {
+      "id": "T3",
+      "zone_id": "Z4",
+      "level": 1,
+      "start": 0,
+      "end": 1440,
+      "note": "small-arms and MANPADS"
+    },
+    {
+      "id": "T4",
+      "zone_id": "Z5",
+      "level": 2,
+      "start": 0,
+      "end": 1440,
+      "note": "mobile SAM battery"
+    }
+  ]
+}

@@ -1,0 +1,349 @@
+{
+  "source": "fleet management system",
+  "seed": 2026,
+  "synthetic": true,
+  "aircraft_types": [
+    {
+      "id": "ARC",
+      "name": "Arcus",
+      "role": "multirole fighter",
+      "radius_km": 700,
+      "turnaround_min": 60,
+      "min_ceiling_ft": 500,
+      "min_vis_km": 1.5,
+      "max_threat": 3,
+      "vulnerability": 1,
+      "weather_sensitivity": 0
+    },
+    {
+      "id": "SKR",
+      "name": "Skarn",
+      "role": "strike / SEAD",
+      "radius_km": 600,
+      "turnaround_min": 90,
+      "min_ceiling_ft": 800,
+      "min_vis_km": 2.0,
+      "max_threat": 3,
+      "vulnerability": 2,
+      "weather_sensitivity": 1
+    },
+    {
+      "id": "NOC",
+      "name": "Nocta",
+      "role": "ISR",
+      "radius_km": 950,
+      "turnaround_min": 75,
+      "min_ceiling_ft": 600,
+      "min_vis_km": 2.0,
+      "max_threat": 2,
+      "vulnerability": 3,
+      "weather_sensitivity": 1
+    },
+    {
+      "id": "TRV",
+      "name": "Travan",
+      "role": "tactical transport",
+      "radius_km": 1200,
+      "turnaround_min": 120,
+      "min_ceiling_ft": 400,
+      "min_vis_km": 1.0,
+      "max_threat": 1,
+      "vulnerability": 3,
+      "weather_sensitivity": 0
+    }
+  ],
+  "aircraft": [
+    {
+      "id": "AR-101",
+      "type_id": "ARC",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 34.3,
+        "age_years": 10.5,
+        "faults_30d": 1,
+        "days_since_inspection": 11,
+        "sorties_7d": 6
+      }
+    },
+    {
+      "id": "AR-102",
+      "type_id": "ARC",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 127.4,
+        "age_years": 12.3,
+        "faults_30d": 1,
+        "days_since_inspection": 40,
+        "sorties_7d": 10
+      }
+    },
+    {
+      "id": "AR-103",
+      "type_id": "ARC",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 210.0,
+        "age_years": 11.8,
+        "faults_30d": 3,
+        "days_since_inspection": 60,
+        "sorties_7d": 12
+      }
+    },
+    {
+      "id": "AR-104",
+      "type_id": "ARC",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 29.7,
+        "age_years": 7.3,
+        "faults_30d": 0,
+        "days_since_inspection": 33,
+        "sorties_7d": 3
+      }
+    },
+    {
+      "id": "SK-201",
+      "type_id": "SKR",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 117.8,
+        "age_years": 13.3,
+        "faults_30d": 2,
+        "days_since_inspection": 25,
+        "sorties_7d": 6
+      }
+    },
+    {
+      "id": "SK-202",
+      "type_id": "SKR",
+      "base_id": "B1",
+      "status": "unserviceable",
+      "unavailable": [
+        {
+          "start": 0,
+          "end": 1440,
+          "reason": "gearbox replacement"
+        }
+      ],
+      "risk": {
+        "hours_since_maint": 67.7,
+        "age_years": 8.2,
+        "faults_30d": 0,
+        "days_since_inspection": 29,
+        "sorties_7d": 11
+      }
+    },
+    {
+      "id": "SK-203",
+      "type_id": "SKR",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 96.5,
+        "age_years": 13.8,
+        "faults_30d": 0,
+        "days_since_inspection": 40,
+        "sorties_7d": 11
+      }
+    },
+    {
+      "id": "NC-301",
+      "type_id": "NOC",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 55.1,
+        "age_years": 9.9,
+        "faults_30d": 2,
+        "days_since_inspection": 24,
+        "sorties_7d": 3
+      }
+    },
+    {
+      "id": "NC-302",
+      "type_id": "NOC",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 121.7,
+        "age_years": 8.5,
+        "faults_30d": 1,
+        "days_since_inspection": 32,
+        "sorties_7d": 4
+      }
+    },
+    {
+      "id": "TV-401",
+      "type_id": "TRV",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 67.9,
+        "age_years": 11.8,
+        "faults_30d": 1,
+        "days_since_inspection": 12,
+        "sorties_7d": 9
+      }
+    },
+    {
+      "id": "TV-402",
+      "type_id": "TRV",
+      "base_id": "B1",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 80.8,
+        "age_years": 14.3,
+        "faults_30d": 1,
+        "days_since_inspection": 36,
+        "sorties_7d": 9
+      }
+    },
+    {
+      "id": "AR-105",
+      "type_id": "ARC",
+      "base_id": "B2",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 130.0,
+        "age_years": 6.9,
+        "faults_30d": 1,
+        "days_since_inspection": 35,
+        "sorties_7d": 11
+      }
+    },
+    {
+      "id": "AR-106",
+      "type_id": "ARC",
+      "base_id": "B2",
+      "status": "serviceable",
+      "unavailable": [
+        {
+          "start": 0,
+          "end": 780,
+          "reason": "scheduled inspection"
+        }
+      ],
+      "risk": {
+        "hours_since_maint": 82.2,
+        "age_years": 3.4,
+        "faults_30d": 0,
+        "days_since_inspection": 13,
+        "sorties_7d": 3
+      }
+    },
+    {
+      "id": "AR-107",
+      "type_id": "ARC",
+      "base_id": "B2",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 135.5,
+        "age_years": 10.8,
+        "faults_30d": 2,
+        "days_since_inspection": 11,
+        "sorties_7d": 12
+      }
+    },
+    {
+      "id": "SK-204",
+      "type_id": "SKR",
+      "base_id": "B2",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 71.5,
+        "age_years": 5.1,
+        "faults_30d": 0,
+        "days_since_inspection": 12,
+        "sorties_7d": 10
+      }
+    },
+    {
+      "id": "SK-205",
+      "type_id": "SKR",
+      "base_id": "B2",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 265.0,
+        "age_years": 13.7,
+        "faults_30d": 4,
+        "days_since_inspection": 78,
+        "sorties_7d": 11
+      }
+    },
+    {
+      "id": "SK-206",
+      "type_id": "SKR",
+      "base_id": "B2",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 68.2,
+        "age_years": 18.0,
+        "faults_30d": 1,
+        "days_since_inspection": 37,
+        "sorties_7d": 10
+      }
+    },
+    {
+      "id": "NC-303",
+      "type_id": "NOC",
+      "base_id": "B2",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 116.6,
+        "age_years": 9.0,
+        "faults_30d": 0,
+        "days_since_inspection": 23,
+        "sorties_7d": 7
+      }
+    },
+    {
+      "id": "NC-304",
+      "type_id": "NOC",
+      "base_id": "B2",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 21.1,
+        "age_years": 5.2,
+        "faults_30d": 1,
+        "days_since_inspection": 34,
+        "sorties_7d": 11
+      }
+    },
+    {
+      "id": "TV-403",
+      "type_id": "TRV",
+      "base_id": "B2",
+      "status": "serviceable",
+      "unavailable": [],
+      "risk": {
+        "hours_since_maint": 131.2,
+        "age_years": 8.4,
+        "faults_30d": 0,
+        "days_since_inspection": 21,
+        "sorties_7d": 10
+      }
+    }
+  ]
+}

@@ -1,0 +1,405 @@
+{
+  "source": "crew rostering system",
+  "seed": 2026,
+  "synthetic": true,
+  "crews": [
+    {
+      "id": "C-01",
+      "callsign": "Ash",
+      "base_id": "B1",
+      "qualified_types": [
+        "ARC"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-02",
+      "callsign": "Birch",
+      "base_id": "B1",
+      "qualified_types": [
+        "ARC"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-03",
+      "callsign": "Cinder",
+      "base_id": "B1",
+      "qualified_types": [
+        "ARC"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-04",
+      "callsign": "Dune",
+      "base_id": "B1",
+      "qualified_types": [
+        "ARC"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-05",
+      "callsign": "Ember",
+      "base_id": "B1",
+      "qualified_types": [
+        "ARC"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-06",
+      "callsign": "Flint",
+      "base_id": "B1",
+      "qualified_types": [
+        "SKR"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-07",
+      "callsign": "Gale",
+      "base_id": "B1",
+      "qualified_types": [
+        "SKR"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-08",
+      "callsign": "Hollow",
+      "base_id": "B1",
+      "qualified_types": [
+        "SKR"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-09",
+      "callsign": "Iris",
+      "base_id": "B1",
+      "qualified_types": [
+        "SKR"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-10",
+      "callsign": "Jade",
+      "base_id": "B1",
+      "qualified_types": [
+        "ARC",
+        "SKR"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-11",
+      "callsign": "Kite",
+      "base_id": "B1",
+      "qualified_types": [
+        "NOC"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-12",
+      "callsign": "Lumen",
+      "base_id": "B1",
+      "qualified_types": [
+        "NOC"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-13",
+      "callsign": "Moss",
+      "base_id": "B1",
+      "qualified_types": [
+        "NOC"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-14",
+      "callsign": "Nettle",
+      "base_id": "B1",
+      "qualified_types": [
+        "TRV"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-15",
+      "callsign": "Onyx",
+      "base_id": "B1",
+      "qualified_types": [
+        "TRV"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-16",
+      "callsign": "Pike",
+      "base_id": "B1",
+      "qualified_types": [
+        "TRV"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-17",
+      "callsign": "Quill",
+      "base_id": "B2",
+      "qualified_types": [
+        "ARC"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-18",
+      "callsign": "Rook",
+      "base_id": "B2",
+      "qualified_types": [
+        "ARC"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-19",
+      "callsign": "Sable",
+      "base_id": "B2",
+      "qualified_types": [
+        "ARC"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-20",
+      "callsign": "Thorn",
+      "base_id": "B2",
+      "qualified_types": [
+        "ARC"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "unavailable",
+      "unavailable": [
+        {
+          "start": 0,
+          "end": 1440,
+          "reason": "medical"
+        }
+      ]
+    },
+    {
+      "id": "C-21",
+      "callsign": "Umber",
+      "base_id": "B2",
+      "qualified_types": [
+        "SKR"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-22",
+      "callsign": "Vale",
+      "base_id": "B2",
+      "qualified_types": [
+        "SKR"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-23",
+      "callsign": "Wren",
+      "base_id": "B2",
+      "qualified_types": [
+        "SKR"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-24",
+      "callsign": "Yarrow",
+      "base_id": "B2",
+      "qualified_types": [
+        "SKR"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-25",
+      "callsign": "Zephyr",
+      "base_id": "B2",
+      "qualified_types": [
+        "ARC",
+        "SKR"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-26",
+      "callsign": "Alder",
+      "base_id": "B2",
+      "qualified_types": [
+        "NOC"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-27",
+      "callsign": "Bramble",
+      "base_id": "B2",
+      "qualified_types": [
+        "NOC"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-28",
+      "callsign": "Coral",
+      "base_id": "B2",
+      "qualified_types": [
+        "NOC"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-29",
+      "callsign": "Drift",
+      "base_id": "B2",
+      "qualified_types": [
+        "TRV"
+      ],
+      "duty_start": 360,
+      "duty_end": 1080,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    },
+    {
+      "id": "C-30",
+      "callsign": "Fern",
+      "base_id": "B2",
+      "qualified_types": [
+        "TRV"
+      ],
+      "duty_start": 720,
+      "duty_end": 1440,
+      "max_duty_min": 600,
+      "status": "available",
+      "unavailable": []
+    }
+  ]
+}

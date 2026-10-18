@@ -1,0 +1,66 @@
+{
+  "source": "airspace control cell",
+  "seed": 2026,
+  "synthetic": true,
+  "bases": [
+    {
+      "id": "B1",
+      "name": "Base 1 Northfield",
+      "x_km": 100,
+      "y_km": 400
+    },
+    {
+      "id": "B2",
+      "name": "Base 2 Eastmoor",
+      "x_km": 420,
+      "y_km": 380
+    }
+  ],
+  "zones": [
+    {
+      "id": "Z1",
+      "name": "Zone 1 Redhill",
+      "x_km": 300,
+      "y_km": 150
+    },
+    {
+      "id": "Z2",
+      "name": "Zone 2 Saltmarsh",
+      "x_km": 520,
+      "y_km": 120
+    },
+    {
+      "id": "Z3",
+      "name": "Zone 3 Ironvale",
+      "x_km": 640,
+      "y_km": 330
+    },
+    {
+      "id": "Z4",
+      "name": "Zone 4 Westfold",
+      "x_km": 180,
+      "y_km": 700
+    },
+    {
+      "id": "Z5",
+      "name": "Zone 5 Far Reach",
+      "x_km": 980,
+      "y_km": 240
+    },
+    {
+      "id": "Z6",
+      "name": "Zone 6 Greywater",
+      "x_km": 40,
+      "y_km": 80
+    }
+  ],
+  "restrictions": [
+    {
+      "id": "R1",
+      "zone_id": "Z4",
+      "start": 540,
+      "end": 660,
+      "reason": "civil air corridor active"
+    }
+  ]
+}
