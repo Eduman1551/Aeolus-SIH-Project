@@ -48,11 +48,15 @@ export default function TopBar() {
     <header className="flex h-12 shrink-0 items-center gap-4 border-b border-line bg-panel px-4">
       <Wordmark />
 
-      <div className="ml-2 flex items-center gap-2 rounded-md border border-line bg-bg px-2.5 py-1">
+      <div
+        className="ml-2 flex items-center gap-2 rounded-md border border-line bg-bg px-2.5 py-1"
+        title={plan?.active ? "Scenario time. Runs faster than real time while a plan is active." : "The scenario clock starts when the first plan is published."}
+      >
         <span className="label text-[11px] text-dim">Scenario D1</span>
         <span className="mono text-[15px] font-medium text-text" aria-label="Scenario clock">
           {hhmmss(now)}
         </span>
+        {!plan?.active && <span className="text-[10px] text-dim">starts on publish</span>}
         <button
           onClick={togglePause}
           className="ml-0.5 rounded p-0.5 text-muted hover:bg-panel-3 hover:text-text"
