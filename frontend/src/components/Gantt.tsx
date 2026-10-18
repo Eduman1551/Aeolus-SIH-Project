@@ -52,12 +52,12 @@ function ResultBadge() {
   return (
     <span
       className={cx(
-        "fade-in mono inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm border px-2 py-[3px] text-[11.5px]",
+        "fade-in mono inline-flex min-w-0 max-w-full items-center gap-1.5 whitespace-nowrap rounded-sm border px-2 py-[3px] text-[11.5px]",
         badge.tone === "ok" ? "border-teal/40 bg-teal-dim/30 text-teal" : "border-amber/40 bg-amber-dim/30 text-amber",
       )}
     >
-      {hit && <Zap size={12} />}
-      {badge.text}
+      {hit && <Zap size={12} className="shrink-0" />}
+      <span className="truncate" title={badge.text}>{badge.text}</span>
     </span>
   );
 }
@@ -371,7 +371,7 @@ export default function Gantt() {
 
   return (
     <div className="relative flex h-full flex-col">
-      <div className="flex h-10 shrink-0 items-center gap-3 border-b border-line px-3">
+      <div className="flex h-10 shrink-0 items-center gap-3 overflow-hidden border-b border-line px-3">
         <h2 className="label whitespace-nowrap text-[13px] text-text">Air tasking timeline</h2>
         {proposal && plan.active && (
           <div className="flex rounded-md border border-line-2 bg-bg p-0.5 text-[12px]" role="tablist" aria-label="Plan shown">
@@ -389,11 +389,11 @@ export default function Gantt() {
           </div>
         )}
         {shown && (
-          <span className="mono hidden whitespace-nowrap text-[11.5px] text-muted xl:inline">
+          <span className="mono hidden whitespace-nowrap text-[11.5px] text-muted 2xl:inline">
             {shown.id} · {shown.sorties.length} sorties · {shown.source === "cache" ? "from cache" : shown.solver_status.toLowerCase()}
           </span>
         )}
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex min-w-0 items-center gap-3">
           <ResultBadge />
         </div>
       </div>

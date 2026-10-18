@@ -205,7 +205,7 @@ export interface Proposal {
   id: string;
   plan: Plan;
   previous_id: string | null;
-  trigger: { kind: string; label: string; note?: string; conditions?: string[]; parser?: string; text?: string };
+  trigger: { kind: string; label: string; note?: string; conditions?: string[]; parser?: string; text?: string; compared_with?: string };
   validation: ValidationReport;
   publishable: boolean;
   changes: Change[];

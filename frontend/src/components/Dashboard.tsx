@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { api, API_URL } from "@/lib/api";
 import { useStore } from "@/lib/store";
 import { connectLive } from "@/lib/ws";
+import EndPlanModal from "./EndPlanModal";
 import Gantt from "./Gantt";
 import KpiStrip from "./KpiStrip";
 import MissionTable from "./MissionTable";
@@ -68,6 +69,7 @@ export default function Dashboard() {
         </>
       )}
       <Toasts />
+      <EndPlanModal />
     </div>
   );
 }
