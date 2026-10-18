@@ -37,6 +37,12 @@ class SolveOptions:
     earliest: float | None = None  # no new take-off before this minute
     serviceability: dict[str, float] = field(default_factory=dict)  # aircraft -> P(serviceable)
     weather_impact: dict[tuple[str, str, str], float] = field(default_factory=dict)  # (mission, base, type) -> 0..1
+    # replanning
+    previous: Plan | None = None  # warm start + stability reference
+    stability_lambda: int = 0  # penalty per changed / dropped previous sortie
+    frozen: list[Sortie] = field(default_factory=list)  # sorties already committed, kept as they are
+    # rejected alternatives: each entry is (sorties the rejected plan added, previous sorties it dropped)
+    forbid: list[tuple[list[tuple[str, str, str]], list[tuple[str, str, str]]]] = field(default_factory=list)
 
 
 @dataclass
@@ -75,7 +81,7 @@ def solve(ws: WorldState, opts: SolveOptions | None = None) -> SolveResult:
     opts = opts or SolveOptions()
     t_start = time.perf_counter()
     earliest = opts.earliest if opts.earliest is not None else ws.rules.horizon_start
-    feas = build_feasibility(ws, earliest)
+    feas = build_feasibility(ws, earliest, opts.frozen)
     r = ws.rules
 
     model = cp_model.CpModel()
@@ -161,6 +167,41 @@ def solve(ws: WorldState, opts: SolveOptions | None = None) -> SolveResult:
         pen = risk_penalty(ws, mid, aid, opts)
         penalties[(mid, aid)] = pen
         obj.append(-sum(pen.values()) * SCALE * xv)
+
+    # committed sorties stay exactly as they are
+    for fz in opts.frozen:
+        v = p.get((fz.mission_id, fz.aircraft_id, fz.crew_id))
+        if v is not None:
+            model.add(v == 1)
+
+    # stability: lambda x (previous sorties changed or dropped), plus warm start hints
+    if opts.previous is not None:
+        lam = opts.stability_lambda * SCALE
+        for mid, olds in opts.previous.by_mission().items():
+            if mid not in s:
+                continue
+            for o in olds:
+                v = p.get((mid, o.aircraft_id, o.crew_id))
+                if v is not None and lam:
+                    obj.append(lam * v)  # = -lam * (1 - v) up to a constant
+            t_old = olds[0].takeoff
+            if lam:
+                moved = model.new_bool_var(f"moved_{mid}")
+                model.add(s[mid] == t_old).only_enforce_if([moved.Not(), assigned[mid]])
+                obj.append(-lam * len(olds) * moved)
+            model.add_hint(s[mid], t_old)
+        prev_keys = {(o.mission_id, o.aircraft_id, o.crew_id) for o in opts.previous.sorties}
+        for key, v in p.items():
+            model.add_hint(v, 1 if key in prev_keys else 0)
+
+    # rejected alternatives must not come back exactly
+    for added, dropped in opts.forbid:
+        if any(k not in p for k in added):
+            continue  # that combination is impossible now anyway
+        lhs = [p[k] for k in added] + [1 - p[k] if k in p else 1 for k in dropped]
+        if lhs:
+            model.add(sum(lhs) <= len(lhs) - 1)
+
     model.maximize(sum(obj))
 
     solver = cp_model.CpSolver()
