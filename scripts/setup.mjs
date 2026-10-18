@@ -11,7 +11,10 @@ const isWin = process.platform === "win32";
 function run(cmd, args, { allowFail = false, cwd = root } = {}) {
   console.log(`\n> ${cmd} ${args.join(" ")}`);
   const env = { ...process.env, PYTHONPATH: path.join(root, "backend"), PYTHONUTF8: "1" };
-  const r = spawnSync(cmd, args, { cwd, stdio: "inherit", env, shell: isWin && !cmd.endsWith(".exe") });
+  // .cmd shims (pnpm on Windows) need a shell; pass one quoted command line instead of an args array
+  const r = isWin && !cmd.endsWith(".exe")
+    ? spawnSync([cmd, ...args].map((a) => (/\s/.test(a) ? `"${a}"` : a)).join(" "), { cwd, stdio: "inherit", env, shell: true })
+    : spawnSync(cmd, args, { cwd, stdio: "inherit", env });
   if (r.status !== 0 && !allowFail) {
     console.error(`\nStep failed: ${cmd} ${args.join(" ")}`);
     process.exit(r.status ?? 1);
@@ -24,10 +27,8 @@ function findPython() {
     ? [["py", ["-3.12"]], ["py", ["-3.11"]], ["py", ["-3.13"]], ["python", []]]
     : [["python3.12", []], ["python3.11", []], ["python3.13", []], ["python3", []]];
   for (const [cmd, pre] of candidates) {
-    const r = spawnSync(cmd, [...pre, "-c", "import sys; print('%d.%d' % sys.version_info[:2])"], {
-      encoding: "utf8",
-      shell: isWin,
-    });
+    // py.exe and python.exe are real executables, so no shell is needed
+    const r = spawnSync(cmd, [...pre, "-c", "import sys; print('%d.%d' % sys.version_info[:2])"], { encoding: "utf8" });
     const v = (r.stdout || "").trim();
     if (r.status === 0 && ["3.11", "3.12", "3.13"].includes(v)) return { cmd, pre, v };
   }
