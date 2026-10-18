@@ -20,7 +20,7 @@ def wait_ready(p, timeout=30):
 
 @pytest.fixture
 def planner():
-    p = build_planner(dataclasses.replace(settings, database_url=None))
+    p = build_planner(dataclasses.replace(settings, database_url=None, groq_api_key=None))
     prop = p.generate()
     p.approve(prop.id)
     wait_ready(p)

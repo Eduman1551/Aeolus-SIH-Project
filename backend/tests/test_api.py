@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 @pytest.fixture
 def client(monkeypatch):
     # keep tests off the real database
-    monkeypatch.setattr(main_mod, "settings", dataclasses.replace(main_mod.settings, database_url=None))
+    monkeypatch.setattr(main_mod, "settings", dataclasses.replace(main_mod.settings, database_url=None, groq_api_key=None))
     with TestClient(main_mod.app) as c:
         yield c
 

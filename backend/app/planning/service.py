@@ -6,9 +6,11 @@ import logging
 import threading
 
 from app.config import Settings
+from app.events.types import EventIn
 from app.fusion.schema import Plan
 from app.fusion.world import WorldState
-from app.planning.orchestrator import Planner
+from app.llm.client import LLM
+from app.planning.orchestrator import Planner, Proposal
 from app.precompute.cache import ContingencyCache, build_cache
 from app.precompute.fragility import compute_fragility
 from app.predict.model import predict_serviceability
@@ -20,8 +22,24 @@ log = logging.getLogger("aeolus.service")
 class AeolusPlanner(Planner):
     def reset(self) -> None:
         self._risk_memo: tuple[int, int, tuple] | None = None
+        if not hasattr(self, "llm"):
+            self.llm = LLM(self.settings.groq_api_key, self.settings.llm_model)
         super().reset()
         self.cache = ContingencyCache()
+
+    # ---------- LLM: text -> conditions, summary wording ----------
+
+    def parse_note(self, text: str) -> tuple[list[EventIn], str]:
+        with self.lock:
+            ws = self.ws
+        return self.llm.parse(text, ws)
+
+    def reword(self, proposal: Proposal) -> None:
+        if not proposal.changes and proposal.trigger.get("kind") == "initial":
+            return
+        text = self.llm.reword(proposal.summary, [c.reason for c in proposal.changes])
+        if text:
+            proposal.summary_llm = text
 
     # ---------- predictive inputs ----------
 
