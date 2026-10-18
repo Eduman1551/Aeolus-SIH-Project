@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -31,8 +31,8 @@ def _float(name: str, default: float) -> float:
 
 @dataclass(frozen=True)
 class Settings:
-    database_url: str | None
-    groq_api_key: str | None
+    database_url: str | None = field(repr=False)
+    groq_api_key: str | None = field(repr=False)
     llm_model: str | None
     sim_speed: float  # scenario minutes per real minute
     stability_lambda: int
