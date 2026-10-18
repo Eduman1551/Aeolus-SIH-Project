@@ -32,3 +32,6 @@ logs/
 .DS_Store
 Thumbs.db
 backend/app/predict/*.meta.json
+
+# local tool settings
+.claude/

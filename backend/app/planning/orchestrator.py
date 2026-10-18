@@ -418,4 +418,7 @@ class Planner:
                 "history": self.history[-20:],
                 "ended": self.ended,
                 "stability_lambda": self.stability_lambda,
+                "kpi_history": {"replans": self.kpi.replans[-20:], "stabilities": self.kpi.stabilities[-20:],
+                                "manual_baseline_min": self.kpi.manual_baseline_min,
+                                "greedy_ms": self.kpi.greedy_ms, "initial_solve_ms": self.kpi.initial_solve_ms},
             }
