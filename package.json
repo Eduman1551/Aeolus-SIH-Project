@@ -1,0 +1,23 @@
+{
+  "name": "aeolus",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Aeolus: decision support for air-operations planning (SIH 2026, PS26249). Synthetic data only.",
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "concurrently -k -n api,web -c cyan,yellow \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev:api": "node scripts/run-api.mjs",
+    "dev:web": "pnpm --dir frontend dev",
+    "build:web": "pnpm --dir frontend build",
+    "db:init": "node scripts/run-py.mjs backend/db/init_db.py",
+    "seed": "node scripts/run-py.mjs data/generate.py",
+    "train": "node scripts/run-py.mjs -m app.predict.train",
+    "test": "node scripts/run-py.mjs -m pytest backend/tests -q",
+    "lint": "node scripts/run-py.mjs -m ruff check backend scripts data",
+    "smoke": "node scripts/run-py.mjs scripts/smoke.py"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "packageManager": "pnpm@11.9.0"
+}
