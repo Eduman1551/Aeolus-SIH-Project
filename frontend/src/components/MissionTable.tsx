@@ -14,6 +14,7 @@ export default function MissionTable() {
   const plan = useStore((s) => s.plan);
   const view = useStore((s) => s.view);
   const [filter, setFilter] = useState<Filter>("all");
+  const select = useStore((s) => s.setSelected);
 
   const proposal = plan?.proposal ?? null;
   const showProposal = !!proposal && (view === "proposal" || !plan?.active);
@@ -43,24 +44,24 @@ export default function MissionTable() {
   const visible = rows.filter((r) => (filter === "unassigned" ? r.status === "unassigned" : filter === "changed" ? r.changes.length > 0 : true));
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex h-9 shrink-0 items-center gap-3 border-b border-line px-3">
-        <h2 className="label text-[13px]">Missions</h2>
-        <span className="text-[12px] text-muted">
+    <div>
+      <div className="flex flex-wrap items-center gap-3 px-6 py-4">
+        <h2 className="text-[16px] font-semibold">Missions</h2>
+        <span className="text-[14px] text-muted">
           {shown ? (
             <>
-              <span className="text-teal">{rows.filter((r) => r.status === "assigned").length} assigned</span> ·{" "}
-              <span className={unassigned ? "text-coral" : "text-muted"}>{unassigned} unassigned</span> of {rows.filter((r) => r.status !== "cancelled").length} open
+              {rows.filter((r) => r.status === "assigned").length} assigned,{" "}
+              <span className={unassigned ? "font-medium text-amber" : ""}>{unassigned} not assigned</span>, out of {rows.filter((r) => r.status !== "cancelled").length} open
             </>
           ) : (
-            `${rows.length} missions in the tasking order`
+            `${rows.length} missions in today's tasking`
           )}
         </span>
-        <div className="ml-auto flex rounded-md border border-line-2 bg-bg p-0.5 text-[12px]" role="tablist" aria-label="Filter missions">
+        <div className="ml-auto flex rounded-xl border border-line bg-panel-2 p-1 text-[13.5px]" role="tablist" aria-label="Filter missions">
           {(
             [
               ["all", `All ${rows.length}`],
-              ["unassigned", `Unassigned ${unassigned}`],
+              ["unassigned", `Not assigned ${unassigned}`],
               ["changed", `Changed ${changed}`],
             ] as [Filter, string][]
           ).map(([f, label]) => (
@@ -69,24 +70,24 @@ export default function MissionTable() {
               role="tab"
               aria-selected={filter === f}
               onClick={() => setFilter(f)}
-              className={cx("rounded px-2 py-0.5", filter === f ? "bg-panel-3 text-text" : "text-muted hover:text-text")}
+              className={cx("rounded-lg px-3 py-1 font-medium", filter === f ? "bg-white text-primary-dark shadow-sm" : "text-muted hover:text-text")}
             >
               {label}
             </button>
           ))}
         </div>
       </div>
-      <div className="min-h-0 flex-1 overflow-auto">
+      <div className="overflow-x-auto">
         {visible.length === 0 ? (
-          <Empty icon={<ListChecks size={22} />} title={filter === "changed" ? "No changes in this view" : "Nothing unassigned"}>
-            {filter === "changed" ? "Changes show up here when a proposal differs from the active plan." : "Every open mission has aircraft and crew."}
+          <Empty icon={<ListChecks size={22} />} title={filter === "changed" ? "No changes to show" : "Every mission is assigned"}>
+            {filter === "changed" ? "Changed missions appear here when a proposed plan differs from the live one." : "All open missions have aircraft and crew."}
           </Empty>
         ) : (
-          <table className="w-full border-separate border-spacing-0 text-[12px]">
-            <thead className="sticky top-0 z-10 bg-panel">
-              <tr className="text-left text-dim">
-                {["Mission", "Type", "Zone", "Window", "Take-off", "Aircraft / crew", "Status", "Reason"].map((h) => (
-                  <th key={h} className="label border-b border-line px-2 py-1.5 text-[11px] font-semibold first:pl-3">
+          <table className="w-full min-w-[980px] border-separate border-spacing-0 text-[14px]">
+            <thead>
+              <tr className="text-left text-[13px] text-dim">
+                {["Mission", "Type", "Zone", "Window", "Take-off", "Aircraft and crew", "Status", "Reason"].map((h) => (
+                  <th key={h} className="border-y border-line bg-panel-2 px-3 py-2.5 font-semibold first:pl-6 last:pr-6">
                     {h}
                   </th>
                 ))}
@@ -94,38 +95,48 @@ export default function MissionTable() {
             </thead>
             <tbody>
               {visible.map(({ m, ss, status, reason, changes: ch, typeName }) => (
-                <tr key={m.id} className={cx("align-top hover:bg-panel-2/60", ch.length > 0 && "bg-amber-dim/10")}>
-                  <td className="border-b border-line/60 px-2 py-1.5 pl-3">
-                    <div className="flex items-center gap-1.5">
+                <tr key={m.id} className={cx("align-top hover:bg-panel-2", ch.length > 0 && "bg-primary-50/50")}>
+                  <td className="border-b border-line px-3 py-3 pl-6">
+                    <div className="flex items-center gap-2">
                       <PriorityTag p={m.priority} compact />
-                      <span className="mono font-medium">{m.id}</span>
+                      <span className="num font-semibold">{m.id}</span>
                     </div>
-                    <div className="mt-0.5 max-w-[150px] truncate text-[11px] text-dim" title={`${m.name} (${m.origin})`}>
+                    <div className="mt-1 max-w-[180px] truncate text-[13px] text-dim" title={`${m.name} (${m.origin})`}>
                       {m.name}
                     </div>
                   </td>
-                  <td className="border-b border-line/60 px-2 py-1.5 text-muted">
+                  <td className="border-b border-line px-3 py-3 text-muted">
                     {typeName}
-                    <div className="text-[11px] text-dim">{m.aircraft_required} aircraft</div>
+                    <div className="text-[13px] text-dim">{m.aircraft_required} aircraft</div>
                   </td>
-                  <td className="mono border-b border-line/60 px-2 py-1.5">{m.zone_id}</td>
-                  <td className="mono border-b border-line/60 px-2 py-1.5 text-muted">
+                  <td className="num border-b border-line px-3 py-3">{m.zone_id}</td>
+                  <td className="num border-b border-line px-3 py-3 text-muted">
                     {hhmm(m.window_start)}
-                    {m.window_end !== m.window_start && `-${hhmm(m.window_end)}`}
-                    <div className="text-[11px] text-dim">{m.duration_min} min</div>
+                    {m.window_end !== m.window_start && ` to ${hhmm(m.window_end)}`}
+                    <div className="text-[13px] text-dim">{m.duration_min} min</div>
                   </td>
-                  <td className="mono border-b border-line/60 px-2 py-1.5">{ss[0] ? hhmm(ss[0].takeoff) : "-"}</td>
-                  <td className="mono border-b border-line/60 px-2 py-1.5">
-                    {ss.length ? ss.map((s) => <div key={s.aircraft_id}>{s.aircraft_id} <span className="text-dim">{s.crew_id}</span></div>) : <span className="text-dim">-</span>}
+                  <td className="num border-b border-line px-3 py-3">{ss[0] ? hhmm(ss[0].takeoff) : "-"}</td>
+                  <td className="num border-b border-line px-3 py-3">
+                    {ss.length ? (
+                      ss.map((s) => (
+                        <button key={s.aircraft_id} onClick={() => select(s)} className="block rounded text-left hover:text-primary hover:underline">
+                          {s.aircraft_id} <span className="text-dim">{s.crew_id}</span>
+                        </button>
+                      ))
+                    ) : (
+                      <span className="text-dim">-</span>
+                    )}
                   </td>
-                  <td className="border-b border-line/60 px-2 py-1.5">
-                    {status === "assigned" && <Pill tone="ok">Assigned</Pill>}
-                    {status === "unassigned" && <Pill tone="bad">Unassigned</Pill>}
-                    {status === "cancelled" && <Pill>Cancelled</Pill>}
-                    {status === "open" && <Pill>Open</Pill>}
-                    {ch.length > 0 && <Pill tone="warn" className="ml-1">Changed</Pill>}
+                  <td className="border-b border-line px-3 py-3">
+                    <div className="flex flex-col items-start gap-1">
+                      {status === "assigned" && <Pill tone="info">Assigned</Pill>}
+                      {status === "unassigned" && <Pill tone="warn">Not assigned</Pill>}
+                      {status === "cancelled" && <Pill>Cancelled</Pill>}
+                      {status === "open" && <Pill>Waiting for plan</Pill>}
+                      {ch.length > 0 && <Pill tone="neutral">Changed</Pill>}
+                    </div>
                   </td>
-                  <td className="border-b border-line/60 px-2 py-1.5 leading-[18px] text-muted">
+                  <td className="max-w-[380px] border-b border-line px-3 py-3 pr-6 text-[13.5px] leading-6 text-muted">
                     {status === "unassigned" ? reason : ch.length ? ch[0].reason : m.origin !== "tasking order" ? `Added via ${m.origin}` : ""}
                   </td>
                 </tr>

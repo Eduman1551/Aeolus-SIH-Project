@@ -14,7 +14,7 @@ export const NAV = [
   { href: "/plan", label: "Mission plan", icon: CalendarRange },
   { href: "/events", label: "Events", icon: Zap },
   { href: "/assistant", label: "Assistant", icon: MessageSquareText },
-  { href: "/review", label: "Review and approve", icon: ClipboardCheck },
+  { href: "/review", label: "Review plan", icon: ClipboardCheck },
   { href: "/results", label: "Results", icon: BarChart3 },
   { href: "/guide", label: "How to use", icon: BookOpen },
 ];
