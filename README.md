@@ -102,22 +102,26 @@ Other scripts:
 
 ## The dashboard
 
-A light, multi-page app with a sidebar. Each page does one job, starts with a short "What to do here" tip and ends with a "Next" button.
+A light, multi-page ops-room app. A collapsible sidebar (icon rail below 1280 px) and a top bar sit on every page. The top bar has the "SYNTHETIC EXERCISE DATA" banner, a Zulu scenario clock with play/pause and 1x / 10x / 60x speed, and a Planner / Commander view switch. Each page does one job, starts with a short "What to do here" tip and ends with a "Next" button.
 
 | Page | What you do there |
 |---|---|
-| Home | Getting started checklist, the next step, headline results, recent activity |
-| Data and live feed | Browse aircraft, crews, weapons and missions; watch live updates |
-| Mission plan | Generate the plan; Gantt timeline (click a bar for details); mission table with reasons |
+| Home | Getting started checklist, the next step, headline results, a compact theatre map and flight board, the ops overview charts, **Run exercise** |
+| Ops map | Fictional theatre: bases, target zones, threat rings, weather cells, restricted airspace, routes coloured by priority. Aircraft (ARROW-01, HAMMER-03, ...) move with the clock through taxi, airborne, on target, returning and complete. Click anything for details |
+| Data and live feed | Ops charts (fleet readiness, coverage by priority, crew duty, weapons vs planned use, threat by zone over the day), tables for aircraft, crews, weapons and missions, live feed |
+| Mission plan | Generate the plan; Gantt timeline (click a bar for details; bars animate to their new slot on replan); "where the flying goes" Sankey; mission table with "Why?" reasons |
 | Events | Aircraft down, new priority mission, weather closure, new threat zone; prepared answers |
 | Assistant | Describe a change in plain English, check and edit the conditions, confirm |
 | Review plan | Old vs new side by side with a reason per change, rule checks, Approve / Reject |
 | Results | All 8 KPIs, simple method vs Aeolus, replan time chart, end plan and save |
-| How to use | The flow step by step, and the demo script |
+| Commander summary | Clean summary for a commander: KPIs, map, readiness, coverage, risks to watch, latest decisions |
+| How to use | The flow step by step, the demo script and **Run exercise** |
+
+Hovering a mission in the Gantt, map, flight board, mission table or Sankey highlights it everywhere. Every plan change shows a short solving screen (reading, optimising, validating) ending in the measured result, e.g. "Best plan found in 0.12 s · 0 violations". Motion respects the reduced-motion setting.
 
 ## Demo
 
-The full 4 to 5 minute script is in [docs/DEMO.md](docs/DEMO.md) and on the **How to use** page. In short:
+The full 4 to 5 minute script is in [docs/DEMO.md](docs/DEMO.md) and on the **How to use** page. **Run exercise** (Home or How to use) plays the same story automatically, pausing at each step with a caption built from the real results. In short:
 
 1. Show the fused live picture and the streaming feed.
 2. Generate the initial plan and compare it with the greedy baseline.
@@ -199,7 +203,7 @@ Objective: priority-weighted coverage (P1 10000, P2 4000, P3 1500, P4 600), minu
 
 ## Tech stack
 
-Python 3.11-3.13 · FastAPI · Uvicorn · Pydantic v2 · Google OR-Tools CP-SAT · scikit-learn · PostgreSQL via psycopg 3 (plain SQL, no ORM) · Groq (optional) · Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Zustand · Recharts (replan time chart only) · lucide-react · pnpm · pytest · ruff.
+Python 3.11-3.13 · FastAPI · Uvicorn · Pydantic v2 · Google OR-Tools CP-SAT · scikit-learn · PostgreSQL via psycopg 3 (plain SQL, no ORM) · Groq (optional) · Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Zustand · Recharts (ops charts, Sankey, replan chart) · motion (transitions) · lucide-react · pnpm · pytest · ruff.
 
 ## Known limitations
 

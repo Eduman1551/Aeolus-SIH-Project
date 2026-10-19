@@ -2,6 +2,8 @@
 
 The same script is in the app under **How to use** (`/guide`), with a "Go there" button for each step.
 
+**Hands-free option:** click **Run exercise** on Home. It resets the scenario and plays the story on the clock (first plan, aircraft down from the cache, weather closure, a new P1 mission typed in chat, replan, approve), pausing at each step with a caption made from the measured results. Press **Next** to move on. Use the steps below if you prefer to drive it yourself.
+
 **Before you start**
 
 - `pnpm dev` is running, and <http://localhost:3000> is open full screen (1366x768 or larger).
@@ -11,11 +13,12 @@ The same script is in the app under **How to use** (`/guide`), with a "Go there"
 
 ---
 
-## 1. The live picture (40 s), Data and live feed
+## 1. The live picture (40 s), Ops map and Data
 
 > "Planners pull aircraft, crews, weapons, weather and threats from separate systems. Aeolus puts them in one live picture. Everything here is synthetic."
 
-- Open **Data and live feed**. Show the Aircraft tab: each aircraft has a predicted "ready to fly" percentage (AR-103 is low, SK-202 is down).
+- Open **Ops map**: the fictional theatre with bases, targets, threat rings, weather and restricted airspace. After step 2, press play (60x) and aircraft such as ARROW-01 fly their routes; click one for its fault-risk gauge and flights.
+- Open **Data and live feed**. Point at the ops charts, then the Aircraft tab: each aircraft has a predicted "ready to fly" percentage (AR-103 is low, SK-202 is down).
 - Point at the **Live feed** on the right as messages arrive from the fleet system, weather office, crew roster and intelligence.
 
 ## 2. First plan, Aeolus vs a simple method (50 s), Mission plan and Review
