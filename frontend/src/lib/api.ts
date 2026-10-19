@@ -61,4 +61,5 @@ export const api = {
     }),
   clock: (action: "pause" | "resume") => post<{ paused: boolean }>("/api/clock", { action }),
   reset: () => post<PlanStatus>("/api/scenario/reset"),
+  kpiHistory: () => call<{ snapshots: { id: number; taken_at: string; reason: string; summary: string }[] }>("/api/kpis/history"),
 };

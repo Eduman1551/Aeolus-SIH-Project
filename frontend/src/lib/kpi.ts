@@ -11,7 +11,7 @@ export const KPI_COPY: Record<string, { name: string; line: string; tip: string 
     tip: "Prepared answers (cache hits) are near-instant; new situations are solved fresh (cache misses).",
   },
   priority_coverage: {
-    name: "Priority missions covered",
+    name: "Priority coverage",
     line: "Share of P1 and P2 missions that have aircraft and crew.",
     tip: "P1 is critical, P2 high priority. Aim: every P1 mission whenever it is possible.",
   },

@@ -23,7 +23,7 @@ export default function KpiCard({ k: raw, big, children }: { k: Kpi; big?: boole
       <div className={cx("num mt-2 font-semibold tracking-tight", big ? "text-[34px]" : "text-[28px]", k.value === null ? "text-dim" : "text-navy")}>
         {k.value === null ? "Not yet" : k.display}
       </div>
-      <div className="mt-1 text-[13.5px] leading-5 text-muted">{k.value === null ? copy.line : k.delta ?? k.baseline ?? copy.line}</div>
+      <div className="mt-1 text-[13.5px] leading-5 text-muted">{k.value === null ? copy.line : k.delta ?? k.baseline ?? k.detail}</div>
       {children}
     </div>
   );
