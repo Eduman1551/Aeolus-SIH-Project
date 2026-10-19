@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import FlightBoard from "@/components/FlightBoard";
 import KpiCard from "@/components/KpiCard";
+import OpsCharts from "@/components/OpsCharts";
 import TacticalMap from "@/components/TacticalMap";
 import { Button, ButtonLink, Card, NextStep, PageHeader, Skeleton, TipBox } from "@/components/ui";
 import { cx } from "@/lib/format";
@@ -139,6 +140,11 @@ export default function HomePage() {
           </div>
         </Card>
       </div>
+
+      <section className="space-y-3">
+        <h2 className="text-[18px] font-semibold">Ops overview</h2>
+        <OpsCharts />
+      </section>
 
       <div className="grid grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-6">
         <Card title="Recent activity" action={<Link href="/events" className="text-[13.5px] font-medium text-primary hover:underline">All events</Link>}>

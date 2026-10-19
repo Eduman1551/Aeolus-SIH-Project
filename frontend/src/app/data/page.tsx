@@ -3,6 +3,7 @@
 import { Info } from "lucide-react";
 import { useState } from "react";
 import LiveFeed from "@/components/LiveFeed";
+import OpsCharts from "@/components/OpsCharts";
 import { Card, NextStep, PageHeader, Pill, PriorityTag, Skeleton, TipBox } from "@/components/ui";
 import { cx, hhmm } from "@/lib/format";
 import { useStore } from "@/lib/store";
@@ -53,6 +54,8 @@ export default function DataPage() {
           )}
         </div>
       </div>
+
+      <OpsCharts />
 
       <div className="grid grid-cols-[minmax(0,1fr)_360px] gap-6 2xl:grid-cols-[minmax(0,1fr)_420px]">
         <Card className="min-w-0 overflow-hidden">
