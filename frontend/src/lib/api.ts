@@ -1,7 +1,9 @@
 import type { EventInput, Health, MapData, ParsedCondition, PlanStatus, World } from "./types";
 
-export const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/$/, "");
-export const WS_URL = API_URL.replace(/^http/, "ws") + "/ws";
+// Both come from env vars (inlined at build time by next.config.ts).
+// NEXT_PUBLIC_WS_URL is optional: by default it follows the API URL, so https gives wss.
+export const API_URL = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+export const WS_URL = (process.env.NEXT_PUBLIC_WS_URL || `${API_URL.replace(/^http/, "ws")}/ws`).replace(/\/$/, "");
 
 export class ApiError extends Error {
   status: number;
