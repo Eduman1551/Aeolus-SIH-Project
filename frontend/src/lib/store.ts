@@ -208,7 +208,7 @@ export const useStore = create<State>((set, get) => {
     progress: { reviewed: false, visitedResults: false },
     tips: {},
 
-    setSelected: (selected) => set({ selected }),
+    setSelected: (selected) => set(selected ? { selected, drawer: null } : { selected }),
     markProgress: (k) => {
       if (get().progress[k]) return;
       const progress = { ...get().progress, [k]: true };

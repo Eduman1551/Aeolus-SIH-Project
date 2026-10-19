@@ -7,6 +7,7 @@ import { api, API_URL } from "@/lib/api";
 import { useStore } from "@/lib/store";
 import { connectLive } from "@/lib/ws";
 import EndPlanModal from "../EndPlanModal";
+import EntityDrawer from "../EntityDrawer";
 import SortieDrawer from "../SortieDrawer";
 import Toasts from "../Toasts";
 import TopBar from "../TopBar";
@@ -100,6 +101,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         <main className="px-8 pb-12 pt-7">{children}</main>
       </div>
       <SortieDrawer />
+      <EntityDrawer />
       <SolvingScreen />
       <EndPlanModal />
       <Toasts />

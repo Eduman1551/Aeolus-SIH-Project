@@ -3,7 +3,9 @@
 import { ArrowRight, CheckCircle2, Circle, Layers, Play, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import FlightBoard from "@/components/FlightBoard";
 import KpiCard from "@/components/KpiCard";
+import TacticalMap from "@/components/TacticalMap";
 import { Button, ButtonLink, Card, NextStep, PageHeader, Skeleton, TipBox } from "@/components/ui";
 import { cx } from "@/lib/format";
 import { HOME_KPIS } from "@/lib/kpi";
@@ -123,6 +125,19 @@ export default function HomePage() {
 
       <div className="grid grid-cols-4 gap-4">
         {plan ? HOME_KPIS.map((id) => plan.kpis.find((k) => k.id === id)).filter(Boolean).map((k) => <KpiCard key={k!.id} k={k!} />) : Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[136px]" />)}
+      </div>
+
+      <div className="grid grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] gap-6">
+        <Card title="Theatre" action={<Link href="/ops" className="text-[13.5px] font-medium text-primary hover:underline">Open ops map</Link>}>
+          <div className="p-3 pt-2">
+            <TacticalMap compact className="aspect-[1100/820] w-full" />
+          </div>
+        </Card>
+        <Card title="Flights">
+          <div className="px-5 pb-3 pt-1">
+            <FlightBoard limit={6} />
+          </div>
+        </Card>
       </div>
 
       <div className="grid grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-6">
