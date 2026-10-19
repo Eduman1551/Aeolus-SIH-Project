@@ -177,6 +177,29 @@ body {
   pointer-events: none;
 }
 
+/* tooltip to the right, for the collapsed sidebar rail */
+[data-tip-right] {
+  position: relative;
+}
+[data-tip-right]:hover::after,
+[data-tip-right]:focus-visible::after {
+  content: attr(data-tip-right);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--color-navy);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow-pop);
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

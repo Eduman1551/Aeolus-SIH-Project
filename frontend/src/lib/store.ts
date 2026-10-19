@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { api, ApiError, type ReplanResponse } from "./api";
 import { PATH_LABEL, secs, sortieKey } from "./format";
-import type { EventInput, FeedMsg, Health, ParsedCondition, PlanStatus, Sortie, World } from "./types";
+import type { EventInput, FeedMsg, Health, MapData, ParsedCondition, PlanStatus, Sortie, World } from "./types";
 
 export type WsState = "connecting" | "open" | "closed";
 
@@ -44,6 +44,14 @@ export interface Progress {
 }
 
 const LS_KEY = "aeolus.ui.v1";
+const LS_SHELL = "aeolus.shell.v1";
+function saveShell(v: { sidebarCollapsed: boolean; role: string }) {
+  try {
+    localStorage.setItem(LS_SHELL, JSON.stringify(v));
+  } catch {
+    /* storage blocked: the choice just is not remembered */
+  }
+}
 function saveLocal(progress: Progress, tips: Record<string, boolean>) {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({ progress, tips }));
@@ -71,6 +79,17 @@ interface State {
   progress: Progress;
   tips: Record<string, boolean>;
 
+  sidebarCollapsed: boolean;
+  role: "planner" | "commander";
+  hoverMission: string | null;
+  map: MapData | null;
+  drawer: { kind: "aircraft" | "base" | "zone" | "crew"; id: string } | null;
+  setSidebar: (collapsed: boolean, remember?: boolean) => void;
+  setRole: (role: "planner" | "commander") => void;
+  setHoverMission: (id: string | null) => void;
+  openDrawer: (d: { kind: "aircraft" | "base" | "zone" | "crew"; id: string } | null) => void;
+  refreshMap: () => Promise<void>;
+  setSpeed: (speed: number) => Promise<void>;
   setSelected: (s: Sortie | null) => void;
   markProgress: (k: keyof Progress) => void;
   dismissTip: (id: string) => void;
@@ -81,7 +100,7 @@ interface State {
   toast: (kind: Toast["kind"], text: string) => void;
   dismissToast: (id: number) => void;
   setWs: (s: WsState) => void;
-  applyClock: (now: number, paused: boolean, status?: string) => void;
+  applyClock: (now: number, paused: boolean, status?: string, speed?: number) => void;
   applyFeed: (msgs: FeedMsg[], live?: { telemetry: Live["telemetry"]; observations: Live["observations"]; checked_in: string[] }) => void;
   setPlan: (p: PlanStatus, fromWs?: boolean) => void;
   closeEnded: () => void;
@@ -152,6 +171,40 @@ export const useStore = create<State>((set, get) => {
     resultBadge: null,
     endedOpen: false,
     selected: null,
+    sidebarCollapsed: false,
+    role: "planner",
+    hoverMission: null,
+    map: null,
+    drawer: null,
+    setSidebar: (sidebarCollapsed, remember = true) => {
+      set({ sidebarCollapsed });
+      if (remember) saveShell({ sidebarCollapsed, role: get().role });
+    },
+    setRole: (role) => {
+      set({ role });
+      saveShell({ sidebarCollapsed: get().sidebarCollapsed, role });
+    },
+    setHoverMission: (hoverMission) => {
+      if (get().hoverMission !== hoverMission) set({ hoverMission });
+    },
+    openDrawer: (drawer) => set({ drawer, selected: null }),
+    refreshMap: async () => {
+      try {
+        const map = await api.map();
+        set({ map });
+      } catch {
+        /* the map is optional; the unreachable banner covers a down API */
+      }
+    },
+    setSpeed: async (speed) => {
+      try {
+        const r = await api.clock({ speed });
+        const p = get().plan;
+        if (p) set({ plan: { ...p, speed: r.speed } });
+      } catch (e) {
+        get().toast("error", e instanceof Error ? e.message : String(e));
+      }
+    },
     progress: { reviewed: false, visitedResults: false },
     tips: {},
 
@@ -168,6 +221,15 @@ export const useStore = create<State>((set, get) => {
       saveLocal(get().progress, tips);
     },
     hydrateLocal: () => {
+      try {
+        const shell = localStorage.getItem(LS_SHELL);
+        if (shell) {
+          const v = JSON.parse(shell);
+          set({ sidebarCollapsed: !!v.sidebarCollapsed, role: v.role === "commander" ? "commander" : "planner" });
+        }
+      } catch {
+        /* ignore */
+      }
       try {
         const raw = localStorage.getItem(LS_KEY);
         if (raw) {
@@ -197,10 +259,10 @@ export const useStore = create<State>((set, get) => {
     },
     dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
     setWs: (ws) => set({ ws }),
-    applyClock: (now, paused, status) =>
+    applyClock: (now, paused, status, speed) =>
       set((s) => {
         if (!s.plan) return {};
-        const plan = { ...s.plan, now, paused, status: (status as PlanStatus["status"]) ?? s.plan.status };
+        const plan = { ...s.plan, now, paused, status: (status as PlanStatus["status"]) ?? s.plan.status, speed: speed ?? s.plan.speed };
         return { plan };
       }),
     applyFeed: (msgs, live) =>
@@ -231,6 +293,7 @@ export const useStore = create<State>((set, get) => {
       try {
         const world = await api.state();
         set((s) => ({ world, feed: s.feed.length ? s.feed : world.feed, unreachable: null }));
+        get().refreshMap();
       } catch (e) {
         if (e instanceof ApiError && e.status === 0) set({ unreachable: e.message });
       }
@@ -239,6 +302,7 @@ export const useStore = create<State>((set, get) => {
       try {
         const [world, plan, health] = await Promise.all([api.state(), api.plan(), api.health()]);
         set({ world, plan, health, feed: world.feed, unreachable: null });
+        get().refreshMap();
       } catch (e) {
         set({ unreachable: e instanceof Error ? e.message : String(e) });
       }
@@ -371,7 +435,7 @@ export const useStore = create<State>((set, get) => {
       const r = await run("Resetting scenario", () => api.reset());
       if (!r) return;
       const progress = { reviewed: false, visitedResults: false };
-      set({ chat: [], resultBadge: null, highlight: { keys: [], until: 0 }, view: "proposal", feed: [], selected: null, progress });
+      set({ chat: [], resultBadge: null, highlight: { keys: [], until: 0 }, view: "proposal", feed: [], selected: null, drawer: null, progress });
       saveLocal(progress, get().tips);
       get().setPlan(r);
       await get().refreshWorld();
@@ -380,7 +444,7 @@ export const useStore = create<State>((set, get) => {
     togglePause: async () => {
       const paused = !!get().plan?.paused;
       try {
-        const r = await api.clock(paused ? "resume" : "pause");
+        const r = await api.clock({ action: paused ? "resume" : "pause" });
         get().applyClock(get().plan?.now ?? 0, r.paused);
       } catch (e) {
         get().toast("error", e instanceof Error ? e.message : String(e));

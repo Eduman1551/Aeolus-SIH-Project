@@ -36,7 +36,7 @@ export function connectLive(): () => void {
       const st = useStore.getState();
       switch (msg.type) {
         case "clock":
-          st.applyClock(msg.now as number, msg.paused as boolean, msg.status as string);
+          st.applyClock(msg.now as number, msg.paused as boolean, msg.status as string, msg.speed as number);
           break;
         case "feed":
           st.applyFeed(msg.messages as never, msg.live as never);

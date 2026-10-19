@@ -20,6 +20,8 @@ const config: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
   turbopack: { root: process.cwd() },
+  // a second dev server (e.g. a preview next to your own pnpm dev) needs its own build folder
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || fromRoot.NEXT_PUBLIC_API_URL || "http://localhost:8000",
   },

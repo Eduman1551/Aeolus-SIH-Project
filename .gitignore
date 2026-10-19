@@ -37,3 +37,4 @@ backend/app/predict/*.meta.json
 .claude/
 # written by next dev
 frontend/AGENTS.md
+.next-*/

@@ -1,4 +1,4 @@
-import type { EventInput, Health, ParsedCondition, PlanStatus, World } from "./types";
+import type { EventInput, Health, MapData, ParsedCondition, PlanStatus, World } from "./types";
 
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/$/, "");
 export const WS_URL = API_URL.replace(/^http/, "ws") + "/ws";
@@ -59,7 +59,8 @@ export const api = {
       conditions: conditions.map((c) => ({ type: c.type, params: c.params })),
       text,
     }),
-  clock: (action: "pause" | "resume") => post<{ paused: boolean }>("/api/clock", { action }),
+  clock: (body: { action?: "pause" | "resume"; speed?: number }) => post<{ paused: boolean; speed: number }>("/api/clock", body),
+  map: () => call<MapData>("/api/map"),
   reset: () => post<PlanStatus>("/api/scenario/reset"),
   kpiHistory: () => call<{ snapshots: { id: number; taken_at: string; reason: string; summary: string }[] }>("/api/kpis/history"),
 };

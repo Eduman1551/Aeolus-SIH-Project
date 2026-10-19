@@ -12,6 +12,7 @@ export interface Window {
 export interface Base {
   id: string;
   name: string;
+  wing?: string;
   x_km: number;
   y_km: number;
   meta?: Meta;
@@ -31,6 +32,7 @@ export interface Aircraft {
   id: string;
   type_id: string;
   base_id: string;
+  callsign: string;
   status: "serviceable" | "unserviceable";
   unavailable: Window[];
   risk: {
@@ -280,6 +282,8 @@ export interface PlanStatus {
   history: { id: string; status: string; at: string; label?: string }[];
   ended: { plan_id: string; summary: string; lines: string[]; kpis: Kpi[]; at: string; reason: string } | null;
   stability_lambda: number;
+  speed: number;
+  activity: ActivityEntry[];
   cache: { status: string; build_ms: number; entries: CacheEntry[] };
   kpi_history: {
     replans: { ms: number; path: string }[];
@@ -304,4 +308,27 @@ export interface ParsedCondition {
   type: string;
   params: Record<string, unknown>;
   description: string;
+}
+
+export interface ActivityEntry {
+  at: string;
+  clock: string;
+  actor: string;
+  action: string;
+  detail: string;
+  kind: "planner" | "system" | "event" | "publish" | "info";
+}
+type Pt = [number, number];
+export interface MapData {
+  bounds: { width: number; height: number };
+  coast: Pt[];
+  river: Pt[];
+  ridges: Pt[][];
+  sectors: { name: string; x: number; y: number }[];
+  sector_lines: Pt[][];
+  bases: { id: string; name: string; wing: string; x: number; y: number }[];
+  zones: { id: string; name: string; x: number; y: number }[];
+  threats: { id: string; zone_id: string; x: number; y: number; level: number; radius: number; start: number; end: number; note: string }[];
+  weather_cells: { id: string; location_id: string; x: number; y: number; radius: number; start: number; end: number; severity: string; ceiling_ft: number; vis_km: number; note: string }[];
+  restrictions: { id: string; zone_id: string; x: number; y: number; radius: number; start: number; end: number; reason: string }[];
 }

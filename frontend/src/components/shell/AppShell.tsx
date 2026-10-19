@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2, ServerCrash } from "lucide-react";
+import { MotionConfig } from "motion/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { api, API_URL } from "@/lib/api";
 import { useStore } from "@/lib/store";
@@ -10,7 +11,7 @@ import SortieDrawer from "../SortieDrawer";
 import Toasts from "../Toasts";
 import TopBar from "../TopBar";
 import { Button } from "../ui";
-import Sidebar from "./Sidebar";
+import Sidebar, { SIDEBAR_W } from "./Sidebar";
 
 /** Friendly "working on it" screen with elapsed time. Hidden for very quick actions to avoid a flash. */
 function SolvingScreen() {
@@ -52,14 +53,36 @@ function Unreachable() {
   );
 }
 
+function readSavedCollapsed(): boolean {
+  try {
+    return !!JSON.parse(localStorage.getItem("aeolus.shell.v1") || "{}").sidebarCollapsed;
+  } catch {
+    return false;
+  }
+}
+
 export default function AppShell({ children }: { children: ReactNode }) {
   const unreachable = useStore((s) => s.unreachable);
   const hydrateLocal = useStore((s) => s.hydrateLocal);
+  const collapsed = useStore((s) => s.sidebarCollapsed);
+  const setSidebar = useStore((s) => s.setSidebar);
 
+  // auto-collapse below ~1280 px; going wide again restores the remembered choice
   useEffect(() => {
     hydrateLocal();
-    return connectLive();
-  }, [hydrateLocal]);
+    let narrow: boolean | null = null;
+    const check = () => {
+      const now = window.innerWidth < 1280;
+      if (now === narrow) return;
+      narrow = now;
+      setSidebar(now ? true : readSavedCollapsed(), false);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [setSidebar, hydrateLocal]);
+
+  useEffect(() => connectLive(), []);
   useEffect(() => {
     const id = setInterval(() => {
       api.health().then((health) => useStore.setState({ health })).catch(() => undefined);
@@ -68,9 +91,10 @@ export default function AppShell({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <MotionConfig reducedMotion="user">
+    <div className="min-h-screen" style={{ ["--sidebar-w" as string]: `${collapsed ? SIDEBAR_W.closed : SIDEBAR_W.open}px` }}>
       <Sidebar />
-      <div className="pl-[244px]">
+      <div className="pl-[var(--sidebar-w)] transition-[padding] duration-200 ease-out">
         <TopBar />
         {unreachable && <Unreachable />}
         <main className="px-8 pb-12 pt-7">{children}</main>
@@ -80,5 +104,6 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <EndPlanModal />
       <Toasts />
     </div>
+    </MotionConfig>
   );
 }
