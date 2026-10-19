@@ -1,9 +1,10 @@
 "use client";
 
 import { Rise } from "@/components/motion";
-import { ArrowRight, CheckCircle2, Circle, Layers, Play, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle2, Circle, Clapperboard, Layers, Play, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { startExercise } from "@/components/ExerciseRunner";
 import FlightBoard from "@/components/FlightBoard";
 import KpiCard from "@/components/KpiCard";
 import OpsCharts from "@/components/OpsCharts";
@@ -72,7 +73,15 @@ export default function HomePage() {
       <section className="relative overflow-hidden rounded-2xl border border-line bg-white px-8 py-7 shadow-[var(--shadow-card)]">
         <WindFlow />
         <div className="relative">
-          <PageHeader title="Welcome to Aeolus" description="A planning assistant for air operations. It suggests the plan, you decide." />
+          <PageHeader
+            title="Welcome to Aeolus"
+            description="A planning assistant for air operations. It suggests the plan, you decide."
+            action={
+              <Button variant="secondary" icon={<Clapperboard size={16} />} onClick={startExercise} disabled={!!busy}>
+                Run exercise
+              </Button>
+            }
+          />
         </div>
       </section>
       <TipBox

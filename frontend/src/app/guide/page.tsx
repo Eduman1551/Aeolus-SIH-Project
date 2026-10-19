@@ -1,7 +1,8 @@
 "use client";
 
-import { ArrowRight, Clock } from "lucide-react";
-import { ButtonLink, Card, Details, NextStep, PageHeader, TipBox } from "@/components/ui";
+import { ArrowRight, Clapperboard, Clock } from "lucide-react";
+import { startExercise } from "@/components/ExerciseRunner";
+import { Button, ButtonLink, Card, Details, NextStep, PageHeader, TipBox } from "@/components/ui";
 
 const STEPS = [
   { title: "Look at the data", text: "See the aircraft, crews, weapons and missions, and watch live updates arrive.", href: "/data", cta: "Open Data" },
@@ -81,7 +82,19 @@ export default function GuidePage() {
         </ol>
       </Card>
 
-      <Card title="Five-minute demo script" action={<span className="flex items-center gap-1.5 text-[13.5px] text-dim"><Clock size={15} /> about 4 to 5 minutes</span>}>
+      <Card
+        title="Five-minute demo script"
+        action={
+          <span className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5 text-[13.5px] text-dim">
+              <Clock size={15} /> about 4 to 5 minutes
+            </span>
+            <Button variant="primary" size="sm" icon={<Clapperboard size={15} />} onClick={startExercise}>
+              Run exercise
+            </Button>
+          </span>
+        }
+      >
         <div className="px-6 pb-6 pt-3">
           <p className="text-[14.5px] text-muted">Before you start, click Reset scenario in the sidebar so the day starts at 06:00 with no plan.</p>
           <ol className="mt-4 space-y-4">

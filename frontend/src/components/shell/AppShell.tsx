@@ -8,6 +8,7 @@ import { useStore } from "@/lib/store";
 import { connectLive } from "@/lib/ws";
 import EndPlanModal from "../EndPlanModal";
 import EntityDrawer from "../EntityDrawer";
+import ExerciseRunner from "../ExerciseRunner";
 import SortieDrawer from "../SortieDrawer";
 import Toasts from "../Toasts";
 import TopBar from "../TopBar";
@@ -80,6 +81,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <EntityDrawer />
       <SolvingScreen />
       <EndPlanModal />
+      <ExerciseRunner />
       <Toasts />
     </div>
     </MotionConfig>

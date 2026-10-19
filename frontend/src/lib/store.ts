@@ -80,6 +80,8 @@ interface State {
   tips: Record<string, boolean>;
 
   sidebarCollapsed: boolean;
+  exercise: number | null; // guided exercise step, null when not running
+  setExercise: (step: number | null) => void;
   role: "planner" | "commander";
   hoverMission: string | null;
   map: MapData | null;
@@ -172,6 +174,8 @@ export const useStore = create<State>((set, get) => {
     endedOpen: false,
     selected: null,
     sidebarCollapsed: false,
+    exercise: null,
+    setExercise: (exercise) => set({ exercise }),
     role: "planner",
     hoverMission: null,
     map: null,
