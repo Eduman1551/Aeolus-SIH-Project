@@ -1,5 +1,6 @@
 "use client";
 
+import { Rise } from "@/components/motion";
 import { ArrowRight, CheckCircle2, Circle, Layers, Play, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -125,7 +126,7 @@ export default function HomePage() {
       </div>
 
       <div className="grid grid-cols-4 gap-4">
-        {plan ? HOME_KPIS.map((id) => plan.kpis.find((k) => k.id === id)).filter(Boolean).map((k) => <KpiCard key={k!.id} k={k!} />) : Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[136px]" />)}
+        {plan ? HOME_KPIS.map((id) => plan.kpis.find((k) => k.id === id)).filter(Boolean).map((k, i) => <Rise key={k!.id} i={i}><KpiCard k={k!} /></Rise>) : Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[136px]" />)}
       </div>
 
       <div className="grid grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] gap-6">

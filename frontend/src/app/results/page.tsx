@@ -1,5 +1,6 @@
 "use client";
 
+import { Rise } from "@/components/motion";
 import { Flag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -161,10 +162,12 @@ export default function ResultsPage() {
 
       <div className="grid grid-cols-4 gap-4">
         {plan
-          ? plan.kpis.map((k) => (
-              <KpiCard key={k.id} k={k}>
+          ? plan.kpis.map((k, i) => (
+              <Rise key={k.id} i={i}>
+              <KpiCard k={k}>
                 <div className="mt-3 border-t border-line pt-2.5 text-[13px] leading-5 text-dim">{KPI_COPY[k.id]?.line}</div>
               </KpiCard>
+              </Rise>
             ))
           : Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-[170px]" />)}
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Lock } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { cx, hhmm, PRIORITY_COLOR, PRIORITY_INK, sortieKey, STRENGTH } from "@/lib/format";
 import { useStore } from "@/lib/store";
@@ -26,6 +27,7 @@ function AircraftRow({
   frag,
   changeBy,
   highlight,
+  slot,
   h0,
   h1,
 }: {
@@ -36,10 +38,13 @@ function AircraftRow({
   frag: Record<string, Fragility>;
   changeBy: Record<string, Change>;
   highlight: Set<string>;
+  slot: Record<string, number>;
   h0: number;
   h1: number;
 }) {
   const select = useStore((s) => s.setSelected);
+  const hover = useStore((s) => s.hoverMission);
+  const setHover = useStore((s) => s.setHoverMission);
   const type = world.aircraft_types.find((t) => t.id === a.type_id)!;
   const svc = world.serviceability[a.id];
   const missions = useMemo(() => Object.fromEntries(world.missions.map((m) => [m.id, m])), [world.missions]);
@@ -101,10 +106,15 @@ function AircraftRow({
           return (
             <div key={key}>
               <div className="absolute bottom-[6px] h-[3px] rounded-r-sm bg-primary-100" style={ta} />
-              <button
+              <motion.button
+                layoutId={`bar-${s.mission_id}-${slot[key] ?? 0}`}
+                transition={{ type: "spring", stiffness: 260, damping: 30 }}
                 onClick={() => select(s)}
+                onMouseEnter={() => setHover(s.mission_id)}
+                onMouseLeave={() => setHover(null)}
                 className={cx(
-                  "absolute top-[5px] flex items-center gap-1.5 overflow-hidden rounded-md pl-2 pr-1 text-left shadow-sm transition-[left,width,filter] duration-300 hover:brightness-110",
+                  "absolute top-[5px] flex items-center gap-1.5 overflow-hidden rounded-md pl-2 pr-1 text-left shadow-sm transition-[filter] duration-200 hover:brightness-110",
+                  hover === s.mission_id && "z-10 ring-[3px] ring-amber-400 ring-offset-1",
                   highlight.has(key) && "changed-pulse",
                   changeBy[key] && !highlight.has(key) && "outline-2 outline-offset-1 outline-amber/70",
                   committed && "opacity-70",
@@ -126,7 +136,7 @@ function AircraftRow({
                     {st.short}
                   </span>
                 )}
-              </button>
+              </motion.button>
             </div>
           );
         })}
@@ -250,6 +260,11 @@ export default function Gantt() {
   const h0 = world.rules.horizon_start;
   const h1 = world.rules.horizon_end;
   const hours = Array.from({ length: (h1 - h0) / 60 + 1 }, (_, i) => h0 + i * 60);
+  // stable slot per mission so a bar can animate from its old aircraft row to its new one
+  const slot: Record<string, number> = {};
+  const perMission: Record<string, Sortie[]> = {};
+  for (const s of shown?.sorties ?? []) (perMission[s.mission_id] ||= []).push(s);
+  for (const list of Object.values(perMission)) list.sort((x, y) => x.crew_id.localeCompare(y.crew_id)).forEach((s, i) => (slot[sortieKey(s)] = i));
   const byAircraft: Record<string, Sortie[]> = {};
   for (const s of shown?.sorties ?? []) (byAircraft[s.aircraft_id] ||= []).push(s);
   const ghostsBy: Record<string, Sortie[]> = {};
@@ -326,6 +341,7 @@ export default function Gantt() {
                       frag={frag}
                       changeBy={changeBy}
                       highlight={highlightSet}
+                      slot={slot}
                       h0={h0}
                       h1={h1}
                     />

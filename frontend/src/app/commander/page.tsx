@@ -1,5 +1,6 @@
 "use client";
 
+import { Rise } from "@/components/motion";
 import { AlertTriangle, CloudFog, Plane, ShieldAlert, Unlink } from "lucide-react";
 import { useMemo } from "react";
 import ActivityLog from "@/components/ActivityLog";
@@ -62,7 +63,7 @@ export default function CommanderPage() {
       <PageHeader title="Commander summary" description="The picture at a glance: where the force is, how ready it is, what is covered and what could go wrong." />
 
       <div className="grid grid-cols-4 gap-4">
-        {plan ? COMMANDER_KPIS.map((id) => plan.kpis.find((k) => k.id === id)).filter(Boolean).map((k) => <KpiCard key={k!.id} k={k!} />) : Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[136px]" />)}
+        {plan ? COMMANDER_KPIS.map((id) => plan.kpis.find((k) => k.id === id)).filter(Boolean).map((k, i) => <Rise key={k!.id} i={i}><KpiCard k={k!} /></Rise>) : Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[136px]" />)}
       </div>
 
       <div className="grid grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] gap-6">

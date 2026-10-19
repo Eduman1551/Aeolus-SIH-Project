@@ -6,6 +6,7 @@ import { cx, hhmm } from "@/lib/format";
 import { useStore } from "@/lib/store";
 import type { Change, Sortie } from "@/lib/types";
 import { Empty, Pill, PriorityTag } from "./ui";
+import WhyButton from "./WhyButton";
 
 type Filter = "all" | "unassigned" | "changed";
 
@@ -15,6 +16,8 @@ export default function MissionTable() {
   const view = useStore((s) => s.view);
   const [filter, setFilter] = useState<Filter>("all");
   const select = useStore((s) => s.setSelected);
+  const hover = useStore((s) => s.hoverMission);
+  const setHover = useStore((s) => s.setHoverMission);
 
   const proposal = plan?.proposal ?? null;
   const showProposal = !!proposal && (view === "proposal" || !plan?.active);
@@ -95,7 +98,12 @@ export default function MissionTable() {
             </thead>
             <tbody>
               {visible.map(({ m, ss, status, reason, changes: ch, typeName }) => (
-                <tr key={m.id} className={cx("align-top hover:bg-panel-2", ch.length > 0 && "bg-primary-50/50")}>
+                <tr
+                  key={m.id}
+                  onMouseEnter={() => setHover(m.id)}
+                  onMouseLeave={() => setHover(null)}
+                  className={cx("align-top transition-colors", hover === m.id ? "bg-amber-dim/60" : ch.length > 0 ? "bg-primary-50/50 hover:bg-panel-2" : "hover:bg-panel-2")}
+                >
                   <td className="border-b border-line px-3 py-3 pl-6">
                     <div className="flex items-center gap-2">
                       <PriorityTag p={m.priority} compact />
@@ -119,7 +127,7 @@ export default function MissionTable() {
                   <td className="num border-b border-line px-3 py-3">
                     {ss.length ? (
                       ss.map((s) => (
-                        <button key={s.aircraft_id} onClick={() => select(s)} className="block rounded text-left hover:text-primary hover:underline">
+                        <button key={s.aircraft_id} onClick={() => select(s)} className="block whitespace-nowrap rounded text-left hover:text-primary hover:underline">
                           {s.aircraft_id} <span className="text-dim">{s.crew_id}</span>
                         </button>
                       ))
@@ -134,6 +142,7 @@ export default function MissionTable() {
                       {status === "cancelled" && <Pill>Cancelled</Pill>}
                       {status === "open" && <Pill>Waiting for plan</Pill>}
                       {ch.length > 0 && <Pill tone="neutral">Changed</Pill>}
+                      <WhyButton missionId={m.id} />
                     </div>
                   </td>
                   <td className="max-w-[380px] border-b border-line px-3 py-3 pr-6 text-[13.5px] leading-6 text-muted">

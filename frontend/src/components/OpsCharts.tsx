@@ -5,6 +5,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ReferenceLin
 import { cx, PRIORITY_COLOR } from "@/lib/format";
 import { shownPlan } from "@/lib/ops";
 import { useStore } from "@/lib/store";
+import { Rise } from "./motion";
 import { Card, InfoTip, Skeleton } from "./ui";
 
 const AXIS = { fill: "#5b6b8c", fontSize: 12 };
@@ -240,13 +241,11 @@ export function ThreatHeatStrip() {
 export default function OpsCharts() {
   return (
     <div className="grid grid-cols-3 gap-5">
-      <ReadinessDonut />
-      <CoverageChart />
-      <CrewDutyChart />
-      <WeaponsChart />
-      <div className="col-span-2 min-w-0">
-        <ThreatHeatStrip />
-      </div>
+      <Rise i={0} className="min-w-0"><ReadinessDonut /></Rise>
+      <Rise i={1} className="min-w-0"><CoverageChart /></Rise>
+      <Rise i={2} className="min-w-0"><CrewDutyChart /></Rise>
+      <Rise i={3} className="min-w-0"><WeaponsChart /></Rise>
+      <Rise i={4} className="col-span-2 min-w-0"><ThreatHeatStrip /></Rise>
     </div>
   );
 }

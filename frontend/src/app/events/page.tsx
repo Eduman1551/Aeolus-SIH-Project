@@ -1,5 +1,6 @@
 "use client";
 
+import { Rise } from "@/components/motion";
 import { CloudFog, Crosshair, History, PlaneLanding, ShieldAlert, Wrench, Zap } from "lucide-react";
 import { useState } from "react";
 import { EventForm, type EventKind } from "@/components/EventForms";
@@ -50,12 +51,12 @@ export default function EventsPage() {
       )}
 
       <div className="grid grid-cols-2 gap-5 xl:grid-cols-4">
-        {CARDS.map((c) => (
+        {CARDS.map((c, i) => (
+          <Rise key={c.kind} i={i} className="flex">
           <button
-            key={c.kind}
             onClick={() => setOpen(c.kind)}
             disabled={!!busy}
-            className="card group flex flex-col items-start p-6 text-left transition-shadow hover:border-primary-100 hover:shadow-[var(--shadow-pop)] disabled:opacity-60"
+            className="card group flex w-full flex-col items-start p-6 text-left transition-shadow hover:border-primary-100 hover:shadow-[var(--shadow-pop)] disabled:opacity-60"
           >
             <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
               {c.icon}
@@ -71,6 +72,7 @@ export default function EventsPage() {
               )}
             </span>
           </button>
+          </Rise>
         ))}
       </div>
 
