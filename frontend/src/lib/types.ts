@@ -240,6 +240,7 @@ export interface EventRecord {
   cache_hit: boolean;
   path: string;
   replan_ms: number | null;
+  at?: string;
 }
 export interface CacheEntry {
   signature: string;
@@ -262,6 +263,7 @@ export interface PlanStatus {
   active_fragility: Record<string, Fragility>;
   proposal: Proposal | null;
   baseline: Plan | null;
+  initial: Plan | null;
   kpis: Kpi[];
   last_result: {
     plan_id: string;

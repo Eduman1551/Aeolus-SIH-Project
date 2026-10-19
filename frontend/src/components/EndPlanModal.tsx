@@ -1,10 +1,10 @@
 "use client";
 
-import { Database, Flag, X } from "lucide-react";
-import { useEffect } from "react";
+import { Database } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { cx } from "@/lib/format";
 import { useStore } from "@/lib/store";
-import { Button } from "./ui";
+import { Button, Modal } from "./ui";
 
 export default function EndPlanModal() {
   const open = useStore((s) => s.endedOpen);
@@ -12,64 +12,46 @@ export default function EndPlanModal() {
   const health = useStore((s) => s.health);
   const close = useStore((s) => s.closeEnded);
   const reset = useStore((s) => s.reset);
+  const router = useRouter();
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, close]);
-
-  if (!open || !ended) return null;
+  if (!ended) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[2px]" role="dialog" aria-modal="true" aria-labelledby="end-title">
-      <div className="fade-in w-[720px] max-w-[94vw] rounded-lg border border-line-2 bg-panel p-5 shadow-2xl shadow-black/60">
-        <div className="flex items-start gap-3">
-          <Flag className="mt-0.5 text-amber" size={18} />
-          <div className="flex-1">
-            <h2 id="end-title" className="label text-[16px]">
-              Plan ended · KPI summary
-            </h2>
-            <p className="mt-1 text-[12.5px] leading-5 text-muted">{ended.summary}</p>
+    <Modal open={open} onClose={close} title="Plan ended, results saved" width={820}>
+      <p className="text-[14.5px] leading-6 text-muted">{ended.summary}</p>
+      <div className="mt-4 grid grid-cols-4 gap-3">
+        {ended.kpis.map((k) => (
+          <div key={k.id} className="rounded-xl border border-line bg-panel-2 px-4 py-3">
+            <div className="truncate text-[12.5px] font-medium text-dim">{k.label}</div>
+            <div className={cx("num mt-0.5 text-[20px] font-semibold", k.value === null ? "text-dim" : "text-text")}>{k.display}</div>
+            <div className="mt-0.5 text-[12px] leading-[17px] text-dim">{k.detail}</div>
           </div>
-          <button onClick={close} className="text-dim hover:text-text" aria-label="Close">
-            <X size={16} />
-          </button>
-        </div>
-        <div className="mt-4 grid grid-cols-4 gap-2">
-          {ended.kpis.map((k) => (
-            <div
-              key={k.id}
-              className="rounded-md border border-line bg-panel-2/60 px-2.5 py-2"
-              style={{ boxShadow: `inset 0 2px 0 ${k.good === true ? "var(--color-teal)" : k.good === false ? "var(--color-coral)" : "var(--color-line-2)"}` }}
-            >
-              <div className="label truncate text-[10.5px] text-muted">{k.label}</div>
-              <div className={cx("num text-[18px] font-semibold", k.value === null && "text-dim")}>{k.display}</div>
-              <div className="text-[10.5px] leading-[14px] text-dim">{k.detail}</div>
-              <div className="mt-0.5 text-[10px] text-dim">target: {k.target}</div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 flex items-center gap-2 text-[12px] text-muted">
-          <Database size={14} className={health?.db.online ? "text-teal" : "text-coral"} />
-          {health?.db.online ? "Snapshot saved to PostgreSQL (kpi_snapshots table)." : "Database offline: snapshot kept in memory only."}
-          <span className="text-dim">Targets are our own suggestions.</span>
-          <div className="ml-auto flex gap-2">
-            <Button variant="ghost" onClick={close}>
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                close();
-                reset();
-              }}
-            >
-              Start a new scenario
-            </Button>
-          </div>
+        ))}
+      </div>
+      <div className="mt-5 flex items-center gap-2 text-[13.5px] text-muted">
+        <Database size={16} className={health?.db.online ? "text-teal" : "text-coral"} />
+        {health?.db.online ? "Saved to the results database." : "The database is offline, so these results are only kept on screen."}
+        <div className="ml-auto flex gap-2">
+          <Button
+            variant="ghost"
+            onClick={() => {
+              close();
+              router.push("/results");
+            }}
+          >
+            View results page
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              close();
+              reset();
+              router.push("/");
+            }}
+          >
+            Start a new scenario
+          </Button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

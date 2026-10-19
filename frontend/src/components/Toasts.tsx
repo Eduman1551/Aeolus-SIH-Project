@@ -8,25 +8,25 @@ export default function Toasts() {
   const toasts = useStore((s) => s.toasts);
   const dismiss = useStore((s) => s.dismissToast);
   return (
-    <div className="pointer-events-none fixed bottom-4 left-4 z-50 flex w-[360px] flex-col gap-2" role="status" aria-live="polite">
+    <div className="pointer-events-none fixed bottom-6 right-6 z-[70] flex w-[380px] flex-col gap-2" role="status" aria-live="polite">
       {toasts.map((t) => (
         <div
           key={t.id}
           className={cx(
-            "fade-in pointer-events-auto flex items-start gap-2 rounded-md border bg-panel-2 px-3 py-2 text-[13px] shadow-lg shadow-black/40",
-            t.kind === "error" ? "border-coral/50" : t.kind === "success" ? "border-teal/40" : "border-line-2",
+            "fade-in pointer-events-auto flex items-start gap-3 rounded-xl border bg-white px-4 py-3 text-[14px] shadow-[var(--shadow-pop)]",
+            t.kind === "error" ? "border-coral/30" : t.kind === "success" ? "border-teal/30" : "border-primary-100",
           )}
         >
           {t.kind === "error" ? (
-            <XCircle size={16} className="mt-px shrink-0 text-coral" />
+            <XCircle size={18} className="mt-0.5 shrink-0 text-coral" />
           ) : t.kind === "success" ? (
-            <CheckCircle2 size={16} className="mt-px shrink-0 text-teal" />
+            <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-teal" />
           ) : (
-            <Info size={16} className="mt-px shrink-0 text-p3" />
+            <Info size={18} className="mt-0.5 shrink-0 text-primary" />
           )}
-          <span className="flex-1 leading-5">{t.text}</span>
+          <span className="flex-1 leading-6 text-text">{t.text}</span>
           <button onClick={() => dismiss(t.id)} className="text-dim hover:text-text" aria-label="Dismiss">
-            <X size={14} />
+            <X size={16} />
           </button>
         </div>
       ))}

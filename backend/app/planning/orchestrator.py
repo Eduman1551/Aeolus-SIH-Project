@@ -75,6 +75,7 @@ class Planner:
             self.active_fragility: dict[str, Any] = {}
             self.proposal: Proposal | None = None
             self.baseline: Plan | None = None
+            self.initial_plan: Plan | None = None  # first Aeolus plan, kept for the greedy comparison
             self.baseline_validation: ValidationReport | None = None
             self.status = "no_plan"
             self.kpi = KpiTracker(manual_baseline_min=self.settings.manual_baseline_min)
@@ -206,6 +207,7 @@ class Planner:
                 self.store.save_plan(g.plan.model_dump(), "baseline", "greedy baseline",
                                      self.baseline_validation.model_dump())
             prop = self._proposal(res, None, {"kind": "initial", "label": "initial plan"}, "initial", t0)
+            self.initial_plan = prop.plan.model_copy(deep=True)
             self.notify("plan")
             return prop
 
@@ -422,6 +424,7 @@ class Planner:
                 "active_fragility": self.active_fragility,
                 "proposal": self.proposal.model_dump() if self.proposal else None,
                 "baseline": self.baseline.model_dump() if self.baseline else None,
+                "initial": self.initial_plan.model_dump() if self.initial_plan else None,
                 "kpis": [k.model_dump() for k in kpis],
                 "last_result": self.last_result,
                 "events": self.events[:30],

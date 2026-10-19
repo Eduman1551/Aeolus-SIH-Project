@@ -23,11 +23,26 @@ export const PRIORITY_COLOR: Record<number, string> = {
   4: "var(--color-p4)",
 };
 
+/** text colour that stays readable on each priority fill */
+export const PRIORITY_INK: Record<number, string> = {
+  1: "#ffffff",
+  2: "#ffffff",
+  3: "#0b1f44",
+  4: "#0b1f44",
+};
+
 export const PRIORITY_LABEL: Record<number, string> = {
   1: "P1 critical",
   2: "P2 high",
   3: "P3 routine",
   4: "P4 low",
+};
+
+/** fragility from the backend (low/medium/high) shown as plan strength */
+export const STRENGTH: Record<string, { label: string; short: string; tone: "ok" | "warn" | "bad"; color: string }> = {
+  low: { label: "Strong", short: "S", tone: "ok", color: "var(--color-teal)" },
+  medium: { label: "Moderate", short: "M", tone: "warn", color: "var(--color-amber)" },
+  high: { label: "Weak", short: "W", tone: "bad", color: "var(--color-coral)" },
 };
 
 export const FRAGILITY_COLOR: Record<string, string> = {
@@ -37,18 +52,18 @@ export const FRAGILITY_COLOR: Record<string, string> = {
 };
 
 export const PATH_LABEL: Record<string, string> = {
-  "cache hit": "cache hit",
-  "cache miss": "cache miss",
-  "cache stale": "cache stale, re-solved",
-  "reject loop": "re-solved after reject",
-  initial: "initial solve",
-  "re-solve": "re-solved",
+  "cache hit": "used a prepared answer",
+  "cache miss": "solved fresh",
+  "cache stale": "solved fresh (prepared answer was out of date)",
+  "reject loop": "found after your rejection",
+  initial: "first plan",
+  "re-solve": "solved fresh",
 };
 
 export const CHANGE_LABEL: Record<string, string> = {
-  aircraft_swap: "Aircraft swap",
-  crew_swap: "Crew swap",
-  retimed: "Re-timed",
+  aircraft_swap: "Aircraft swapped",
+  crew_swap: "Crew swapped",
+  retimed: "Time moved",
   removed: "Dropped",
   added: "Added",
 };

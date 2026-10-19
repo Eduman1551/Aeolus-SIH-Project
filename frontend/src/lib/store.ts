@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { api, ApiError, type ReplanResponse } from "./api";
 import { PATH_LABEL, secs, sortieKey } from "./format";
-import type { EventInput, FeedMsg, Health, ParsedCondition, PlanStatus, World } from "./types";
+import type { EventInput, FeedMsg, Health, ParsedCondition, PlanStatus, Sortie, World } from "./types";
 
 export type Tab = "chat" | "events" | "changes" | "validation";
 export type WsState = "connecting" | "open" | "closed";
@@ -39,6 +39,20 @@ interface Live {
   checkedIn: string[];
 }
 
+export interface Progress {
+  reviewed: boolean;
+  visitedResults: boolean;
+}
+
+const LS_KEY = "aeolus.ui.v1";
+function saveLocal(progress: Progress, tips: Record<string, boolean>) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({ progress, tips }));
+  } catch {
+    /* storage can be blocked; the app works without it */
+  }
+}
+
 interface State {
   world: World | null;
   plan: PlanStatus | null;
@@ -53,8 +67,17 @@ interface State {
   highlight: { keys: string[]; until: number };
   toasts: Toast[];
   chat: ChatMsg[];
-  resultBadge: { text: string; tone: "ok" | "warn"; at: number } | null;
+  resultBadge: { text: string; tone: "ok" | "warn"; at: number; path?: string; planId?: string } | null;
   endedOpen: boolean;
+  selected: Sortie | null;
+  progress: Progress;
+  tips: Record<string, boolean>;
+
+  setSelected: (s: Sortie | null) => void;
+  markProgress: (k: keyof Progress) => void;
+  dismissTip: (id: string) => void;
+  hydrateLocal: () => void;
+  chatEditCondition: (msgId: number, index: number, cond: ParsedCondition | null) => void;
 
   setTab: (t: Tab) => void;
   setView: (v: "proposal" | "active") => void;
@@ -109,10 +132,8 @@ export const useStore = create<State>((set, get) => {
     get().setPlan(r);
     const lr = r.last_result;
     if (lr) {
-      const text = `${what} in ${secs(lr.total_ms)} · ${PATH_LABEL[lr.path] ?? lr.path} · ${lr.changed} of ${lr.total} changed${
-        lr.added ? ` · ${lr.added} added` : ""
-      }`;
-      set({ resultBadge: { text, tone: lr.publishable ? "ok" : "warn", at: Date.now() } });
+      const text = `${what} in ${secs(lr.total_ms)}, ${lr.changed} of ${lr.total} changed${lr.added ? `, ${lr.added} added` : ""}`;
+      set({ resultBadge: { text, tone: lr.publishable ? "ok" : "warn", at: Date.now(), path: PATH_LABEL[lr.path] ?? lr.path, planId: lr.plan_id } });
     }
     set({ tab: "changes", view: "proposal" });
     get().refreshWorld();
@@ -134,6 +155,43 @@ export const useStore = create<State>((set, get) => {
     chat: [],
     resultBadge: null,
     endedOpen: false,
+    selected: null,
+    progress: { reviewed: false, visitedResults: false },
+    tips: {},
+
+    setSelected: (selected) => set({ selected }),
+    markProgress: (k) => {
+      if (get().progress[k]) return;
+      const progress = { ...get().progress, [k]: true };
+      set({ progress });
+      saveLocal(progress, get().tips);
+    },
+    dismissTip: (id) => {
+      const tips = { ...get().tips, [id]: true };
+      set({ tips });
+      saveLocal(get().progress, tips);
+    },
+    hydrateLocal: () => {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (raw) {
+          const v = JSON.parse(raw);
+          set({ progress: { reviewed: !!v.progress?.reviewed, visitedResults: !!v.progress?.visitedResults }, tips: v.tips ?? {} });
+        }
+      } catch {
+        /* ignore */
+      }
+    },
+    chatEditCondition: (msgId, index, cond) =>
+      set((s) => ({
+        chat: s.chat.map((m) => {
+          if (m.id !== msgId || m.role !== "preview") return m;
+          const conditions = m.conditions.slice();
+          if (cond) conditions[index] = cond;
+          else conditions.splice(index, 1);
+          return { ...m, conditions };
+        }),
+      })),
 
     setTab: (tab) => set({ tab }),
     setView: (view) => set({ view }),
@@ -200,9 +258,10 @@ export const useStore = create<State>((set, get) => {
       if (p) {
         set({
           resultBadge: {
-            text: `Planned in ${secs(p.timing.total_ms)} · ${p.plan.sorties.length} sorties · ${p.validation.violations.length} violations`,
+            text: `Planned in ${secs(p.timing.total_ms)}, ${p.plan.sorties.length} sorties, ${p.validation.violations.length} rule problems`,
             tone: p.publishable ? "ok" : "warn",
             at: Date.now(),
+            planId: p.id,
           },
           tab: "changes",
         });
@@ -228,9 +287,10 @@ export const useStore = create<State>((set, get) => {
       if (lr) {
         set({
           resultBadge: {
-            text: `Re-solved in ${secs(lr.total_ms)} · ${lr.changed} of ${lr.total} changed vs active`,
+            text: `Found another option in ${secs(lr.total_ms)}, ${lr.changed} of ${lr.total} changed`,
             tone: lr.publishable ? "ok" : "warn",
             at: Date.now(),
+            planId: lr.plan_id,
           },
         });
       }
@@ -291,7 +351,7 @@ export const useStore = create<State>((set, get) => {
               id: nextId(),
               role: "result",
               text: "Plan updated for your conditions. Review it in Plan changes.",
-              badge: `${secs(lr.total_ms)} · ${PATH_LABEL[lr.path] ?? lr.path} · ${lr.changed} of ${lr.total} changed${lr.added ? ` · ${lr.added} added` : ""}`,
+              badge: `Replanned in ${secs(lr.total_ms)}, ${lr.changed} of ${lr.total} changed${lr.added ? `, ${lr.added} added` : ""}`,
               summary: p.summary,
               planId: p.id,
             },
@@ -316,7 +376,9 @@ export const useStore = create<State>((set, get) => {
     reset: async () => {
       const r = await run("Resetting scenario", () => api.reset());
       if (!r) return;
-      set({ chat: [], resultBadge: null, highlight: { keys: [], until: 0 }, view: "proposal", feed: [] });
+      const progress = { reviewed: false, visitedResults: false };
+      set({ chat: [], resultBadge: null, highlight: { keys: [], until: 0 }, view: "proposal", feed: [], selected: null, progress });
+      saveLocal(progress, get().tips);
       get().setPlan(r);
       await get().refreshWorld();
       get().toast("info", "Scenario reset to the seeded synthetic data");
