@@ -1,0 +1,9 @@
+# Runtime dependencies of the Aeolus API (what Vercel installs for the Python function).
+# Development extras (server, model training, tests, lint) are in backend/requirements.txt.
+fastapi==0.146.0
+pydantic==2.14.1
+python-dotenv==1.2.4
+ortools==9.15.6755
+numpy==2.5.4
+psycopg[binary]==3.3.6
+groq==1.7.0
