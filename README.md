@@ -90,6 +90,7 @@ Other scripts:
 | Command | What it does |
 |---|---|
 | `pnpm dev:api` / `pnpm dev:web` | Start only the API or only the dashboard |
+| `pnpm dev:clean` | Stop leftover Aeolus dev servers on the web and API ports (3000 and 8000) if `pnpm dev` says a port is busy |
 | `pnpm db:init` | Create the PostgreSQL tables from `backend/db/schema.sql` |
 | `pnpm seed` | Regenerate the synthetic data (`data/*.json`) |
 | `pnpm train` | Retrain the serviceability model |

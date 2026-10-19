@@ -75,7 +75,7 @@ app = FastAPI(title="Aeolus API", version="1.0.0", lifespan=lifespan,
               description="Decision support for air-operations planning. Synthetic data only.")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=list(settings.cors_origins),
     allow_methods=["*"],
     allow_headers=["*"],
 )

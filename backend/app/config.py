@@ -39,6 +39,7 @@ class Settings:
     manual_baseline_min: int
     solver_time_limit_s: float
     seed: int
+    cors_origins: tuple[str, ...] = ()
 
 
 def load_settings() -> Settings:
@@ -51,7 +52,16 @@ def load_settings() -> Settings:
         manual_baseline_min=_int("MANUAL_BASELINE_MIN", 180),
         solver_time_limit_s=_float("SOLVER_TIME_LIMIT_S", 8.0),
         seed=_int("AEOLUS_SEED", 2026),
+        cors_origins=_cors_origins(),
     )
+
+
+def _cors_origins() -> tuple[str, ...]:
+    """Dashboard origins allowed to call the API: the web port in use, plus any extra CORS_ORIGINS."""
+    port = _int("WEB_PORT", 3000)
+    origins = [f"http://localhost:{port}", f"http://127.0.0.1:{port}"]
+    origins += [o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()]
+    return tuple(dict.fromkeys(origins))
 
 
 settings = load_settings()

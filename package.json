@@ -5,7 +5,8 @@
   "description": "Aeolus: decision support for air-operations planning (SIH 2026, PS26249). Synthetic data only.",
   "scripts": {
     "setup": "node scripts/setup.mjs",
-    "dev": "concurrently -k -n api,web -c cyan,yellow \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev": "node scripts/dev.mjs",
+    "dev:clean": "node scripts/dev-clean.mjs",
     "dev:api": "node scripts/run-api.mjs",
     "dev:web": "pnpm --dir frontend dev",
     "build:web": "pnpm --dir frontend build",
