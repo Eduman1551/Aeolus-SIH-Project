@@ -5,13 +5,15 @@
   "bases": [
     {
       "id": "B1",
-      "name": "Base 1 Northfield",
+      "name": "Base 1 Corvane",
+      "wing": "Corvane Air Wing",
       "x_km": 100,
       "y_km": 400
     },
     {
       "id": "B2",
-      "name": "Base 2 Eastmoor",
+      "name": "Base 2 Ostrel",
+      "wing": "Ostrel Air Wing",
       "x_km": 420,
       "y_km": 380
     }
@@ -19,37 +21,37 @@
   "zones": [
     {
       "id": "Z1",
-      "name": "Zone 1 Redhill",
+      "name": "Zone 1 Kelmar Ridge",
       "x_km": 300,
       "y_km": 150
     },
     {
       "id": "Z2",
-      "name": "Zone 2 Saltmarsh",
+      "name": "Zone 2 Sarrow Coast",
       "x_km": 520,
       "y_km": 120
     },
     {
       "id": "Z3",
-      "name": "Zone 3 Ironvale",
+      "name": "Zone 3 Vennic Plateau",
       "x_km": 640,
       "y_km": 330
     },
     {
       "id": "Z4",
-      "name": "Zone 4 Westfold",
+      "name": "Zone 4 Thallen Valley",
       "x_km": 180,
       "y_km": 700
     },
     {
       "id": "Z5",
-      "name": "Zone 5 Far Reach",
+      "name": "Zone 5 Orrin Expanse",
       "x_km": 980,
       "y_km": 240
     },
     {
       "id": "Z6",
-      "name": "Zone 6 Greywater",
+      "name": "Zone 6 Grisk Marsh",
       "x_km": 40,
       "y_km": 80
     }

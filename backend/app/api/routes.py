@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException, Request, WebSocket, WebSocketDisco
 from pydantic import BaseModel, Field
 
 from app.events.types import EventError, EventIn, describe, normalise
+from app.fusion.theatre import map_layers
 from app.planning.orchestrator import Planner, PlannerError
 from app.predict.model import model_info
 from app.predict.weather import mission_weather_notes
@@ -38,7 +39,8 @@ class ChatApply(BaseModel):
 
 
 class ClockBody(BaseModel):
-    action: str = Field(pattern="^(pause|resume)$")
+    action: str | None = Field(default=None, pattern="^(pause|resume)$")
+    speed: int | None = Field(default=None, description="scenario minutes per real minute: 1, 10 or 60")
 
 
 class SettingsBody(BaseModel):
@@ -154,9 +156,21 @@ def chat_apply(body: ChatApply, req: Request) -> dict[str, Any]:
 @router.post("/api/clock")
 def clock(body: ClockBody, req: Request) -> dict[str, Any]:
     p = planner(req)
+    if body.speed is not None and body.speed not in (1, 10, 60):
+        raise HTTPException(status_code=400, detail="speed must be 1, 10 or 60")
     with p.lock:
-        p.paused = body.action == "pause"
-    return {"paused": p.paused, "now": p.ws.now}
+        if body.action is not None:
+            p.paused = body.action == "pause"
+        if body.speed is not None:
+            p.sim_speed = float(body.speed)
+    return {"paused": p.paused, "speed": p.sim_speed, "now": p.ws.now}
+
+
+@router.get("/api/map")
+def map_data(req: Request) -> dict[str, Any]:
+    p = planner(req)
+    with p.lock:
+        return map_layers(p.ws)
 
 
 @router.post("/api/settings")
@@ -171,6 +185,7 @@ def update_settings(body: SettingsBody, req: Request) -> dict[str, Any]:
 def reset(req: Request) -> dict[str, Any]:
     p = planner(req)
     p.reset()
+    p.log("Planner", "reset the scenario", "synthetic data reloaded", kind="planner")
     req.app.state.hub.notify("world")
     req.app.state.hub.notify("plan")
     return p.status_view()

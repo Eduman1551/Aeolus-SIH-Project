@@ -70,3 +70,28 @@ def test_approve_without_proposal_is_a_400(client):
 def test_websocket_hello(client):
     with client.websocket_connect("/ws") as ws:
         assert ws.receive_json()["type"] == "hello"
+
+
+def test_map_layers(client):
+    m = client.get("/api/map").json()
+    assert {b["id"] for b in m["bases"]} == {"B1", "B2"} and len(m["zones"]) == 6
+    assert m["threats"] and m["restrictions"] and m["weather_cells"]
+    assert all("wing" in b for b in m["bases"])
+
+
+def test_clock_speed_and_activity_log(client):
+    r = client.post("/api/clock", json={"speed": 60}).json()
+    assert r["speed"] == 60
+    assert client.post("/api/clock", json={"speed": 7}).status_code == 400
+    st = client.post("/api/plan/generate").json()
+    client.post("/api/plan/approve", json={"plan_id": st["proposal"]["id"]})
+    acts = client.get("/api/plan").json()["activity"]
+    actions = [a["action"] for a in acts]
+    assert any(a.startswith("approved plan") for a in actions)
+    assert any(a.startswith("published") for a in actions)
+    assert all(a["actor"] and a["clock"] for a in acts)
+
+
+def test_aircraft_have_callsigns(client):
+    s = client.get("/api/state").json()
+    assert all(a["callsign"] for a in s["aircraft"])

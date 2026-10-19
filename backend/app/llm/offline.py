@@ -17,7 +17,7 @@ from app.events.types import EventIn
 
 TIME = r"(\d{1,2}:\d{2}|\d{4}|\d{1,2})"
 RANGE = re.compile(rf"(?:from\s+|between\s+)?{TIME}\s*(?:h|hrs|z)?\s*(?:to|-|–|until|till|and)\s*{TIME}", re.I)
-BASE = re.compile(r"\b(?:base\s*([12])|b([12])\b|(northfield)|(eastmoor))", re.I)
+BASE = re.compile(r"\b(?:base\s*([12])|b([12])\b|(corvane)|(ostrel))", re.I)
 ZONE = re.compile(r"\b(?:zone\s*(\d)|z(\d))\b", re.I)
 AIRCRAFT = re.compile(r"\b(AR|SK|NC|TV)\s*-?\s*(\d{3})\b", re.I)
 CREW = re.compile(r"\bcrew\s*(?:c\s*-?\s*)?(\d{1,2})\b|\bc-(\d{1,2})\b", re.I)

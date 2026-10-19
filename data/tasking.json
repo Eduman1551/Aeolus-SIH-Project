@@ -78,7 +78,7 @@
   "missions": [
     {
       "id": "M01",
-      "name": "Dawn CAP Redhill",
+      "name": "Dawn CAP Kelmar",
       "type_id": "CAP",
       "priority": 1,
       "zone_id": "Z1",
@@ -91,7 +91,7 @@
     },
     {
       "id": "M02",
-      "name": "Strike Ironvale depot",
+      "name": "Strike Vennic depot",
       "type_id": "STRIKE",
       "priority": 1,
       "zone_id": "Z3",
@@ -104,7 +104,7 @@
     },
     {
       "id": "M03",
-      "name": "Recce Saltmarsh coast",
+      "name": "Recce Sarrow coast",
       "type_id": "ISR",
       "priority": 2,
       "zone_id": "Z2",
@@ -117,7 +117,7 @@
     },
     {
       "id": "M04",
-      "name": "SEAD Ironvale radar",
+      "name": "SEAD Vennic radar",
       "type_id": "SEAD",
       "priority": 2,
       "zone_id": "Z3",
@@ -130,7 +130,7 @@
     },
     {
       "id": "M05",
-      "name": "Resupply Greywater post",
+      "name": "Resupply Grisk post",
       "type_id": "AIRLIFT",
       "priority": 1,
       "zone_id": "Z6",
@@ -143,7 +143,7 @@
     },
     {
       "id": "M06",
-      "name": "Recce Far Reach",
+      "name": "Recce Orrin",
       "type_id": "ISR",
       "priority": 3,
       "zone_id": "Z5",
@@ -156,7 +156,7 @@
     },
     {
       "id": "M07",
-      "name": "Strike Westfold bridge",
+      "name": "Strike Thallen bridge",
       "type_id": "STRIKE",
       "priority": 2,
       "zone_id": "Z4",
@@ -169,7 +169,7 @@
     },
     {
       "id": "M08",
-      "name": "CAP Saltmarsh",
+      "name": "CAP Sarrow",
       "type_id": "CAP",
       "priority": 3,
       "zone_id": "Z2",
@@ -182,7 +182,7 @@
     },
     {
       "id": "M09",
-      "name": "CAP Ironvale",
+      "name": "CAP Vennic",
       "type_id": "CAP",
       "priority": 1,
       "zone_id": "Z3",
@@ -195,7 +195,7 @@
     },
     {
       "id": "M10",
-      "name": "Strike Far Reach convoy",
+      "name": "Strike Orrin convoy",
       "type_id": "STRIKE",
       "priority": 2,
       "zone_id": "Z5",
@@ -208,7 +208,7 @@
     },
     {
       "id": "M11",
-      "name": "Recce Redhill",
+      "name": "Recce Kelmar",
       "type_id": "ISR",
       "priority": 4,
       "zone_id": "Z1",
@@ -221,7 +221,7 @@
     },
     {
       "id": "M12",
-      "name": "Resupply Westfold",
+      "name": "Resupply Thallen",
       "type_id": "AIRLIFT",
       "priority": 3,
       "zone_id": "Z4",
@@ -234,7 +234,7 @@
     },
     {
       "id": "M13",
-      "name": "SEAD Far Reach",
+      "name": "SEAD Orrin",
       "type_id": "SEAD",
       "priority": 2,
       "zone_id": "Z5",
@@ -247,7 +247,7 @@
     },
     {
       "id": "M14",
-      "name": "Strike Greywater cache",
+      "name": "Strike Grisk cache",
       "type_id": "STRIKE",
       "priority": 4,
       "zone_id": "Z6",
@@ -260,7 +260,7 @@
     },
     {
       "id": "M15",
-      "name": "Dusk CAP Redhill",
+      "name": "Dusk CAP Kelmar",
       "type_id": "CAP",
       "priority": 3,
       "zone_id": "Z1",

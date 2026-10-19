@@ -86,8 +86,16 @@ class Planner:
             self.last_result: dict | None = None
             self.ended: dict | None = None
             self.paused = False
+            self.sim_speed = self.settings.sim_speed  # scenario minutes per real minute
+            self.activity: list[dict] = []
             self.stability_lambda = self.settings.stability_lambda
             self._event_seq = 0
+
+    def log(self, actor: str, action: str, detail: str = "", kind: str = "info") -> None:
+        """Activity log: who did what and when (wall clock and scenario clock)."""
+        self.activity.append({"at": wall_now(), "clock": fmt_min(self.ws.now), "actor": actor, "action": action,
+                              "detail": detail, "kind": kind})
+        del self.activity[:-200]
 
     # ---------- hooks filled in by later modules ----------
 
@@ -208,6 +216,10 @@ class Planner:
                                      self.baseline_validation.model_dump())
             prop = self._proposal(res, None, {"kind": "initial", "label": "initial plan"}, "initial", t0)
             self.initial_plan = prop.plan.model_copy(deep=True)
+            self.log("Planner", "requested a plan", kind="planner")
+            self.log("Aeolus", f"proposed plan {prop.id}", f"{len(prop.plan.sorties)} flights, "
+                     f"{len(prop.plan.unassigned)} missions unassigned, {len(prop.validation.violations)} rule problems",
+                     kind="system")
             self.notify("plan")
             return prop
 
@@ -240,6 +252,8 @@ class Planner:
                 self.store.save_plan(plan.model_dump(), "active", prop.trigger.get("label"), rep.model_dump(),
                                      prop.stability.get("stability_pct"))
                 self.store.save_decision(plan.id, "approved", None)
+            self.log("Planner", f"approved plan {plan.id}", kind="planner")
+            self.log("Aeolus", f"published {plan.id} as the live plan", kind="publish")
             self.after_publish()
             self.notify("plan")
             return plan
@@ -284,6 +298,9 @@ class Planner:
             trigger = {"kind": "reject", "label": label, "note": note, "conditions": applied, "parser": parser,
                        "compared_with": prop.id}
             new = self._proposal(res, previous, trigger, "reject loop", t0, diff_ref=prop.plan)
+            self.log("Planner", f"rejected plan {prop.id}", note or "no note", kind="planner")
+            self.log("Aeolus", f"proposed another option {new.id}", "; ".join(applied) or "next best alternative",
+                     kind="system")
             self.notify("plan")
             if applied:
                 self.notify("world")
@@ -340,6 +357,13 @@ class Planner:
                     self.kpi.record_replan(prop.timing["total_ms"], path, prop.stability["stability_pct"])
             total_ms = round((time.perf_counter() - t0) * 1000, 1)
             for r in records:
+                who = "Planner" if r["origin"] in ("event panel", "planner chat", "reject note") else r["origin"].capitalize()
+                self.log(who, "injected event" if r["origin"] != "planner chat" else "added a condition by chat",
+                         r["description"], kind="event")
+            if prop is not None:
+                self.log("Aeolus", f"replanned in {prop.timing['total_ms'] / 1000:.2f} s ({path})",
+                         f"proposal {prop.id}: {prop.stability['changed']} of {prop.stability['total']} changed", kind="system")
+            for r in records:
                 r.update(cache_hit=path == "cache hit", path=path, replan_ms=prop.timing["total_ms"] if prop else None,
                          proposal_id=prop.id if prop else None)
                 self.events.insert(0, r)
@@ -364,6 +388,7 @@ class Planner:
                 self.store.set_plan_status(self.active.id, "ended")
             self.active.status = "ended"
             self.status = "ended"
+            self.log("Planner", f"ended plan {self.active.id}", "KPI snapshot saved", kind="planner")
             if self.proposal is not None:
                 self._close_proposal("superseded")
             self.notify("plan")
@@ -377,7 +402,7 @@ class Planner:
             if self.paused or self.status == "ended" or self.active is None:
                 return False  # the clock models plan execution, so it starts at the first publish
             before = int(self.ws.now)
-            self.ws.now = min(self.ws.rules.horizon_end, self.ws.now + self.settings.sim_speed * real_seconds / 60.0)
+            self.ws.now = min(self.ws.rules.horizon_end, self.ws.now + self.sim_speed * real_seconds / 60.0)
             if self.ws.now >= self.ws.rules.horizon_end and self.active is not None and self.status != "ended":
                 self.end_plan("planning horizon reached")
             return int(self.ws.now) != before
@@ -431,6 +456,8 @@ class Planner:
                 "history": self.history[-20:],
                 "ended": self.ended,
                 "stability_lambda": self.stability_lambda,
+                "speed": self.sim_speed,
+                "activity": self.activity[-60:][::-1],
                 "kpi_history": {"replans": self.kpi.replans[-20:], "stabilities": self.kpi.stabilities[-20:],
                                 "manual_baseline_min": self.kpi.manual_baseline_min,
                                 "greedy_ms": self.kpi.greedy_ms, "initial_solve_ms": self.kpi.initial_solve_ms},

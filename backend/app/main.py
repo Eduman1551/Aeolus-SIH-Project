@@ -32,7 +32,8 @@ async def clock_loop(app: FastAPI) -> None:
         try:
             planner.advance_clock(1.0)
             await hub.send({"type": "clock", "now": planner.ws.now, "clock": fmt_min(planner.ws.now),
-                            "paused": planner.paused, "status": planner.status})
+                            "paused": planner.paused, "status": planner.status,
+                            "speed": planner.sim_speed})
             if tick % FEED_EVERY_S == 0:
                 msgs = planner.feed_tick()
                 if msgs:

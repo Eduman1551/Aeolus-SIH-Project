@@ -57,6 +57,7 @@
       "id": "AR-101",
       "type_id": "ARC",
       "base_id": "B1",
+      "callsign": "ARROW-01",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -71,6 +72,7 @@
       "id": "AR-102",
       "type_id": "ARC",
       "base_id": "B1",
+      "callsign": "ARROW-02",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -85,6 +87,7 @@
       "id": "AR-103",
       "type_id": "ARC",
       "base_id": "B1",
+      "callsign": "ARROW-03",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -99,6 +102,7 @@
       "id": "AR-104",
       "type_id": "ARC",
       "base_id": "B1",
+      "callsign": "ARROW-04",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -113,6 +117,7 @@
       "id": "SK-201",
       "type_id": "SKR",
       "base_id": "B1",
+      "callsign": "HAMMER-01",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -127,6 +132,7 @@
       "id": "SK-202",
       "type_id": "SKR",
       "base_id": "B1",
+      "callsign": "HAMMER-02",
       "status": "unserviceable",
       "unavailable": [
         {
@@ -147,6 +153,7 @@
       "id": "SK-203",
       "type_id": "SKR",
       "base_id": "B1",
+      "callsign": "HAMMER-03",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -161,6 +168,7 @@
       "id": "NC-301",
       "type_id": "NOC",
       "base_id": "B1",
+      "callsign": "OWL-01",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -175,6 +183,7 @@
       "id": "NC-302",
       "type_id": "NOC",
       "base_id": "B1",
+      "callsign": "OWL-02",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -189,6 +198,7 @@
       "id": "TV-401",
       "type_id": "TRV",
       "base_id": "B1",
+      "callsign": "MULE-01",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -203,6 +213,7 @@
       "id": "TV-402",
       "type_id": "TRV",
       "base_id": "B1",
+      "callsign": "MULE-02",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -217,6 +228,7 @@
       "id": "AR-105",
       "type_id": "ARC",
       "base_id": "B2",
+      "callsign": "ARROW-05",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -231,6 +243,7 @@
       "id": "AR-106",
       "type_id": "ARC",
       "base_id": "B2",
+      "callsign": "ARROW-06",
       "status": "serviceable",
       "unavailable": [
         {
@@ -251,6 +264,7 @@
       "id": "AR-107",
       "type_id": "ARC",
       "base_id": "B2",
+      "callsign": "ARROW-07",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -265,6 +279,7 @@
       "id": "SK-204",
       "type_id": "SKR",
       "base_id": "B2",
+      "callsign": "HAMMER-04",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -279,6 +294,7 @@
       "id": "SK-205",
       "type_id": "SKR",
       "base_id": "B2",
+      "callsign": "HAMMER-05",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -293,6 +309,7 @@
       "id": "SK-206",
       "type_id": "SKR",
       "base_id": "B2",
+      "callsign": "HAMMER-06",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -307,6 +324,7 @@
       "id": "NC-303",
       "type_id": "NOC",
       "base_id": "B2",
+      "callsign": "OWL-03",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -321,6 +339,7 @@
       "id": "NC-304",
       "type_id": "NOC",
       "base_id": "B2",
+      "callsign": "OWL-04",
       "status": "serviceable",
       "unavailable": [],
       "risk": {
@@ -335,6 +354,7 @@
       "id": "TV-403",
       "type_id": "TRV",
       "base_id": "B2",
+      "callsign": "MULE-03",
       "status": "serviceable",
       "unavailable": [],
       "risk": {

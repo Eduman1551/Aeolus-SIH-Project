@@ -38,15 +38,16 @@ AIRCRAFT_TYPES = [
     ("TRV", "Travan", "tactical transport", 1200, 120, 400, 1.0, 1, 3, 0),
 ]
 
-BASES = [("B1", "Base 1 Northfield", 100, 400), ("B2", "Base 2 Eastmoor", 420, 380)]
+BASES = [("B1", "Base 1 Corvane", 100, 400), ("B2", "Base 2 Ostrel", 420, 380)]
+WINGS = {"B1": "Corvane Air Wing", "B2": "Ostrel Air Wing"}
 
 ZONES = [
-    ("Z1", "Zone 1 Redhill", 300, 150),
-    ("Z2", "Zone 2 Saltmarsh", 520, 120),
-    ("Z3", "Zone 3 Ironvale", 640, 330),
-    ("Z4", "Zone 4 Westfold", 180, 700),
-    ("Z5", "Zone 5 Far Reach", 980, 240),
-    ("Z6", "Zone 6 Greywater", 40, 80),
+    ("Z1", "Zone 1 Kelmar Ridge", 300, 150),
+    ("Z2", "Zone 2 Sarrow Coast", 520, 120),
+    ("Z3", "Zone 3 Vennic Plateau", 640, 330),
+    ("Z4", "Zone 4 Thallen Valley", 180, 700),
+    ("Z5", "Zone 5 Orrin Expanse", 980, 240),
+    ("Z6", "Zone 6 Grisk Marsh", 40, 80),
 ]
 
 # airframes per base and type: (base, type, count)
@@ -55,6 +56,8 @@ FLEET = [
     ("B2", "ARC", 3), ("B2", "SKR", 3), ("B2", "NOC", 2), ("B2", "TRV", 1),
 ]
 TYPE_PREFIX = {"ARC": ("AR", 101), "SKR": ("SK", 201), "NOC": ("NC", 301), "TRV": ("TV", 401)}
+# radio callsign word per type (fictional), numbered per type: ARROW-01, HAMMER-01, ...
+CALLSIGN_WORD = {"ARC": "ARROW", "SKR": "HAMMER", "NOC": "OWL", "TRV": "MULE"}
 
 # crews: (base, qualified types, count)
 CREWS = [
@@ -90,21 +93,21 @@ MISSION_TYPES = [
 
 MISSIONS = [
     # id, name, type, priority, zone, window start, window end, duration, aircraft
-    ("M01", "Dawn CAP Redhill", "CAP", 1, "Z1", "07:30", "07:30", 180, 2),
-    ("M02", "Strike Ironvale depot", "STRIKE", 1, "Z3", "09:00", "09:30", 150, 2),
-    ("M03", "Recce Saltmarsh coast", "ISR", 2, "Z2", "08:00", "09:00", 240, 1),
-    ("M04", "SEAD Ironvale radar", "SEAD", 2, "Z3", "08:00", "08:30", 120, 2),
-    ("M05", "Resupply Greywater post", "AIRLIFT", 1, "Z6", "10:00", "11:00", 180, 1),
-    ("M06", "Recce Far Reach", "ISR", 3, "Z5", "11:00", "12:00", 240, 1),
-    ("M07", "Strike Westfold bridge", "STRIKE", 2, "Z4", "10:00", "12:00", 150, 2),
-    ("M08", "CAP Saltmarsh", "CAP", 3, "Z2", "13:00", "13:00", 180, 2),
-    ("M09", "CAP Ironvale", "CAP", 1, "Z3", "15:00", "15:00", 180, 2),
-    ("M10", "Strike Far Reach convoy", "STRIKE", 2, "Z5", "15:30", "16:30", 150, 2),
-    ("M11", "Recce Redhill", "ISR", 4, "Z1", "14:00", "15:00", 180, 1),
-    ("M12", "Resupply Westfold", "AIRLIFT", 3, "Z4", "16:00", "18:00", 180, 1),
-    ("M13", "SEAD Far Reach", "SEAD", 2, "Z5", "15:00", "15:30", 120, 2),
-    ("M14", "Strike Greywater cache", "STRIKE", 4, "Z6", "18:30", "19:30", 120, 2),
-    ("M15", "Dusk CAP Redhill", "CAP", 3, "Z1", "20:00", "20:00", 180, 2),
+    ("M01", "Dawn CAP Kelmar", "CAP", 1, "Z1", "07:30", "07:30", 180, 2),
+    ("M02", "Strike Vennic depot", "STRIKE", 1, "Z3", "09:00", "09:30", 150, 2),
+    ("M03", "Recce Sarrow coast", "ISR", 2, "Z2", "08:00", "09:00", 240, 1),
+    ("M04", "SEAD Vennic radar", "SEAD", 2, "Z3", "08:00", "08:30", 120, 2),
+    ("M05", "Resupply Grisk post", "AIRLIFT", 1, "Z6", "10:00", "11:00", 180, 1),
+    ("M06", "Recce Orrin", "ISR", 3, "Z5", "11:00", "12:00", 240, 1),
+    ("M07", "Strike Thallen bridge", "STRIKE", 2, "Z4", "10:00", "12:00", 150, 2),
+    ("M08", "CAP Sarrow", "CAP", 3, "Z2", "13:00", "13:00", 180, 2),
+    ("M09", "CAP Vennic", "CAP", 1, "Z3", "15:00", "15:00", 180, 2),
+    ("M10", "Strike Orrin convoy", "STRIKE", 2, "Z5", "15:30", "16:30", 150, 2),
+    ("M11", "Recce Kelmar", "ISR", 4, "Z1", "14:00", "15:00", 180, 1),
+    ("M12", "Resupply Thallen", "AIRLIFT", 3, "Z4", "16:00", "18:00", 180, 1),
+    ("M13", "SEAD Orrin", "SEAD", 2, "Z5", "15:00", "15:30", 120, 2),
+    ("M14", "Strike Grisk cache", "STRIKE", 4, "Z6", "18:30", "19:30", 120, 2),
+    ("M15", "Dusk CAP Kelmar", "CAP", 3, "Z1", "20:00", "20:00", 180, 2),
 ]
 
 THREATS = [("T1", "Z2", 1, "light air defence"), ("T2", "Z3", 2, "medium SAM site"),
@@ -135,9 +138,10 @@ def build(seed: int) -> dict[str, dict]:
         for _ in range(n):
             prefix = TYPE_PREFIX[t][0]
             aid = f"{prefix}-{counters[t]}"
+            callsign = f"{CALLSIGN_WORD[t]}-{counters[t] - TYPE_PREFIX[t][1] + 1:02d}"
             counters[t] += 1
             aircraft.append(dict(
-                id=aid, type_id=t, base_id=base, status="serviceable", unavailable=[],
+                id=aid, type_id=t, base_id=base, callsign=callsign, status="serviceable", unavailable=[],
                 risk=dict(
                     hours_since_maint=round(rnd.uniform(20, 140), 1),
                     age_years=round(rnd.uniform(3, 18), 1),
@@ -174,7 +178,7 @@ def build(seed: int) -> dict[str, dict]:
     weapons = [dict(id=i, name=n, category=c, compatible_types=t) for i, n, c, t in WEAPONS]
     stock = [dict(base_id=b, weapon_id=w, qty=q) for b, items in STOCK.items() for w, q in items.items()]
 
-    bases = [dict(id=i, name=n, x_km=x, y_km=y) for i, n, x, y in BASES]
+    bases = [dict(id=i, name=n, wing=WINGS[i], x_km=x, y_km=y) for i, n, x, y in BASES]
     zones = [dict(id=i, name=n, x_km=x, y_km=y) for i, n, x, y in ZONES]
     restrictions = [dict(id=i, zone_id=z, start=hm(s), end=hm(e), reason=r) for i, z, s, e, r in RESTRICTIONS]
 

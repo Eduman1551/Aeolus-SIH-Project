@@ -36,6 +36,7 @@ class Window(BaseModel):
 class Base(Record):
     id: str
     name: str
+    wing: str = ""
     x_km: float
     y_km: float
 
@@ -93,6 +94,7 @@ class Aircraft(Record):
     id: str
     type_id: str
     base_id: str
+    callsign: str = ""
     status: Literal["serviceable", "unserviceable"] = "serviceable"
     unavailable: list[Window] = Field(default_factory=list)
     risk: RiskInputs

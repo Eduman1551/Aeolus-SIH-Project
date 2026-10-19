@@ -89,6 +89,8 @@ class AeolusPlanner(Planner):
                 self.cache.active_id = active.id
                 self.cache.build_ms = ms
                 self.cache.status = "ready"
+                self.log("Aeolus", f"prepared {len(entries)} contingency answers", "for the likeliest disruptions",
+                         kind="system")
             self.notify("cache")
             self.notify("plan")
 
