@@ -1,111 +1,114 @@
 "use client";
 
-import { API_URL, WS_URL } from "./api";
+import { api } from "./api";
 import { useStore } from "./store";
 
-// Retries with backoff, then gives up and shows "Offline" (Retry or a good health check starts again).
-// The budget covers a free-tier host waking from sleep (30 to 60 s).
+// Live updates by short HTTP polling of /api/live (works on serverless hosts, where WebSockets
+// are not available). Each poll returns the clock, new feed messages, the plan when it changed,
+// and revisions that tell us when to refetch the world.
+const POLL_MS = 2000;
+const HIDDEN_POLL_MS = 6000; // slower while the tab is in the background
+// failed polls back off, then give up and show "Offline" (Retry or a good health check restarts)
 const BACKOFF_MS = [1000, 2000, 4000, 8000, 15000, 15000, 15000, 15000];
-// after this long without a connection, tell the user the server may be waking up
+// a first answer slower than this means a sleeping server is starting: say so instead of failing
 const WAKING_AFTER_MS = 4000;
 
 let restart: (() => void) | null = null;
 
-/** Try connecting again after the client gave up (Offline). */
+/** Start polling again after the client gave up (Offline). */
 export function retryLive() {
   restart?.();
 }
 
-// One WebSocket per page; the server pushes clock, feed, plan and world updates.
 export function connectLive(): () => void {
-  let socket: WebSocket | null = null;
   let stopped = false;
+  let running = false;
   let attempt = 0;
   let firstFail = 0;
-  let ping: ReturnType<typeof setInterval> | null = null;
+  let connected = false;
   let timer: ReturnType<typeof setTimeout> | null = null;
+  let wakeTimer: ReturnType<typeof setTimeout> | null = null;
+  let feedSince = 0;
+  let planRev = -1;
+  let worldRev = -1;
 
-  const open = () => {
+  const later = (ms: number) => {
     if (stopped) return;
-    if (!API_URL && !process.env.NEXT_PUBLIC_WS_URL) {
-      // no backend configured for this build, so there is nothing to connect to
-      useStore.getState().setWs("offline");
-      return;
-    }
+    timer = setTimeout(poll, ms);
+  };
+
+  const poll = async () => {
+    if (stopped || running) return;
+    running = true;
     const st = useStore.getState();
-    st.setWs(firstFail && Date.now() - firstFail > WAKING_AFTER_MS ? "waking" : "connecting");
-    try {
-      socket = new WebSocket(WS_URL);
-    } catch {
-      schedule();
-      return;
+    if (!connected) {
+      st.setWs(firstFail && Date.now() - firstFail > WAKING_AFTER_MS ? "waking" : "connecting");
+      // still waiting on the very first answer after a few seconds: the server is waking up
+      wakeTimer = setTimeout(() => !connected && useStore.getState().setWs("waking"), WAKING_AFTER_MS);
     }
-    socket.onopen = () => {
+    try {
+      const r = await api.live(feedSince, planRev);
+      if (wakeTimer) clearTimeout(wakeTimer);
+      const s = useStore.getState();
+      const wasConnected = connected;
+      connected = true;
       attempt = 0;
       firstFail = 0;
-      useStore.getState().setWs("open");
-      useStore.getState().refreshAll();
-      ping = setInterval(() => socket?.readyState === WebSocket.OPEN && socket.send("ping"), 20000);
-    };
-    socket.onmessage = (ev) => {
-      let msg: { type: string; [k: string]: unknown };
-      try {
-        msg = JSON.parse(ev.data);
-      } catch {
+      s.setWs("open");
+      if (r.plan) s.setPlan(r.plan, true);
+      else if (s.plan) {
+        s.applyClock(r.clock.now, r.clock.paused, r.clock.status, r.clock.speed);
+        if (r.cache) useStore.setState({ plan: { ...useStore.getState().plan!, cache: r.cache } });
+      }
+      if (r.feed && feedSince) s.applyFeed(r.feed.messages as never, r.feed.live as never);
+      feedSince = r.last_feed_id;
+      planRev = r.revs.plan;
+      if (!wasConnected) {
+        worldRev = r.revs.world;
+        s.refreshAll();
+      } else if (r.revs.world !== worldRev) {
+        worldRev = r.revs.world;
+        s.refreshWorld();
+      }
+      running = false;
+      later(document.hidden ? HIDDEN_POLL_MS : POLL_MS);
+    } catch {
+      if (wakeTimer) clearTimeout(wakeTimer);
+      running = false;
+      connected = false;
+      if (!firstFail) firstFail = Date.now();
+      if (attempt >= BACKOFF_MS.length) {
+        useStore.getState().setWs("offline");
         return;
       }
-      const st = useStore.getState();
-      switch (msg.type) {
-        case "clock":
-          st.applyClock(msg.now as number, msg.paused as boolean, msg.status as string, msg.speed as number);
-          break;
-        case "feed":
-          st.applyFeed(msg.messages as never, msg.live as never);
-          break;
-        case "plan":
-          st.setPlan(msg.plan as never, true);
-          break;
-        case "world":
-          st.refreshWorld();
-          break;
-        case "cache":
-          if (st.plan) useStore.setState({ plan: { ...st.plan, cache: msg.cache as never } });
-          break;
-      }
-    };
-    socket.onclose = () => {
-      if (ping) clearInterval(ping);
-      socket = null;
-      schedule();
-    };
-    socket.onerror = () => socket?.close();
+      useStore.getState().setWs(Date.now() - firstFail > WAKING_AFTER_MS ? "waking" : "connecting");
+      later(BACKOFF_MS[attempt++]);
+    }
   };
 
-  const schedule = () => {
-    if (stopped) return;
-    if (!firstFail) firstFail = Date.now();
-    if (attempt >= BACKOFF_MS.length) {
-      useStore.getState().setWs("offline");
-      return;
+  const onVisible = () => {
+    // coming back to the tab: poll now instead of waiting for the slow background timer
+    if (!document.hidden && connected && !running) {
+      if (timer) clearTimeout(timer);
+      poll();
     }
-    useStore.getState().setWs(Date.now() - firstFail > WAKING_AFTER_MS ? "waking" : "connecting");
-    timer = setTimeout(open, BACKOFF_MS[attempt++]);
   };
+  document.addEventListener("visibilitychange", onVisible);
 
   restart = () => {
-    if (stopped || socket) return;
+    if (stopped || running) return;
     if (timer) clearTimeout(timer);
     attempt = 0;
     firstFail = 0;
-    open();
+    poll();
   };
 
-  open();
+  poll();
   return () => {
     stopped = true;
     restart = null;
-    if (ping) clearInterval(ping);
     if (timer) clearTimeout(timer);
-    socket?.close();
+    if (wakeTimer) clearTimeout(wakeTimer);
+    document.removeEventListener("visibilitychange", onVisible);
   };
 }

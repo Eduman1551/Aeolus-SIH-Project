@@ -1,9 +1,8 @@
 import type { EventInput, Health, MapData, ParsedCondition, PlanStatus, World } from "./types";
 
-// Both come from env vars (inlined at build time by next.config.ts).
-// NEXT_PUBLIC_WS_URL is optional: by default it follows the API URL, so https gives wss.
+// Backend base URL, inlined at build time by next.config.ts. Empty means same origin: on Vercel
+// the API is served at /api on the dashboard's own domain. Locally it is http://localhost:8000.
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
-export const WS_URL = (process.env.NEXT_PUBLIC_WS_URL || `${API_URL.replace(/^http/, "ws")}/ws`).replace(/\/$/, "");
 
 export class ApiError extends Error {
   status: number;
@@ -42,8 +41,18 @@ const post = <T>(path: string, body?: unknown) =>
 
 export type ReplanResponse = PlanStatus & { path: string; total_ms: number };
 
+export type LiveResponse = {
+  clock: { now: number; clock: string; paused: boolean; status: string; speed: number };
+  revs: { plan: number; world: number; cache: number };
+  last_feed_id: number;
+  feed: { messages: unknown[]; live: unknown } | null;
+  plan: PlanStatus | null;
+  cache: PlanStatus["cache"];
+};
+
 export const api = {
   health: () => call<Health>("/api/health"),
+  live: (feedSince: number, planRev: number) => call<LiveResponse>(`/api/live?feed_since=${feedSince}&plan_rev=${planRev}`),
   state: () => call<World>("/api/state"),
   plan: () => call<PlanStatus>("/api/plan"),
   generate: () => post<PlanStatus>("/api/plan/generate"),

@@ -17,7 +17,6 @@ import Sidebar, { SIDEBAR_W } from "./Sidebar";
 import SolvingScreen from "./SolvingScreen";
 
 function hint(): string {
-  if (!API_URL) return "No server address is set for this site (NEXT_PUBLIC_API_URL).";
   if (/localhost|127\.0\.0\.1/.test(API_URL)) return "Start it with pnpm dev, then retry.";
   return "It may be asleep or down. Retry in a moment.";
 }

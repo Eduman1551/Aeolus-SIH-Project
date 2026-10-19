@@ -15,14 +15,13 @@ function rootPublicEnv(): Record<string, string> {
 }
 
 const fromRoot = rootPublicEnv();
-const isProdBuild = process.env.NODE_ENV === "production";
+const onVercel = !!process.env.VERCEL;
 
-// Backend URL: env var first (Vercel), then the repo-root .env (local), then localhost for local dev only.
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || fromRoot.NEXT_PUBLIC_API_URL || (isProdBuild ? "" : "http://localhost:8000");
-const wsUrl = process.env.NEXT_PUBLIC_WS_URL || fromRoot.NEXT_PUBLIC_WS_URL || "";
-if (isProdBuild && !apiUrl) {
-  console.warn("[aeolus] NEXT_PUBLIC_API_URL is not set. The deployed dashboard will not find the backend.");
-}
+// Backend URL. On Vercel it stays empty: the API is served from the same domain at /api, so there
+// is no URL or CORS to manage. Locally: env var, then the repo-root .env, then localhost:8000.
+const apiUrl = onVercel
+  ? process.env.NEXT_PUBLIC_API_URL || ""
+  : process.env.NEXT_PUBLIC_API_URL || fromRoot.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 const config: NextConfig = {
   reactStrictMode: true,
@@ -32,7 +31,6 @@ const config: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   env: {
     NEXT_PUBLIC_API_URL: apiUrl,
-    NEXT_PUBLIC_WS_URL: wsUrl,
   },
 };
 
