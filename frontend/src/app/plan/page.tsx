@@ -1,6 +1,7 @@
 "use client";
 
 import { CalendarRange, ClipboardCheck, Play } from "lucide-react";
+import AllocationSankey from "@/components/AllocationSankey";
 import Gantt, { GanttLegend } from "@/components/Gantt";
 import MissionTable from "@/components/MissionTable";
 import ResultBanner from "@/components/ResultBanner";
@@ -61,6 +62,8 @@ export default function PlanPage() {
           <GanttLegend />
         </div>
       </Card>
+
+      <AllocationSankey />
 
       <Card className="overflow-hidden">
         <MissionTable />
