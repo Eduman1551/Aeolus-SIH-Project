@@ -2,7 +2,7 @@
 
 import { ServerCrash } from "lucide-react";
 import { MotionConfig } from "motion/react";
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { api, API_URL } from "@/lib/api";
 import { useStore } from "@/lib/store";
 import { connectLive } from "@/lib/ws";
@@ -44,6 +44,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const hydrateLocal = useStore((s) => s.hydrateLocal);
   const collapsed = useStore((s) => s.sidebarCollapsed);
   const setSidebar = useStore((s) => s.setSidebar);
+  // no width animation until the saved sidebar state is applied, so pages do not flicker on load
+  const [ready, setReady] = useState(false);
 
   // auto-collapse below ~1280 px; going wide again restores the remembered choice
   useEffect(() => {
@@ -56,8 +58,12 @@ export default function AppShell({ children }: { children: ReactNode }) {
       setSidebar(now ? true : readSavedCollapsed(), false);
     };
     check();
+    const raf = requestAnimationFrame(() => requestAnimationFrame(() => setReady(true)));
     window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", check);
+    };
   }, [setSidebar, hydrateLocal]);
 
   useEffect(() => connectLive(), []);
@@ -70,9 +76,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="min-h-screen" style={{ ["--sidebar-w" as string]: `${collapsed ? SIDEBAR_W.closed : SIDEBAR_W.open}px` }}>
+    <div className="min-h-screen" data-shell data-ready={ready || undefined} style={{ ["--sidebar-w" as string]: `${collapsed ? SIDEBAR_W.closed : SIDEBAR_W.open}px` }}>
       <Sidebar />
-      <div className="pl-[var(--sidebar-w)] transition-[padding] duration-200 ease-out">
+      <div className="shell-anim pl-[var(--sidebar-w)] transition-[padding] duration-200 ease-out">
         <TopBar />
         {unreachable && <Unreachable />}
         <main className="px-8 pb-12 pt-7">{children}</main>

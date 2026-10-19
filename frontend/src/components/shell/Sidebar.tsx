@@ -76,7 +76,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className="fixed inset-y-0 left-0 z-30 flex flex-col border-r border-line bg-white py-4 transition-[width] duration-200 ease-out"
+      className="shell-anim fixed inset-y-0 left-0 z-30 flex flex-col border-r border-line bg-white py-4 transition-[width] duration-200 ease-out"
       style={{ width: collapsed ? SIDEBAR_W.closed : SIDEBAR_W.open }}
       aria-label="Sidebar"
     >

@@ -177,6 +177,10 @@ body {
   pointer-events: none;
 }
 
+[data-shell]:not([data-ready]) .shell-anim {
+  transition: none !important;
+}
+
 /* tooltip to the right, for the collapsed sidebar rail */
 [data-tip-right] {
   position: relative;
