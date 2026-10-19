@@ -35,6 +35,18 @@ from app.validator import ValidationReport, validate_plan
 
 log = logging.getLogger("aeolus.planner")
 
+FEED_EVERY_S = 3.0  # one simulated feed message batch every 3 real seconds
+MAX_FEED_BURST = 3  # after a long gap (nobody watching) only replay a few batches
+
+# Everything that makes up the scenario. Saved and restored as one unit, so the API can run
+# statelessly (each request may hit a fresh serverless instance, see app/planning/runtime.py).
+STATE_FIELDS = (
+    "ws", "feed", "active", "active_validation", "active_fragility", "proposal", "baseline", "initial_plan",
+    "baseline_validation", "status", "kpi", "forbid", "pending_triggers", "events", "history", "last_result",
+    "ended", "paused", "sim_speed", "activity", "stability_lambda", "_event_seq", "last_wall", "feed_due",
+    "reword_pending", "revs",
+)
+
 
 class PlannerError(Exception):
     pass
@@ -60,9 +72,31 @@ class Planner:
     def __init__(self, settings: Settings, store=None, notify: Callable[[str], None] | None = None) -> None:
         self.settings = settings
         self.store = store
-        self.notify = notify or (lambda kind: None)
+        self.on_notify = notify
         self.lock = threading.RLock()
+        # deferred=True (serverless): no background threads; slow follow-up work (summary wording,
+        # contingency cache) waits in the state and runs on the next live poll instead.
+        self.deferred = False
+        self.revs: dict[str, int] = {"plan": 0, "world": 0, "cache": 0}  # bumped on every change, read by polls
         self.reset()
+
+    def notify(self, kind: str) -> None:
+        self.revs[kind] = self.revs.get(kind, 0) + 1
+        if self.on_notify:
+            self.on_notify(kind)
+
+    # ---------- saved state ----------
+
+    def state_fields(self) -> tuple[str, ...]:
+        return STATE_FIELDS
+
+    def dump_state(self) -> dict[str, Any]:
+        return {f: getattr(self, f) for f in self.state_fields()}
+
+    def load_state(self, state: dict[str, Any]) -> None:
+        for f in self.state_fields():
+            if f in state:
+                setattr(self, f, state[f])
 
     # ---------- setup ----------
 
@@ -90,6 +124,9 @@ class Planner:
             self.activity: list[dict] = []
             self.stability_lambda = self.settings.stability_lambda
             self._event_seq = 0
+            self.last_wall = 0.0  # wall-clock seconds of the last catch_up
+            self.feed_due = 0.0
+            self.reword_pending: str | None = None
 
     def log(self, actor: str, action: str, detail: str = "", kind: str = "info") -> None:
         """Activity log: who did what and when (wall clock and scenario clock)."""
@@ -167,7 +204,10 @@ class Planner:
                             "publishable": validation.ok, "label": label}
         if self.store:
             self.store.save_plan(plan.model_dump(), plan.status, label, validation.model_dump(), stab["stability_pct"])
-        threading.Thread(target=self._reword_safe, args=(prop,), daemon=True).start()
+        if self.deferred:
+            self.reword_pending = prop.id
+        else:
+            threading.Thread(target=self._reword_safe, args=(prop,), daemon=True).start()
         return prop
 
     def _reword_safe(self, prop: Proposal) -> None:
@@ -395,6 +435,34 @@ class Planner:
             return self.ended
 
     # ---------- clock + feed ----------
+
+    def catch_up(self, wall: float, feed: bool = True) -> list[dict]:
+        """Bring the scenario clock and the simulated feed up to real time `wall` (seconds).
+
+        There is no background loop: every request calls this first, so the clock moves by the real
+        time that passed since the last request, at the chosen speed. Returns new feed messages."""
+        with self.lock:
+            dt = max(0.0, wall - self.last_wall) if self.last_wall else 0.0
+            self.last_wall = wall
+            self.advance_clock(dt)
+            if not feed or self.paused:
+                return []
+            self.feed_due += dt
+            ticks = int(self.feed_due // FEED_EVERY_S)
+            self.feed_due -= ticks * FEED_EVERY_S
+            msgs: list[dict] = []
+            for _ in range(min(ticks, MAX_FEED_BURST)):
+                msgs.extend(self.feed.tick(self.ws, self.active))
+            return msgs
+
+    def run_deferred(self) -> bool:
+        """Follow-up work left by a request when running without threads. Returns True if it did any."""
+        if not self.reword_pending:
+            return False
+        pid, self.reword_pending = self.reword_pending, None
+        if self.proposal is not None and self.proposal.id == pid:
+            self._reword_safe(self.proposal)
+        return True
 
     def advance_clock(self, real_seconds: float) -> bool:
         """Move the scenario clock. Returns True when the minute display changed."""

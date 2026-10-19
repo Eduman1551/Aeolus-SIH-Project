@@ -6,6 +6,7 @@ ever has a hard-constraint violation, and prints the KPI table used in the READM
 Usage:  pnpm smoke                 (offline chat parser, writes to the database if DATABASE_URL is set)
         pnpm smoke -- --llm        (use the Groq LLM for the chat step)
         pnpm smoke -- --no-db      (skip the database)
+        STATE_BACKEND=db pnpm smoke  (keep the scenario in PostgreSQL, as on Vercel)
 """
 
 from __future__ import annotations
@@ -50,6 +51,7 @@ def proposal_ok(state: dict, what: str) -> dict:
 def wait_cache(c: TestClient, timeout: float = 30.0) -> dict:
     end = time.time() + timeout
     while time.time() < end:
+        c.get("/api/live")  # on serverless the cache is built by the next live poll
         s = c.get("/api/plan").json()
         if s["cache"]["status"] == "ready":
             return s
@@ -141,7 +143,9 @@ def main() -> int:
         r = c.post("/api/plan/end").json()
         check(r["status"] == "ended", "end plan failed")
         kpis = r["ended"]["kpis"]
-        main_mod.app.state.store.flush()
+        store = getattr(main_mod.app.state.runtime, "store", None)
+        if store is not None:
+            store.flush()
         db = c.get("/api/health").json()["db"]
         print(f"    KPI snapshot {'saved to PostgreSQL' if db['online'] else 'kept in memory (database offline)'}")
 

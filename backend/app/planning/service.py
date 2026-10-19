@@ -26,6 +26,14 @@ class AeolusPlanner(Planner):
             self.llm = LLM(self.settings.groq_api_key, self.settings.llm_model)
         super().reset()
         self.cache = ContingencyCache()
+        self.cache_pending = False
+
+    def state_fields(self) -> tuple[str, ...]:
+        return (*super().state_fields(), "cache", "cache_pending")
+
+    def load_state(self, state: dict) -> None:
+        super().load_state(state)
+        self._risk_memo = None
 
     # ---------- LLM: text -> conditions, summary wording ----------
 
@@ -63,10 +71,15 @@ class AeolusPlanner(Planner):
         return self.cache.lookup(signature, base_fp, self.ws, self.active)
 
     def after_publish(self) -> None:
-        """Rebuild the contingency cache in the background for the plan just published."""
+        """Rebuild the contingency cache for the plan just published: in a background thread, or
+        (deferred mode, no threads) on the next live poll via run_deferred()."""
         self.cache.clear()
         self.cache.status = "building"
         self.cache.generation += 1
+        if self.deferred:
+            self.cache_pending = True
+            self.notify("cache")
+            return
         gen = self.cache.generation
         ws_copy = self.ws.clone()
         active = self.active.model_copy(deep=True)
@@ -95,6 +108,34 @@ class AeolusPlanner(Planner):
             self.notify("plan")
 
         threading.Thread(target=work, name="aeolus-precompute", daemon=True).start()
+
+    def run_deferred(self) -> bool:
+        did = super().run_deferred()
+        if self.cache_pending:
+            self.cache_pending = False
+            self._build_cache_now()
+            did = True
+        return did
+
+    def _build_cache_now(self) -> None:
+        if self.active is None:
+            self.cache.clear()
+            return
+        opts = self.base_options(self.ws)
+        try:
+            entries, ms = build_cache(self.ws.clone(), self.active.model_copy(deep=True), opts, self.stability_lambda,
+                                      opts.serviceability, risk_fn=self.risk_inputs)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("contingency build failed: %s", exc)
+            entries, ms = {}, 0.0
+        self.cache.entries = entries
+        self.cache.base_fp = self.ws.fingerprint()
+        self.cache.active_id = self.active.id
+        self.cache.build_ms = ms
+        self.cache.status = "ready"
+        self.log("Aeolus", f"prepared {len(entries)} contingency answers", "for the likeliest disruptions", kind="system")
+        self.notify("cache")
+        self.notify("plan")
 
     def cache_view(self) -> dict:
         with self.lock:

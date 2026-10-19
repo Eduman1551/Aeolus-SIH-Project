@@ -3,6 +3,9 @@
 Writes go through one background thread so a slow or unreachable database never blocks
 planning. If DATABASE_URL is missing or the database is down the app keeps working in memory
 and reports the database as offline.
+
+In deferred mode (serverless, no threads) writes are collected per request and committed by
+app/planning/runtime.py in the same transaction that saves the scenario state.
 """
 
 from __future__ import annotations
@@ -21,14 +24,21 @@ log = logging.getLogger("aeolus.db")
 SCHEMA = Path(__file__).with_name("schema.sql")
 
 
+def connect(url: str, **kw) -> psycopg.Connection:
+    # prepare_threshold=None: no server-side prepared statements, so pooled (PgBouncer) URLs work
+    return psycopg.connect(url, connect_timeout=15, prepare_threshold=None, **kw)
+
+
 def init_schema(url: str) -> None:
-    with psycopg.connect(url, connect_timeout=15) as conn:
+    with connect(url) as conn:
         conn.execute(SCHEMA.read_text(encoding="utf-8"))
 
 
 class Store:
-    def __init__(self, url: str | None) -> None:
+    def __init__(self, url: str | None, deferred: bool = False) -> None:
         self.url = url
+        self.deferred = deferred
+        self.pending: list[tuple[str, tuple]] = []
         self.online = False
         self.last_error: str | None = None
         self._q: queue.Queue[tuple[str, tuple] | None] = queue.Queue()
@@ -57,8 +67,14 @@ class Store:
 
     def _connect(self) -> psycopg.Connection:
         if self._conn is None or self._conn.closed:
-            self._conn = psycopg.connect(self.url, connect_timeout=15, autocommit=True)
+            self._conn = connect(self.url, autocommit=True)
         return self._conn
+
+    def write_pending(self, conn: psycopg.Connection) -> None:
+        """Deferred mode: run the collected writes on the caller's connection (inside its transaction)."""
+        items, self.pending = self.pending, []
+        for sql, params in items:
+            conn.execute(sql, params)
 
     def _run(self) -> None:
         try:
@@ -90,7 +106,11 @@ class Store:
                         log.warning("db write failed: %s", self.last_error)
 
     def _put(self, sql: str, params: tuple) -> None:
-        if self.url:
+        if not self.url:
+            return
+        if self.deferred:
+            self.pending.append((sql, params))
+        else:
             self._q.put((sql, params))
 
     # ---------- writes ----------
@@ -143,7 +163,7 @@ class Store:
         if not self.url:
             return []
         try:
-            with psycopg.connect(self.url, connect_timeout=10) as conn:
+            with connect(self.url) as conn:
                 rows = conn.execute(
                     "SELECT id, taken_at, reason, kpis, summary FROM kpi_snapshots ORDER BY taken_at DESC LIMIT %s",
                     (limit,),
@@ -158,7 +178,7 @@ class Store:
         if not self.url:
             return {}
         try:
-            with psycopg.connect(self.url, connect_timeout=10) as conn:
+            with connect(self.url) as conn:
                 return {t: conn.execute(f"SELECT count(*) FROM {t}").fetchone()[0]  # noqa: S608
                         for t in ("plans", "plan_decisions", "events", "kpi_snapshots", "chat_log")}
         except Exception:  # noqa: BLE001

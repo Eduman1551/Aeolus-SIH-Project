@@ -8,7 +8,6 @@ cache on their own. Planning-relevant changes come in as events.
 from __future__ import annotations
 
 import random
-from itertools import count
 from typing import Any
 
 from app.fusion.schema import Plan
@@ -20,7 +19,7 @@ class FeedSimulator:
 
     def __init__(self, seed: int = 2026) -> None:
         self.rng = random.Random(seed)
-        self.ids = count(1)
+        self.last_id = 0  # plain int so the simulator pickles (saved with the scenario state)
 
     def tick(self, ws: WorldState, active: Plan | None = None) -> list[dict[str, Any]]:
         msgs = []
@@ -37,7 +36,7 @@ class FeedSimulator:
 
     def _msg(self, ws: WorldState, source: str, kind: str, entity: str, text: str) -> dict[str, Any]:
         return {
-            "id": next(self.ids),
+            "id": self._next_id(),
             "sim_time": round(ws.now, 1),
             "clock": fmt_min(ws.now),
             "wall": wall_now(),
@@ -47,6 +46,10 @@ class FeedSimulator:
             "text": text,
             "planning_relevant": False,
         }
+
+    def _next_id(self) -> int:
+        self.last_id += 1
+        return self.last_id
 
     def _stamp(self, record) -> None:
         if record.meta:

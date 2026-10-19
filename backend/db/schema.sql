@@ -1,5 +1,6 @@
 -- Aeolus persistence: plan history, planner decisions, events and KPI logs.
--- The live picture itself stays in memory (WorldState). Safe to run more than once.
+-- The live picture (WorldState, plans, cache) is kept in memory when the API runs as one server.
+-- On serverless hosts it is saved in scenario_state after every change instead. Safe to run more than once.
 
 CREATE TABLE IF NOT EXISTS plans (
     id             TEXT PRIMARY KEY,
@@ -58,4 +59,13 @@ CREATE TABLE IF NOT EXISTS chat_log (
     text        TEXT NOT NULL,
     parser      TEXT,
     conditions  JSONB
+);
+
+-- Whole scenario (world, plans, cache, clock) for stateless/serverless runs: one row, saved after
+-- each change. `rev` guards against two requests overwriting each other.
+CREATE TABLE IF NOT EXISTS scenario_state (
+    id          INTEGER PRIMARY KEY,
+    rev         BIGINT NOT NULL DEFAULT 0,
+    data        BYTEA NOT NULL,
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );

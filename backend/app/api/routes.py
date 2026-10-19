@@ -1,23 +1,38 @@
-"""REST routes. Handlers are plain `def` so solver work runs in FastAPI's thread pool."""
+"""REST routes. Handlers are plain `def` so solver work runs in FastAPI's thread pool.
+
+Every handler works inside a runtime session (see app/planning/runtime.py): "read" for views,
+"write" for anything that changes the scenario, "poll" for the live endpoint.
+"""
 
 from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from app.events.types import EventError, EventIn, describe, normalise
 from app.fusion.theatre import map_layers
-from app.planning.orchestrator import Planner, PlannerError
+from app.fusion.world import fmt_min
+from app.planning.orchestrator import PlannerError
 from app.predict.model import model_info
 from app.predict.weather import mission_weather_notes
 
 router = APIRouter()
 
 
-def planner(req: Request) -> Planner:
-    return req.app.state.planner
+def session(req: Request, mode: str = "read"):
+    return req.app.state.get_runtime().session(mode)
+
+
+def live_view(p) -> dict[str, Any]:
+    ws = p.ws
+    return {
+        "observations": ws.observations,
+        "telemetry": {a.id: a.telemetry.model_dump() for a in ws.aircraft.values()},
+        "checked_in": [c.id for c in ws.crews.values() if c.checked_in],
+        "updated": {a.id: a.meta.updated_at for a in ws.aircraft.values() if a.meta},
+    }
 
 
 class PlanAction(BaseModel):
@@ -56,21 +71,38 @@ def _guard(fn, *args, **kwargs):
 
 @router.get("/api/health")
 def health(req: Request) -> dict[str, Any]:
-    p = planner(req)
-    store = req.app.state.store
-    llm = getattr(p, "llm", None)
+    rt = req.app.state.get_runtime()
+    llm = getattr(getattr(rt, "template", None) or getattr(rt, "planner", None), "llm", None)
     return {
         "ok": True,
-        "db": {"configured": bool(store.url), "online": store.online, "error": None if store.online else store.last_error},
+        "db": rt.db_status(),
+        "state": rt.kind,
         "llm": llm.status() if llm else {"configured": False, "mode": "offline parser"},
         "synthetic_data": True,
     }
 
 
+@router.get("/api/live")
+def live(req: Request, feed_since: int = 0, plan_rev: int = -1) -> dict[str, Any]:
+    """Polled every ~2 s by the dashboard instead of a WebSocket. Returns the clock, feed messages
+    newer than `feed_since`, the plan view when it changed since `plan_rev`, and the revisions
+    (the client refetches /api/state when the world revision moves)."""
+    with session(req, "poll") as p:
+        new = [m for m in p.ws.feed_log if m["id"] > feed_since][:30] if feed_since else []
+        return {
+            "clock": {"now": p.ws.now, "clock": fmt_min(p.ws.now), "paused": p.paused, "status": p.status,
+                      "speed": p.sim_speed},
+            "revs": dict(p.revs),
+            "last_feed_id": p.feed.last_id,
+            "feed": {"messages": new[::-1], "live": live_view(p)} if new else None,
+            "plan": p.status_view() if p.revs["plan"] != plan_rev else None,
+            "cache": p.cache_view(),
+        }
+
+
 @router.get("/api/state")
 def state(req: Request) -> dict[str, Any]:
-    p = planner(req)
-    with p.lock:
+    with session(req) as p:
         snap = p.ws.snapshot()
         svc, wx = p.risk_inputs(p.ws)
         snap["serviceability"] = svc
@@ -82,61 +114,61 @@ def state(req: Request) -> dict[str, Any]:
 
 @router.get("/api/plan")
 def plan_status(req: Request) -> dict[str, Any]:
-    return planner(req).status_view()
+    with session(req) as p:
+        return p.status_view()
 
 
 @router.post("/api/plan/generate")
 def generate(req: Request) -> dict[str, Any]:
-    p = planner(req)
-    _guard(p.generate)
-    return p.status_view()
+    with session(req, "write") as p:
+        _guard(p.generate)
+        return p.status_view()
 
 
 @router.post("/api/plan/approve")
 def approve(body: PlanAction, req: Request) -> dict[str, Any]:
-    p = planner(req)
-    _guard(p.approve, body.plan_id)
-    return p.status_view()
+    with session(req, "write") as p:
+        _guard(p.approve, body.plan_id)
+        return p.status_view()
 
 
 @router.post("/api/plan/reject")
 def reject(body: RejectBody, req: Request) -> dict[str, Any]:
-    p = planner(req)
-    _guard(p.reject, body.plan_id, body.note)
-    return p.status_view()
+    with session(req, "write") as p:
+        _guard(p.reject, body.plan_id, body.note)
+        return p.status_view()
 
 
 @router.post("/api/plan/end")
 def end_plan(req: Request) -> dict[str, Any]:
-    p = planner(req)
-    ended = _guard(p.end_plan)
-    return {"ended": ended, **p.status_view()}
+    with session(req, "write") as p:
+        ended = _guard(p.end_plan)
+        return {"ended": ended, **p.status_view()}
 
 
 @router.post("/api/events")
 def inject_event(body: EventIn, req: Request) -> dict[str, Any]:
-    p = planner(req)
-    out = _guard(p.inject, [body], "event")
-    return {"path": out["path"], "total_ms": out["total_ms"], "events": out["events"], **p.status_view()}
+    with session(req, "write") as p:
+        out = _guard(p.inject, [body], "event")
+        return {"path": out["path"], "total_ms": out["total_ms"], "events": out["events"], **p.status_view()}
 
 
 @router.post("/api/chat/parse")
 def chat_parse(body: ChatText, req: Request) -> dict[str, Any]:
-    p = planner(req)
     text = body.text.strip()
     if not text:
         raise HTTPException(status_code=400, detail="Type a condition first.")
-    conditions, parser = p.parse_note(text)
-    items, problems = [], []
-    with p.lock:
+    with session(req, "write") as p:
+        conditions, parser = p.parse_note(text)
+        items, problems = [], []
         for c in conditions:
             try:
                 n = normalise(c, p.ws)
                 items.append({"type": n.type, "params": n.params, "description": describe(n, p.ws)})
             except EventError as exc:
                 problems.append(f"{c.type}: {exc}")
-    if req.app.state.store:
-        req.app.state.store.save_chat(text, parser, items)
+        if p.store:
+            p.store.save_chat(text, parser, items)
     return {"conditions": items, "parser": parser, "problems": problems,
             "understood": bool(items),
             "message": None if items else "I could not turn that into a planning condition. Try for example: "
@@ -145,67 +177,51 @@ def chat_parse(body: ChatText, req: Request) -> dict[str, Any]:
 
 @router.post("/api/chat/apply")
 def chat_apply(body: ChatApply, req: Request) -> dict[str, Any]:
-    p = planner(req)
     if not body.conditions:
         raise HTTPException(status_code=400, detail="No conditions to apply.")
     events = [EventIn(type=c.type, params=c.params, origin="planner chat") for c in body.conditions]
-    out = _guard(p.inject, events, "conditions", body.text)
-    return {"path": out["path"], "total_ms": out["total_ms"], "events": out["events"], **p.status_view()}
+    with session(req, "write") as p:
+        out = _guard(p.inject, events, "conditions", body.text)
+        return {"path": out["path"], "total_ms": out["total_ms"], "events": out["events"], **p.status_view()}
 
 
 @router.post("/api/clock")
 def clock(body: ClockBody, req: Request) -> dict[str, Any]:
-    p = planner(req)
     if body.speed is not None and body.speed not in (1, 10, 60):
         raise HTTPException(status_code=400, detail="speed must be 1, 10 or 60")
-    with p.lock:
+    with session(req, "write") as p:
         if body.action is not None:
             p.paused = body.action == "pause"
         if body.speed is not None:
             p.sim_speed = float(body.speed)
-    return {"paused": p.paused, "speed": p.sim_speed, "now": p.ws.now}
+        return {"paused": p.paused, "speed": p.sim_speed, "now": p.ws.now}
 
 
 @router.get("/api/map")
 def map_data(req: Request) -> dict[str, Any]:
-    p = planner(req)
-    with p.lock:
+    with session(req) as p:
         return map_layers(p.ws)
 
 
 @router.post("/api/settings")
 def update_settings(body: SettingsBody, req: Request) -> dict[str, Any]:
-    p = planner(req)
-    with p.lock:
+    with session(req, "write") as p:
         p.stability_lambda = body.stability_lambda
-    return {"stability_lambda": p.stability_lambda}
+        return {"stability_lambda": p.stability_lambda}
 
 
 @router.post("/api/scenario/reset")
 def reset(req: Request) -> dict[str, Any]:
-    p = planner(req)
-    p.reset()
-    p.log("Planner", "reset the scenario", "synthetic data reloaded", kind="planner")
-    req.app.state.hub.notify("world")
-    req.app.state.hub.notify("plan")
-    return p.status_view()
+    with session(req, "write") as p:
+        p.reset()
+        p.log("Planner", "reset the scenario", "synthetic data reloaded", kind="planner")
+        p.notify("world")
+        p.notify("plan")
+        return p.status_view()
 
 
 @router.get("/api/kpis/history")
 def kpi_history(req: Request) -> dict[str, Any]:
-    return {"snapshots": req.app.state.store.recent_kpi_snapshots(5)}
-
-
-@router.websocket("/ws")
-async def websocket(ws: WebSocket) -> None:
-    hub = ws.app.state.hub
-    await hub.connect(ws)
-    p: Planner = ws.app.state.planner
-    await ws.send_json({"type": "hello", "clock": p.ws.now, "status": p.status})
-    try:
-        while True:
-            await ws.receive_text()  # keepalive pings from the client
-    except WebSocketDisconnect:
-        hub.disconnect(ws)
-    except Exception:  # noqa: BLE001
-        hub.disconnect(ws)
+    with session(req) as p:
+        store = p.store
+    return {"snapshots": store.recent_kpi_snapshots(5) if store else []}

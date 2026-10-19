@@ -67,9 +67,15 @@ def test_approve_without_proposal_is_a_400(client):
     assert client.post("/api/plan/approve", json={"plan_id": "x"}).status_code == 400
 
 
-def test_websocket_hello(client):
-    with client.websocket_connect("/ws") as ws:
-        assert ws.receive_json()["type"] == "hello"
+def test_live_poll(client):
+    first = client.get("/api/live").json()
+    assert first["clock"]["clock"] == "06:00" and first["plan"]["status"] == "no_plan"
+    rev = first["revs"]["plan"]
+    again = client.get(f"/api/live?plan_rev={rev}&feed_since={first['last_feed_id']}").json()
+    assert again["plan"] is None  # unchanged plan is not resent
+    client.post("/api/plan/generate")
+    after = client.get(f"/api/live?plan_rev={rev}").json()
+    assert after["revs"]["plan"] > rev and after["plan"]["status"] == "pending_approval"
 
 
 def test_map_layers(client):
