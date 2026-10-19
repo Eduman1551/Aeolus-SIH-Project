@@ -12,7 +12,7 @@ Information on aircraft availability, crew status, weapon loads, airspace, weath
 
 ## What Aeolus does
 
-1. **Fuses** eight synthetic source systems (fleet, crew roster, armament, airspace, met office, intel, tasking, planning rules) into one live `WorldState`, with a source tag and timestamp on every record. A simulated live feed keeps updating it over WebSocket.
+1. **Fuses** eight synthetic source systems (fleet, crew roster, armament, airspace, met office, intel, tasking, planning rules) into one live `WorldState`, with a source tag and timestamp on every record. A simulated live feed keeps updating it; dashboards poll `/api/live` every 2 s.
 2. **Optimises** the assignment of aircraft + crew + weapons + take-off time to missions with Google OR-Tools CP-SAT, under hard constraints, with a priority-weighted objective and risk penalties.
 3. **Replans in seconds** when an event happens. It warm-starts from the current plan, penalises every changed assignment so the plan stays stable, and **explains every change** with a reason built from facts.
 4. **Checks every plan independently.** A separate validator re-reads the raw data and checks 18 rules. A plan with any violation cannot be published.
@@ -26,7 +26,7 @@ flowchart TD
         F[Fleet] & C[Crews] & W[Armament] & A[Airspace] & M[Met office] & I[Intel] & T[Tasking]
     end
     Sources --> FU[Data fusion: unified schema, WorldState<br/>source tag + timestamp per record]
-    LF[Simulated live feed] -->|WebSocket| FU
+    LF[Simulated live feed] -->|polled /api/live| FU
     FU --> P[Predictive lite: serviceability model<br/>+ weather impact rules]
     CH[Planner chat / reject note] --> LLM[LLM or offline parser<br/>text to structured conditions]
     LLM -->|preview, planner confirms| EV
@@ -62,9 +62,9 @@ If `docs/architecture.png` is present, it shows the same flow as a drawing.
 | `backend/app/llm` | Groq client (text to conditions, summary wording) and the offline rule-based parser |
 | `backend/app/planning` | Orchestrator and plan state machine, deterministic explanations |
 | `backend/app/kpi` | The 8 KPIs |
-| `backend/app/api` | FastAPI routes and WebSocket hub |
+| `backend/app/api` | FastAPI routes, including the `/api/live` poll |
 | `backend/db` | `schema.sql` and a small psycopg (v3) data-access layer in plain SQL |
-| `frontend/` | Next.js planner dashboard (client-side, talks to the API over REST + WebSocket) |
+| `frontend/` | Next.js planner dashboard (client-side, talks to the API over REST, live updates by polling) |
 
 ## Run it on Windows
 
@@ -226,3 +226,21 @@ Python 3.11-3.13 · FastAPI · Uvicorn · Pydantic v2 · Google OR-Tools CP-SAT 
 - Models trained on real maintenance and weather data, calibrated and validated
 - Long-run KPI benchmarking at scale
 - **Plan Resilience Score** (N-1 failure sweep + Monte Carlo mission success probability), "why not?" questions, a what-if sandbox and a ripple view (planned for v2/v3)
+
+## Deploying on Vercel
+
+One Vercel project serves both parts from the same domain (`vercel.json`, Vercel Services): the
+Next.js dashboard from `frontend/` and the FastAPI backend as a Python function (`api/index.py`,
+runtime dependencies in the root `requirements.txt`). Requests to `/api/*` go to the backend, so
+there is no API URL or CORS to configure.
+
+- **Project settings:** Framework Preset `Services`, Root Directory = repository root.
+- **Environment variables:** `DATABASE_URL`, `GROQ_API_KEY` (optional), `LLM_MODEL`. Nothing else.
+- **State:** serverless instances keep nothing between requests, so the whole scenario (world,
+  plans, events, prepared answers, clock) is saved in PostgreSQL (`scenario_state`) after each change
+  (`app/planning/runtime.py`). The clock and live feed catch up from wall time on every request; the
+  prepared answers are built on the next live poll after a publish.
+- **Region:** functions run in `sin1` (Singapore), next to the Neon database.
+- **Limits to know:** the first request after a deploy or a quiet spell starts a new instance
+  (several seconds while OR-Tools loads); the dashboard shows "Waking up the server" meanwhile.
+  A new deploy starts a fresh scenario. All viewers share one scenario.

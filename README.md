@@ -19,7 +19,7 @@ Aircraft, crew, weapons, airspace, weather and threat information sits in separa
 | Part | Built with |
 |---|---|
 | Frontend | Next.js, React, TypeScript, Tailwind CSS |
-| Backend | FastAPI (Python), WebSocket |
+| Backend | FastAPI (Python), live updates by short polling |
 | Planning | Google OR-Tools (CP-SAT), scikit-learn |
 | Storage | PostgreSQL |
 | Language model | Groq (optional, offline fallback built in) |
