@@ -74,7 +74,7 @@ export default function EventsPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-[1fr_1fr] gap-6">
+      <div className="grid grid-cols-2 gap-6">
         <Card
           title={
             <span className="flex items-center gap-1.5">

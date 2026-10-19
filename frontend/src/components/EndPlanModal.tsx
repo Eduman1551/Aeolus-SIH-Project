@@ -3,6 +3,7 @@
 import { Database } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cx } from "@/lib/format";
+import { KPI_COPY } from "@/lib/kpi";
 import { useStore } from "@/lib/store";
 import { Button, Modal } from "./ui";
 
@@ -21,7 +22,7 @@ export default function EndPlanModal() {
       <div className="mt-4 grid grid-cols-4 gap-3">
         {ended.kpis.map((k) => (
           <div key={k.id} className="rounded-xl border border-line bg-panel-2 px-4 py-3">
-            <div className="truncate text-[12.5px] font-medium text-dim">{k.label}</div>
+            <div className="truncate text-[12.5px] font-medium text-dim">{KPI_COPY[k.id]?.name ?? k.label}</div>
             <div className={cx("num mt-0.5 text-[20px] font-semibold", k.value === null ? "text-dim" : "text-text")}>{k.display}</div>
             <div className="mt-0.5 text-[12px] leading-[17px] text-dim">{k.detail}</div>
           </div>

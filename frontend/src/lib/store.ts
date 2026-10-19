@@ -5,7 +5,6 @@ import { api, ApiError, type ReplanResponse } from "./api";
 import { PATH_LABEL, secs, sortieKey } from "./format";
 import type { EventInput, FeedMsg, Health, ParsedCondition, PlanStatus, Sortie, World } from "./types";
 
-export type Tab = "chat" | "events" | "changes" | "validation";
 export type WsState = "connecting" | "open" | "closed";
 
 export interface Toast {
@@ -63,7 +62,6 @@ interface State {
   unreachable: string | null;
   busy: Busy | null;
   view: "proposal" | "active";
-  tab: Tab;
   highlight: { keys: string[]; until: number };
   toasts: Toast[];
   chat: ChatMsg[];
@@ -79,7 +77,6 @@ interface State {
   hydrateLocal: () => void;
   chatEditCondition: (msgId: number, index: number, cond: ParsedCondition | null) => void;
 
-  setTab: (t: Tab) => void;
   setView: (v: "proposal" | "active") => void;
   toast: (kind: Toast["kind"], text: string) => void;
   dismissToast: (id: number) => void;
@@ -135,7 +132,7 @@ export const useStore = create<State>((set, get) => {
       const text = `${what} in ${secs(lr.total_ms)}, ${lr.changed} of ${lr.total} changed${lr.added ? `, ${lr.added} added` : ""}`;
       set({ resultBadge: { text, tone: lr.publishable ? "ok" : "warn", at: Date.now(), path: PATH_LABEL[lr.path] ?? lr.path, planId: lr.plan_id } });
     }
-    set({ tab: "changes", view: "proposal" });
+    set({ view: "proposal" });
     get().refreshWorld();
   }
 
@@ -149,7 +146,6 @@ export const useStore = create<State>((set, get) => {
     unreachable: null,
     busy: null,
     view: "proposal",
-    tab: "events",
     highlight: { keys: [], until: 0 },
     toasts: [],
     chat: [],
@@ -193,7 +189,6 @@ export const useStore = create<State>((set, get) => {
         }),
       })),
 
-    setTab: (tab) => set({ tab }),
     setView: (view) => set({ view }),
     toast: (kind, text) => {
       const id = nextId();
@@ -263,7 +258,6 @@ export const useStore = create<State>((set, get) => {
             at: Date.now(),
             planId: p.id,
           },
-          tab: "changes",
         });
       }
       get().toast("success", "Initial plan ready for review");

@@ -70,7 +70,7 @@ export default function HomePage() {
         lines={["Follow the Getting started checklist, it ticks itself off as you go.", "The big card on the right always shows the best next step."]}
       />
 
-      <div className="grid grid-cols-[1.25fr_1fr] gap-6">
+      <div className="grid grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-6">
         <Card title="Getting started" action={<span className="num text-[13.5px] text-dim">{doneCount} of 5 done</span>}>
           <div className="px-6 pb-5 pt-3">
             <div className="h-2 overflow-hidden rounded-full bg-primary-50">
@@ -125,7 +125,7 @@ export default function HomePage() {
         {plan ? HOME_KPIS.map((id) => plan.kpis.find((k) => k.id === id)).filter(Boolean).map((k) => <KpiCard key={k!.id} k={k!} />) : Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[136px]" />)}
       </div>
 
-      <div className="grid grid-cols-[1.25fr_1fr] gap-6">
+      <div className="grid grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-6">
         <Card title="Recent activity" action={<Link href="/events" className="text-[13.5px] font-medium text-primary hover:underline">All events</Link>}>
           <div className="px-6 pb-5 pt-2">
             {activity.length === 0 ? (
