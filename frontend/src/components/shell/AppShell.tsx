@@ -1,8 +1,8 @@
 "use client";
 
-import { Loader2, ServerCrash } from "lucide-react";
+import { ServerCrash } from "lucide-react";
 import { MotionConfig } from "motion/react";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect } from "react";
 import { api, API_URL } from "@/lib/api";
 import { useStore } from "@/lib/store";
 import { connectLive } from "@/lib/ws";
@@ -13,31 +13,7 @@ import Toasts from "../Toasts";
 import TopBar from "../TopBar";
 import { Button } from "../ui";
 import Sidebar, { SIDEBAR_W } from "./Sidebar";
-
-/** Friendly "working on it" screen with elapsed time. Hidden for very quick actions to avoid a flash. */
-function SolvingScreen() {
-  const busy = useStore((s) => s.busy);
-  const [, tick] = useState(0);
-  useEffect(() => {
-    if (!busy) return;
-    const id = setInterval(() => tick((t) => t + 1), 100);
-    return () => clearInterval(id);
-  }, [busy]);
-  if (!busy) return null;
-  const elapsed = (performance.now() - busy.startedAt) / 1000;
-  if (elapsed < 0.25) return null;
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-white/60 backdrop-blur-[2px]" role="alert" aria-busy="true">
-      <div className="fade-in flex items-center gap-4 rounded-2xl border border-line bg-white px-7 py-5 shadow-[var(--shadow-pop)]">
-        <Loader2 className="spin text-primary" size={26} />
-        <div>
-          <div className="text-[16px] font-semibold text-text">{busy.label}...</div>
-          <div className="num text-[14px] text-muted">Working on it, {elapsed.toFixed(1)} s</div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import SolvingScreen from "./SolvingScreen";
 
 function Unreachable() {
   const refreshAll = useStore((s) => s.refreshAll);

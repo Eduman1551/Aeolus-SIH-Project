@@ -8,6 +8,7 @@ import FlightBoard from "@/components/FlightBoard";
 import KpiCard from "@/components/KpiCard";
 import OpsCharts from "@/components/OpsCharts";
 import TacticalMap from "@/components/TacticalMap";
+import WindFlow from "@/components/WindFlow";
 import { Button, ButtonLink, Card, NextStep, PageHeader, Skeleton, TipBox } from "@/components/ui";
 import { cx } from "@/lib/format";
 import { HOME_KPIS } from "@/lib/kpi";
@@ -68,7 +69,12 @@ export default function HomePage() {
 
   return (
     <div className="mx-auto max-w-[1280px] space-y-6">
-      <PageHeader title="Welcome to Aeolus" description="A planning assistant for air operations. It suggests the plan, you decide." />
+      <section className="relative overflow-hidden rounded-2xl border border-line bg-white px-8 py-7 shadow-[var(--shadow-card)]">
+        <WindFlow />
+        <div className="relative">
+          <PageHeader title="Welcome to Aeolus" description="A planning assistant for air operations. It suggests the plan, you decide." />
+        </div>
+      </section>
       <TipBox
         id="home"
         lines={["Follow the Getting started checklist, it ticks itself off as you go.", "The big card on the right always shows the best next step."]}
