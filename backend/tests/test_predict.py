@@ -1,6 +1,7 @@
 from app.fusion.schema import WeatherSegment
 from app.fusion.world import fuse
-from app.predict.model import predict_serviceability, train
+from app.predict.model import predict_serviceability
+from app.predict.train import train
 from app.predict.weather import weather_impact
 from app.solver.cpsat import SolveOptions, solve
 from app.validator import validate_plan
