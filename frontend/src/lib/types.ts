@@ -130,6 +130,7 @@ export interface World {
   aircraft: Aircraft[];
   crews: Crew[];
   stock: WeaponStock[];
+  weapon_types: { id: string; name: string; category: string; compatible_types: string[] }[];
   weather: WeatherSegment[];
   threats: Threat[];
   mission_types: MissionType[];
