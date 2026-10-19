@@ -77,6 +77,7 @@ app = FastAPI(title="Aeolus API", version="1.0.0", lifespan=lifespan,
 app.add_middleware(
     CORSMiddleware,
     allow_origins=list(settings.cors_origins),
+    allow_origin_regex=settings.cors_origin_regex,  # e.g. Vercel preview URLs
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -40,6 +40,7 @@ class Settings:
     solver_time_limit_s: float
     seed: int
     cors_origins: tuple[str, ...] = ()
+    cors_origin_regex: str | None = None
 
 
 def load_settings() -> Settings:
@@ -53,14 +54,17 @@ def load_settings() -> Settings:
         solver_time_limit_s=_float("SOLVER_TIME_LIMIT_S", 8.0),
         seed=_int("AEOLUS_SEED", 2026),
         cors_origins=_cors_origins(),
+        cors_origin_regex=os.environ.get("ALLOWED_ORIGIN_REGEX") or None,
     )
 
 
 def _cors_origins() -> tuple[str, ...]:
-    """Dashboard origins allowed to call the API: the web port in use, plus any extra CORS_ORIGINS."""
+    """Dashboard origins allowed to call the API: the local web port, plus the deployed site(s) from
+    ALLOWED_ORIGINS (comma separated, e.g. https://aeolus.vercel.app). CORS_ORIGINS is the older name."""
     port = _int("WEB_PORT", 3000)
     origins = [f"http://localhost:{port}", f"http://127.0.0.1:{port}"]
-    origins += [o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()]
+    for name in ("ALLOWED_ORIGINS", "CORS_ORIGINS"):
+        origins += [o.strip().rstrip("/") for o in os.environ.get(name, "").split(",") if o.strip()]
     return tuple(dict.fromkeys(origins))
 
 
