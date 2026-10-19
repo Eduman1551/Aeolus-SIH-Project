@@ -99,9 +99,24 @@ Other scripts:
 
 **LLM (optional).** Set `GROQ_API_KEY` and `LLM_MODEL` in `.env`. The model must be one your Groq key can see; `openai/gpt-oss-20b` and `qwen/qwen3.8-27b` were tested. Without a key, or if a Groq call fails, the chat uses the offline rule-based parser and the demo still works.
 
+## The dashboard
+
+A light, multi-page app with a sidebar. Each page does one job, starts with a short "What to do here" tip and ends with a "Next" button.
+
+| Page | What you do there |
+|---|---|
+| Home | Getting started checklist, the next step, headline results, recent activity |
+| Data and live feed | Browse aircraft, crews, weapons and missions; watch live updates |
+| Mission plan | Generate the plan; Gantt timeline (click a bar for details); mission table with reasons |
+| Events | Aircraft down, new priority mission, weather closure, new threat zone; prepared answers |
+| Assistant | Describe a change in plain English, check and edit the conditions, confirm |
+| Review plan | Old vs new side by side with a reason per change, rule checks, Approve / Reject |
+| Results | All 8 KPIs, simple method vs Aeolus, replan time chart, end plan and save |
+| How to use | The flow step by step, and the demo script |
+
 ## Demo
 
-The full 4 to 5 minute script is in [docs/DEMO.md](docs/DEMO.md). In short:
+The full 4 to 5 minute script is in [docs/DEMO.md](docs/DEMO.md) and on the **How to use** page. In short:
 
 1. Show the fused live picture and the streaming feed.
 2. Generate the initial plan and compare it with the greedy baseline.
@@ -183,7 +198,7 @@ Objective: priority-weighted coverage (P1 10000, P2 4000, P3 1500, P4 600), minu
 
 ## Tech stack
 
-Python 3.11-3.13 · FastAPI · Uvicorn · Pydantic v2 · Google OR-Tools CP-SAT · scikit-learn · PostgreSQL via psycopg 3 (plain SQL, no ORM) · Groq (optional) · Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Zustand · Recharts (KPI sparklines only) · lucide-react · pnpm · pytest · ruff.
+Python 3.11-3.13 · FastAPI · Uvicorn · Pydantic v2 · Google OR-Tools CP-SAT · scikit-learn · PostgreSQL via psycopg 3 (plain SQL, no ORM) · Groq (optional) · Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Zustand · Recharts (replan time chart only) · lucide-react · pnpm · pytest · ruff.
 
 ## Known limitations
 

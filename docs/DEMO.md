@@ -1,76 +1,70 @@
 # Aeolus demo script (4 to 5 minutes)
 
+The same script is in the app under **How to use** (`/guide`), with a "Go there" button for each step.
+
 **Before you start**
 
 - `pnpm dev` is running, and <http://localhost:3000> is open full screen (1366x768 or larger).
-- The top bar shows **Live**, **DB** and **LLM** (or "Offline parser", which is fine).
-- If you have rehearsed already, press **Reset** in the top bar so the scenario starts at 06:00 with no plan.
-- Optional: pause the scenario clock (button next to the time) while you talk. It only runs once a plan is published.
+- The top bar shows **Connected**.
+- If you have rehearsed already, click **Reset scenario** at the bottom of the sidebar. The day goes back to 06:00 with no plan, and the Home checklist clears.
+- The scenario clock only runs once a plan is approved. You can pause it from the top bar while you talk.
 
 ---
 
-## 1. The fused picture and the live feed (40 s)
+## 1. The live picture (40 s), Data and live feed
 
-> "Planners today pull aircraft, crews, weapons, airspace, weather, threats and tasking from separate systems. Aeolus fuses all of it into one live picture. Everything you see is synthetic, as the badge says."
+> "Planners pull aircraft, crews, weapons, weather and threats from separate systems. Aeolus puts them in one live picture. Everything here is synthetic."
 
-- Point at the Gantt rows: 20 aircraft grouped by base. Each shows its **predicted serviceability %** from the maintenance model. AR-103 is 29%, and SK-202 is hatched because it is down all day.
-- Point at the hatching, the **Airspace** lane (Z4 restricted 09:00-11:00) and the faint stripes where base weather is below a type's minimums (Base 2 fog in the evening).
-- Open **Events** and scroll to **Live feed and events**. Messages stream in from the fleet, met office, crew roster, logistics and intel systems. The base header rows show the latest weather observation.
+- Open **Data and live feed**. Show the Aircraft tab: each aircraft has a predicted "ready to fly" percentage (AR-103 is low, SK-202 is down).
+- Point at the **Live feed** on the right as messages arrive from the fleet system, weather office, crew roster and intelligence.
 
-## 2. Generate the initial plan, Aeolus vs greedy (50 s)
+## 2. First plan, Aeolus vs a simple method (50 s), Mission plan and Review
 
-- Click **Generate plan**. The result badge shows something like `Planned in 0.13 s · 23 sorties · 0 violations`.
-- The **Changes** tab opens with the comparison table:
+- Open **Mission plan** and click **Generate plan**. The banner reads something like "Planned in 0.13 s, 23 flights, 0 rule problems".
+- Click a bar to open the detail drawer: crew, weapons and **plan strength** (Strong / Moderate / Weak).
+- Click **Review changes**. Show **Compared with a simple method**:
 
-  > "Same data. A greedy planner, like a quick manual allocation, covers 12 of 15 missions and drops a P2 strike. CP-SAT covers 14 of 15, all P1 and P2, in about a tenth of a second. A manual plan is assumed to take three hours."
+  > "The simple method covers 12 of 15 missions and misses a high-priority strike. Aeolus covers 14, including every P1 and P2, in about a tenth of a second. A manual plan is assumed to take three hours."
 
-- Hover a bar to show crew, weapons, window and the fragility note. Point out the **L/M/H** fragility badges.
-- Open **Validation**: 18 rules, all pass. "This checker is separate code. It re-reads the raw data and never trusts the solver."
-- Back on **Changes**, click **Approve and publish**. The plan is now **Active**, the clock starts, and contingencies get prepared in the background.
+- Scroll to **Rule checks**: all 18 pass. "A separate checker re-reads the raw data. It never trusts the planner."
+- Click **Approve plan**, then confirm.
 
-## 3. Aircraft down, served from the cache (45 s)
+## 3. Aircraft down, answered instantly (45 s), Events
 
-- Open **Events**. **Prepared contingencies** shows `ready · built in ~0.5 s`. These are the likeliest disruptions, already solved.
-- Click **Inject** on the first "... down until end of day" row.
-- The badge reads `Served in 0.01 s · cache hit · 2 of 23 changed`.
+- Open **Events**. Under **Prepared in advance**, Aeolus has already solved the likeliest problems.
+- Click the **Aircraft down** card. Keep the aircraft marked "answer prepared" and click **Apply and replan**.
+- The banner reads "Served in 0.01 s, 2 of 23 changed". Click **Review changes** and read one reason aloud, for example "AR-107 can no longer fly it ... Replacement: AR-102".
+- Approve.
 
-  > "Aeolus had already solved this one. It still re-validated the plan against the live picture before showing it."
+## 4. A bigger change in plain English (60 s), Assistant
 
-- The **Changes** tab shows each change with a reason, for example "AR-107 can no longer fly it: AR-107 unavailable ... Replacement: AR-102 (Arcus, B1, 73% serviceability)". On the Gantt, the old position is a dashed ghost and the new bar pulses.
-- Click **Approve and publish**.
+- Open **Assistant** and click the example **"Base 2 closed 14:00 to 18:00, add P1 strike on Z3 at 16:00"**, then send it.
+- Aeolus shows two condition chips. Click the pencil on one to show it can be edited.
 
-## 4. Chat: base closure plus a new P1 strike, a cache miss (60 s)
+  > "The assistant only reads my words. I check what it understood before anything is replanned. The planner makes the plan."
 
-- Open **Chat** and type (or click the example): `Base 2 closed 14:00 to 18:00, add P1 strike on Z3 at 16:00`, then press Enter.
-- Aeolus shows how it understood the text: two conditions, plus which parser read it.
+- Click **Confirm and replan**. The result reads "Replanned in 0.1 s, 11 of 21 changed, 4 added". Click **Review changes**.
+- Point at the side-by-side rows: the new P1 strike flies from Base 1, and two P2 missions at Base 2 are dropped because the base is closed for every possible slot.
 
-  > "The language model only turns text into structured conditions. You confirm them. It never makes or edits the plan."
+## 5. Reject once, then approve (35 s), Review
 
-- Click **Apply and replan**. The badge shows something like `Replanned in 0.1 s · cache miss · 11 of 21 changed · 4 added`.
-- On **Changes**, read two reasons aloud:
-  - the new P1 strike gets Skarns from Base 1, because Base 2 is closed at take-off time
-  - a P2 mission is dropped, because every take-off or landing slot at Base 2 is closed and Base 1 is out of range
-- Point at the red shaded closure band over the Base 2 rows.
+- Click **Reject**, type `keep SK-201 on the ground`, and click **Reject and find another option**.
 
-## 5. Reject once, then approve (35 s)
+  > "My note became a new condition, and Aeolus found another option. Nothing goes live without me."
 
-- Click **Reject**, type a note such as `keep SK-201 on the ground`, and click **Reject and re-solve**.
+- Approve the new option.
 
-  > "My note became a new condition: SK-201 down. The solver went back and found the best plan without it. A note with no condition gives the next best alternative instead."
+## 6. Results (30 s), Results
 
-- The new proposal shows the extra condition in its trigger line. Click **Approve and publish**.
+- Open **Results**. Walk through the 8 cards (hover the (i) for what each measures), the **Simple method vs Aeolus** table and the **Replan time per event** chart (prepared answers vs solved fresh).
+- Click **End plan and save results**, then confirm. The summary is saved to PostgreSQL.
 
-## 6. End the plan and log the KPIs (30 s)
-
-- Click **End plan** in the top bar. The KPI summary appears and is saved to PostgreSQL (`kpi_snapshots`).
-- Walk the 8 tiles: planning time vs manual, replan time for hits and misses, P1/P2 coverage, 0 violations, resource use vs greedy, stability per event, cache hit rate, explanation coverage 100%.
-
-  > "Every number came from this run. The targets are our own suggestions. The human approved every plan that went live."
+  > "Every number came from this session. The targets are our own suggestions. A human approved every plan that went live."
 
 ---
 
 **If something goes wrong**
 
-- *"Cannot reach the Aeolus API"*: start the backend with `pnpm dev:api` and press Retry.
-- *LLM not available*: chat falls back to the offline parser automatically. The demo sentence works either way.
-- *Clock ran past a window while you talked*: press **Reset** and start again. Each step takes seconds.
+- *"Cannot reach the Aeolus server" banner*: start the backend with `pnpm dev:api` and press Retry.
+- *Language model not available*: the assistant falls back to the offline reader automatically. The demo sentence works either way.
+- *The clock ran past a window while you talked*: click **Reset scenario** and start again. Each step takes seconds.

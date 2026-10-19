@@ -155,15 +155,28 @@ Aeolus-SIH-Project/
 
 ## 8. Frontend / UX (this decides how it feels to SIH judges)
 
-Single-page "ops room" dashboard, desktop-first. It must look good at 1366x768 and 1920x1080 (projector demo). Use the `frontend-design` skill if available. No generic template look: no purple gradients, no default component-kit styling.
+Multi-page planner app (Next.js App Router), desktop-first. It must look good at 1366x768 and 1920x1080 with no horizontal scroll. Each page has one purpose. The UI is uncluttered and uses plain English.
 
-- **Top bar:** Aeolus wordmark, scenario clock, `SYNTHETIC DATA` badge, WebSocket status, plan status chip (Draft / Pending approval / Active).
-- **KPI strip:** the 8 KPIs as compact tiles with live values and small deltas vs baseline.
-- **Main view, Gantt timeline:** rows = aircraft grouped by base; bars = missions coloured by priority (also show the P1 to P4 text label, not colour alone); fragility badge per bar; hover tooltip (crew, weapons, window, reason); unserviceable aircraft hatched; weather/zone closure windows as shaded overlays.
-- **Right panel tabs:** **Chat** (conditions) · **Events** (injection forms + live feed log) · **Plan changes** (old vs new diff, reason per change, Approve / Reject with note) · **Validation** (rule-by-rule pass/fail).
-- **Mission table:** assigned vs unassigned missions, with the reason a mission is unassigned.
-- **Feedback:** solving spinner with elapsed time, then a result badge like `Replanned in 1.8 s · cache miss · 3 of 40 changed`. Changed bars highlight for a few seconds. Toasts, empty states and error states all handled.
-- **Look:** dark, calm, high-contrast ops theme with one or two accent colours, tabular numerals, monospace for IDs, consistent spacing, subtle transitions. Accessible contrast. Plain, simple English in all UI copy.
+**Theme (light only).** White surfaces with blue for everything else: primary `#2563EB`, tints `#EFF6FF` / `#DBEAFE`, deep navy `#0B1F44` for headings and text, soft grey-blue borders. Green, amber and red are only for status (pass / warning / fail), and used sparingly. Gantt priority colours run from P1 darkest blue to P4 lightest, always with the P1-P4 text label as well. Cards are rounded with soft shadows and generous spacing. One font: Inter, bundled locally through `next/font/local` so the app works offline. Text is large and readable, and every control has a visible keyboard focus state. Animations are motion only (never start at opacity 0) and respect reduced motion. Theme tokens live in `frontend/src/app/globals.css`.
+
+**Shell (root layout, `components/shell/`).** A fixed left sidebar with icons and plain labels, with a "1" badge on Review when a plan is waiting, and Reset scenario at the bottom. A slim top bar shows the scenario clock (pause/resume), the connection indicator, the plan status chip and a small "Synthetic data" badge. The root layout also owns the WebSocket connection, health polling, toasts, a global "working on it" screen with elapsed time, the bar-detail drawer and the end-of-plan dialog. State (plan, events, KPIs, feed, chat) lives in the Zustand store, so navigating never loses anything.
+
+**Page pattern.** Each page has a title, a one-line description, at most one primary button, and a dismissible "What to do here" box (2 to 3 lines, remembered in localStorage). Each page ends with a "Next: ..." button that moves the user forward. Empty states say what to do next, and loading uses skeletons. Technical terms (CP-SAT, lambda, cache, fingerprint) stay out of main copy and only appear inside collapsible "Show details" sections or tooltips.
+
+**Pages**
+
+| Route | Purpose |
+|---|---|
+| `/` Home | Welcome and what Aeolus does; a 5-step Getting started checklist that ticks itself off (generate, review, approve, try an event, check results); one "Next step" card that always points to the right action; 4 headline KPI cards; recent activity |
+| `/data` Data and live feed | Tabs for Aircraft, Crews, Weapons and Missions as tables; the live feed on the side; a synthetic-data note |
+| `/plan` Mission plan | Generate plan; the custom Gantt (rows = aircraft by base, airspace lane, hatched outages, weather overlays, dashed ghosts for changed slots, Proposed/Live toggle); clicking a bar opens a side drawer with crew, weapons, plan strength (Strong / Moderate / Weak) and the change reason; mission table with reasons for unassigned missions |
+| `/events` Events | Four large cards (Aircraft down, New priority mission, Weather closure, New threat zone) opening modal forms; prepared answers (contingency cache) with one-click Run; maintenance report; event history; a result banner such as "Replanned in 1.8 s, 3 of 40 changed" with Review changes |
+| `/assistant` Assistant | Chat that turns plain English into conditions, shown as editable and removable chips with Confirm / Cancel; 3 example prompts |
+| `/review` Review and approve | Summary of what triggered the plan; old vs new side by side with a plain reason per change (or a comparison with the simple method for the first plan); missions without aircraft; the rule-by-rule checklist; big Approve / Reject buttons with confirm dialogs and an optional reject note |
+| `/results` Results | All 8 KPIs as cards with a one-line explanation and tooltip; simple method vs Aeolus; replan time chart (prepared vs fresh); saved snapshots; "End plan and save results" |
+| `/guide` How to use | The full flow with a button per step, plus the 5-minute demo script |
+
+**Feedback.** Changed bars pulse for a few seconds. Toasts cover success and errors. An unreachable API shows a banner with Retry. Every UI number comes from the backend; the frontend only renames KPIs into plain English (`frontend/src/lib/kpi.ts`).
 
 ---
 
