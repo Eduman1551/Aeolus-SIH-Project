@@ -3,8 +3,15 @@
 import { Pause, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cx } from "@/lib/format";
-import { useStore } from "@/lib/store";
+import { type WsState, useStore } from "@/lib/store";
 import { Pill } from "./ui";
+
+const WS_LABEL: Record<WsState, string> = {
+  open: "Connected",
+  connecting: "Connecting",
+  waking: "Waking up the server",
+  offline: "Offline",
+};
 
 const STATUS: Record<string, { text: string; tone: "neutral" | "ok" | "warn" | "info" }> = {
   no_plan: { text: "No plan yet", tone: "neutral" },
@@ -100,10 +107,19 @@ export default function TopBar() {
           <span className="h-5 w-px bg-line" />
           <span
             className="flex items-center gap-2 text-[13.5px] text-muted"
-            data-tip={live ? `Connected to the Aeolus server${extras.length ? `. Note: ${extras.join(", ")}.` : "."}` : "Trying to reconnect to the Aeolus server"}
+            data-tip={
+              live
+                ? `Connected to the Aeolus server${extras.length ? `. Note: ${extras.join(", ")}.` : "."}`
+                : ws === "offline"
+                  ? "Cannot reach the Aeolus server. Use Retry in the banner below."
+                  : ws === "waking"
+                    ? "The server is waking up. This can take up to a minute."
+                    : "Connecting to the Aeolus server"
+            }
+            role="status"
           >
-            <span className={cx("h-2.5 w-2.5 rounded-full", live ? "live-dot bg-teal" : "bg-coral")} />
-            <span className="hidden xl:inline">{live ? "Connected" : ws === "connecting" ? "Connecting" : "Reconnecting"}</span>
+            <span className={cx("h-2.5 w-2.5 rounded-full", live ? "live-dot bg-teal" : ws === "offline" ? "bg-coral" : "bg-amber")} />
+            <span className="hidden xl:inline">{WS_LABEL[ws]}</span>
           </span>
           <Pill tone={status.tone}>{status.text}</Pill>
         </div>

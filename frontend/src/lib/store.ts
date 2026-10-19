@@ -5,7 +5,7 @@ import { api, ApiError, type ReplanResponse } from "./api";
 import { PATH_LABEL, secs, sortieKey } from "./format";
 import type { EventInput, FeedMsg, Health, MapData, ParsedCondition, PlanStatus, Sortie, World } from "./types";
 
-export type WsState = "connecting" | "open" | "closed";
+export type WsState = "connecting" | "waking" | "open" | "offline";
 
 export interface Toast {
   id: number;
